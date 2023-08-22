@@ -1,0 +1,2 @@
+1;HOODIE;Bluza rozpinana;Nike;199.99;Wygodna
+2;SOCKS;Skarpetki;Adidas;10.0;Cienkie

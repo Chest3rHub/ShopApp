@@ -3,12 +3,16 @@ package Models.Products;
 
 import Models.Category;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Product {
 
+    public static final String productsFileName="src/Data/Products.txt";
     public static int idCounter=1;
     int id;
     Category category;
@@ -16,7 +20,6 @@ public class Product {
     String brand;
     double price;
     String description;
-    boolean availability;
     public static List<Product> allProducts= new ArrayList<>();
 
     public Product(Category category, String name, String brand, double price, String description){
@@ -60,19 +63,44 @@ public class Product {
     }
 
     public String toString(){
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+        String formattedPrice = decimalFormat.format(price);
         return "ID: "+ id
                 + ", CATEGORY: " + category
                 + ", NAZWA: " + name
                 + ", MARKA: " + brand
-                + ", CENA: " + price + "PLN"
-                + ", OPIS: " + description
-                + ", DOSTEPNOSC: " + availability;
+                + ", CENA: " + formattedPrice + "PLN"
+                + ", OPIS: " + description;
     }
 
     public static void showProducts(){
         for (Product product : allProducts){
             System.out.println(product.toString());
         }
+    }
+
+
+    public static void readProductsFromFile (String fileName){
+
+    }
+
+    public static void saveProductsToFile(){
+        try{
+            BufferedWriter fileWriter = new BufferedWriter(new FileWriter(productsFileName,true));
+            for (Product product : allProducts){
+                String data=product.id + ";" + product.category+ ";"
+                        +product.name + ";"  + product.brand + ";"
+                        + product.price + ";" + product.description + "\n";
+
+                fileWriter.write(data);
+                fileWriter.flush();
+            }
+            fileWriter.close();
+          //  System.out.println("Zapisano do pliku!");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
 
