@@ -3,7 +3,9 @@ package Models.Products;
 
 import Models.Category;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -80,13 +82,42 @@ public class Product {
     }
 
 
-    public static void readProductsFromFile (String fileName){
+    public static void readProductsFromFile (){
+        try{
+            int productsCounter=0;
+            BufferedReader fileReader= new BufferedReader(new FileReader(productsFileName));
+            Scanner scanner= new Scanner(fileReader);
 
+
+            while(scanner.hasNextLine()){
+
+
+                String line= scanner.nextLine();
+                Scanner lineScanner= new Scanner(line);
+                lineScanner.useDelimiter(";");
+                    int id= lineScanner.nextInt();
+                    String categoryString= lineScanner.next();
+                    Category category= Category.valueOf(categoryString);
+                    String name= lineScanner.next();
+                    String brand= lineScanner.next();
+                    String priceString=  lineScanner.next();
+                    double price= Double.parseDouble(priceString);
+                    String description= lineScanner.next();
+
+                //System.out.println(" CENA " + priceString);
+                //System.out.println(price);
+                allProducts.add(new Product(category,name,brand,price,description));
+            }
+            idCounter+=productsCounter;
+            // nowo dodawane produkty beda mialy id ktorego jeszcze nie ma w pliku
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public static void saveProductsToFile(){
         try{
-            BufferedWriter fileWriter = new BufferedWriter(new FileWriter(productsFileName,true));
+            BufferedWriter fileWriter = new BufferedWriter(new FileWriter(productsFileName));
             for (Product product : allProducts){
                 String data=product.id + ";" + product.category+ ";"
                         +product.name + ";"  + product.brand + ";"
