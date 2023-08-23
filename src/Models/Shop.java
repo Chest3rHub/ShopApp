@@ -65,7 +65,7 @@ public class Shop {
         productWithSizeAndQtity2.addSizeAndQuantity(Size.M,2);
         productWithSizeAndQtity2.addSizeAndQuantity(Size.L,11);
 
-       // productWithSizeAndQtity2.decreaseQuantityAvailable(Size.XS,7);
+        productWithSizeAndQtity2.decreaseQuantityAvailable(Size.XS,7);
        // productWithSizeAndQtity2.decreaseQuantityAvailable(Size.M,2);
        // productWithSizeAndQtity2.decreaseQuantityAvailable(Size.L,11);
 
@@ -95,5 +95,8 @@ public class Shop {
         ProductWithSizeAndQtity.orderByPriceDescendingAvailableProductsWithSizesAndQtity();
         ProductWithSizeAndQtity.showByCategoryOrderedByPriceAscendingAvailableProductsWithSizesAndQtity(category);
         ProductWithSizeAndQtity.showByCategoryOrderedByPriceDescendingAvailableProductsWithSizesAndQtity(category);
+
+        String nazwa1="bluza";
+        ProductWithSizeAndQtity.searchAvailableProductsByName(nazwa1);
     }
 }

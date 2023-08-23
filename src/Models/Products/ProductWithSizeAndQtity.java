@@ -140,4 +140,18 @@ public class ProductWithSizeAndQtity {
     public void setSizesAndQuantitiesMap(LinkedHashMap<Size, Integer> sizesAndQuantitiesMap) {
         this.sizesAndQuantitiesMap = sizesAndQuantitiesMap;
     }
+    public static void searchAvailableProductsByName(String name){
+        System.out.println("Results for phrase " + name + ":");
+        String nameUpper= name.toUpperCase();
+        List<ProductWithSizeAndQtity> availableProducts= availableProductsWithSizesAndQtity
+                .stream()
+                .filter(productWithSizeAndQtity -> productWithSizeAndQtity.getProduct().getName().toUpperCase().contains(nameUpper))
+                .toList();
+        if (availableProducts.isEmpty()){
+            System.out.println("No results for phrase: " + name + "!");
+        }
+        for (ProductWithSizeAndQtity productWithSizeAndQtity : availableProducts){
+            System.out.println(productWithSizeAndQtity.toString());
+        }
+    }
 }
