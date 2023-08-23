@@ -88,5 +88,8 @@ public class Shop {
 
         Category category= Category.HOODIE;
         ProductWithSizeAndQtity.showByCategoryAvailableProductsWithSizesAndQtity(category);
+
+        ProductWithSizeAndQtity.orderByPriceAscendingAvailableProductsWithSizesAndQtity();
+        ProductWithSizeAndQtity.orderByPriceDescendingAvailableProductsWithSizesAndQtity();
     }
 }

@@ -2,9 +2,8 @@ package Models.Products;
 
 import Exceptions.NotEnoughProductsException;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ProductWithSizeAndQtity {
 
@@ -38,6 +37,34 @@ public class ProductWithSizeAndQtity {
             }
         }
     }
+    public static void orderByPriceAscendingAvailableProductsWithSizesAndQtity(){
+        System.out.println("Product ordered by price ascending: ");
+       List<ProductWithSizeAndQtity> orderedByAscending = availableProductsWithSizesAndQtity
+               .stream()
+               .sorted(Comparator.comparing(productWithSizeAndQtity -> productWithSizeAndQtity.getProduct().getPrice()))
+               .collect(Collectors.toList());
+
+        for (ProductWithSizeAndQtity productWithSizeAndQtity : orderedByAscending){
+            System.out.println(productWithSizeAndQtity.toString());
+        }
+    }
+
+    public static void orderByPriceDescendingAvailableProductsWithSizesAndQtity(){
+        System.out.println("Product ordered by price descending: ");
+        List<ProductWithSizeAndQtity> orderedByAscending = availableProductsWithSizesAndQtity
+                .stream()
+                .sorted(Comparator.comparing(productWithSizeAndQtity -> productWithSizeAndQtity.getProduct().getPrice()))
+                .collect(Collectors.toList());
+        List<ProductWithSizeAndQtity> orderedByDescending = new LinkedList<>();
+        for (ProductWithSizeAndQtity productWithSizeAndQtity : orderedByAscending) {
+            orderedByDescending.add(0, productWithSizeAndQtity);
+        }
+        for (ProductWithSizeAndQtity productWithSizeAndQtity : orderedByDescending){
+            System.out.println(productWithSizeAndQtity.toString());
+        }
+    }
+
+    // dodac jeszcze orderedByPrice ale z wybranej kategorii
 
     public void increaseQuantityAvailable(Size size, int increaseAmount){
          int currentQuantity= this.sizesAndQuantitiesMap.get(size);
@@ -58,4 +85,19 @@ public class ProductWithSizeAndQtity {
         // dodac walidacje przy zakupie ktora sprawi ze nie da sie odjac wiecej niz obecny amount
     }
 
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public LinkedHashMap<Size, Integer> getSizesAndQuantitiesMap() {
+        return sizesAndQuantitiesMap;
+    }
+
+    public void setSizesAndQuantitiesMap(LinkedHashMap<Size, Integer> sizesAndQuantitiesMap) {
+        this.sizesAndQuantitiesMap = sizesAndQuantitiesMap;
+    }
 }
