@@ -29,7 +29,7 @@ public class Shop {
 
     }
     public static void seedData() throws Exception {
-        Product p1= new Product(Category.PANTS,"Spodenki","Champion",149.99,"Przewiewne na lato");
+      //  Product p1= new Product(Category.PANTS,"Spodenki","Champion",149.99,"Przewiewne na lato");
       //  Product p2= new Product()
         int idDoPodaniaPrzyWyszukiwaniu=1;
         Optional<Integer> optionalInteger1 = Product.allProducts.stream()
@@ -67,6 +67,26 @@ public class Shop {
 
         productWithSizeAndQtity2.decreaseQuantityAvailable(Size.L,9);
 
+        int trzecieIdDoPodania=5;
+        Optional<Integer> optionalInteger3 = Product.allProducts.stream()
+                .filter(product -> product.getId()==trzecieIdDoPodania)
+                .map(Product::getId)
+                .findFirst();
+        if (!optionalInteger2.isPresent()){
+            throw new NoSuchProductException("No such product!");
+        }
+        int testId3= optionalInteger3.get();
+
+        ProductWithSizeAndQtity productWithSizeAndQtity3= new ProductWithSizeAndQtity(Product.allProducts.get(testId3-1));
+
+        productWithSizeAndQtity3.addSizeAndQuantity(Size.XS,1);
+        productWithSizeAndQtity3.addSizeAndQuantity(Size.S,3);
+        productWithSizeAndQtity3.addSizeAndQuantity(Size.M,8);
+        productWithSizeAndQtity3.addSizeAndQuantity(Size.L,2);
+
         ProductWithSizeAndQtity.showAllAvailableProductsWithSizesAndQtity();
+
+        Category category= Category.HOODIE;
+        ProductWithSizeAndQtity.showByCategoryAvailableProductsWithSizesAndQtity(category);
     }
 }

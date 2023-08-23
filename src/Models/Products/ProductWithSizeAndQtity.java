@@ -30,6 +30,15 @@ public class ProductWithSizeAndQtity {
             System.out.println(productWithSizeAndQtity.toString());
         }
     }
+    public static void showByCategoryAvailableProductsWithSizesAndQtity(Category category){
+        System.out.println("Displaying available products from the selected category: ");
+        for (ProductWithSizeAndQtity productWithSizeAndQtity : availableProductsWithSizesAndQtity){
+            if (productWithSizeAndQtity.product.category.equals(category)){
+                System.out.println(productWithSizeAndQtity.toString());
+            }
+        }
+    }
+
     public void increaseQuantityAvailable(Size size, int increaseAmount){
          int currentQuantity= this.sizesAndQuantitiesMap.get(size);
          int newQuantity= currentQuantity + increaseAmount;
