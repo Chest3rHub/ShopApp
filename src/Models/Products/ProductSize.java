@@ -1,8 +1,8 @@
 package Models.Products;
 
-import Models.Size;
-
 public class ProductSize {
+    // chyba niepotrzebna klasa
+
     private Size size;
     private int quantity;
 
