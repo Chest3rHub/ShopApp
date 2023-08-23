@@ -30,7 +30,7 @@ public class ProductWithSizeAndQtity {
         }
     }
     public static void showByCategoryAvailableProductsWithSizesAndQtity(Category category){
-        System.out.println("Displaying available products from the selected category: ");
+        System.out.println("Category -> " + category + ":");
         for (ProductWithSizeAndQtity productWithSizeAndQtity : availableProductsWithSizesAndQtity){
             if (productWithSizeAndQtity.product.category.equals(category)){
                 System.out.println(productWithSizeAndQtity.toString());
@@ -38,7 +38,7 @@ public class ProductWithSizeAndQtity {
         }
     }
     public static void orderByPriceAscendingAvailableProductsWithSizesAndQtity(){
-        System.out.println("Product ordered by price ascending: ");
+        System.out.println("Available products ordered by price ascending: ");
        List<ProductWithSizeAndQtity> orderedByAscending = availableProductsWithSizesAndQtity
                .stream()
                .sorted(Comparator.comparing(productWithSizeAndQtity -> productWithSizeAndQtity.getProduct().getPrice()))
@@ -50,7 +50,7 @@ public class ProductWithSizeAndQtity {
     }
 
     public static void orderByPriceDescendingAvailableProductsWithSizesAndQtity(){
-        System.out.println("Product ordered by price descending: ");
+        System.out.println("Available products ordered by price descending: ");
         List<ProductWithSizeAndQtity> orderedByAscending = availableProductsWithSizesAndQtity
                 .stream()
                 .sorted(Comparator.comparing(productWithSizeAndQtity -> productWithSizeAndQtity.getProduct().getPrice()))
@@ -62,6 +62,43 @@ public class ProductWithSizeAndQtity {
         for (ProductWithSizeAndQtity productWithSizeAndQtity : orderedByDescending){
             System.out.println(productWithSizeAndQtity.toString());
         }
+    }
+    public static void showByCategoryOrderedByPriceAscendingAvailableProductsWithSizesAndQtity(Category category) {
+        System.out.println("Displaying available products from category: " + category + " ordered by price ascending: ");
+        List<ProductWithSizeAndQtity> selectedCategory= new ArrayList<>();
+        for (ProductWithSizeAndQtity productWithSizeAndQtity : availableProductsWithSizesAndQtity) {
+            if (productWithSizeAndQtity.product.category.equals(category)) {
+                selectedCategory.add(productWithSizeAndQtity);
+            }
+        }
+        List<ProductWithSizeAndQtity> orderedByAscending= selectedCategory
+                .stream()
+                .sorted(Comparator.comparing(productWithSizeAndQtity -> productWithSizeAndQtity.getProduct().getPrice()))
+                .collect(Collectors.toList());
+        for (ProductWithSizeAndQtity productWithSizeAndQtity : orderedByAscending){
+            System.out.println(productWithSizeAndQtity.toString());
+        }
+    }
+    public static void showByCategoryOrderedByPriceDescendingAvailableProductsWithSizesAndQtity(Category category){
+        System.out.println("Displaying available products from category: " + category + " ordered by price descending: ");
+        List<ProductWithSizeAndQtity> selectedCategory= new ArrayList<>();
+        for (ProductWithSizeAndQtity productWithSizeAndQtity : availableProductsWithSizesAndQtity) {
+            if (productWithSizeAndQtity.product.category.equals(category)) {
+                selectedCategory.add(productWithSizeAndQtity);
+            }
+        }
+        List<ProductWithSizeAndQtity> orderedByAscending= selectedCategory
+                .stream()
+                .sorted(Comparator.comparing(productWithSizeAndQtity -> productWithSizeAndQtity.getProduct().getPrice()))
+                .collect(Collectors.toList());
+        List<ProductWithSizeAndQtity> orderedByDescending = new LinkedList<>();
+        for (ProductWithSizeAndQtity productWithSizeAndQtity : orderedByAscending) {
+            orderedByDescending.add(0, productWithSizeAndQtity);
+        }
+        for (ProductWithSizeAndQtity productWithSizeAndQtity : orderedByDescending){
+            System.out.println(productWithSizeAndQtity.toString());
+        }
+
     }
 
     // dodac jeszcze orderedByPrice ale z wybranej kategorii
@@ -81,6 +118,9 @@ public class ProductWithSizeAndQtity {
             this.sizesAndQuantitiesMap.remove(size);
         }else {
             this.sizesAndQuantitiesMap.replace(size,newQuantity);
+        }
+        if (this.sizesAndQuantitiesMap.isEmpty()){
+            availableProductsWithSizesAndQtity.remove(this);
         }
         // dodac walidacje przy zakupie ktora sprawi ze nie da sie odjac wiecej niz obecny amount
     }

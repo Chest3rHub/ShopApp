@@ -65,7 +65,9 @@ public class Shop {
         productWithSizeAndQtity2.addSizeAndQuantity(Size.M,2);
         productWithSizeAndQtity2.addSizeAndQuantity(Size.L,11);
 
-        productWithSizeAndQtity2.decreaseQuantityAvailable(Size.L,9);
+       // productWithSizeAndQtity2.decreaseQuantityAvailable(Size.XS,7);
+       // productWithSizeAndQtity2.decreaseQuantityAvailable(Size.M,2);
+       // productWithSizeAndQtity2.decreaseQuantityAvailable(Size.L,11);
 
         int trzecieIdDoPodania=5;
         Optional<Integer> optionalInteger3 = Product.allProducts.stream()
@@ -91,5 +93,7 @@ public class Shop {
 
         ProductWithSizeAndQtity.orderByPriceAscendingAvailableProductsWithSizesAndQtity();
         ProductWithSizeAndQtity.orderByPriceDescendingAvailableProductsWithSizesAndQtity();
+        ProductWithSizeAndQtity.showByCategoryOrderedByPriceAscendingAvailableProductsWithSizesAndQtity(category);
+        ProductWithSizeAndQtity.showByCategoryOrderedByPriceDescendingAvailableProductsWithSizesAndQtity(category);
     }
 }
