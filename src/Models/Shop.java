@@ -1,6 +1,7 @@
 package Models;
 
 // import Models.Employees.Employee;
+import Exceptions.NoSuchProductException;
 import Models.Products.Category;
 import Models.Products.Product;
 import Models.Products.ProductWithSizeAndQtity;
@@ -36,7 +37,7 @@ public class Shop {
                 .map(Product::getId)
                 .findFirst();
         if (!optionalInteger1.isPresent()){
-            throw new Exception("No such product!");
+            throw new NoSuchProductException("No such product!");
         }
         int testId1= optionalInteger1.get();
 
@@ -47,14 +48,14 @@ public class Shop {
         productWithSizeAndQtity1.addSizeAndQuantity(Size.L,20);
         productWithSizeAndQtity1.addSizeAndQuantity(Size.XL,25);
 
-
+        productWithSizeAndQtity1.increaseQuantityAvailable(Size.M,15);
         int drugieIdDoPodania=2;
         Optional<Integer> optionalInteger2 = Product.allProducts.stream()
                 .filter(product -> product.getId()==drugieIdDoPodania)
                 .map(Product::getId)
                 .findFirst();
         if (!optionalInteger2.isPresent()){
-            throw new Exception("No such product!");
+            throw new NoSuchProductException("No such product!");
         }
         int testId2= optionalInteger2.get();
 
@@ -64,6 +65,7 @@ public class Shop {
         productWithSizeAndQtity2.addSizeAndQuantity(Size.M,2);
         productWithSizeAndQtity2.addSizeAndQuantity(Size.L,11);
 
+        productWithSizeAndQtity2.decreaseQuantityAvailable(Size.L,9);
 
         ProductWithSizeAndQtity.showAllAvailableProductsWithSizesAndQtity();
     }

@@ -10,7 +10,7 @@ public class Main {
         try {
             Shop.seedData();
         }catch (Exception e){
-            System.err.println(e.getMessage());
+            e.printStackTrace();
            // e.getMessage();
         }
      //   Product.addProduct();

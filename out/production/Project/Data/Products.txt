@@ -1,0 +1,4 @@
+1;HOODIE;Bluza rozpinana;Nike;199.99;Wygodna
+2;SOCKS;Skarpetki;Adidas;10.0;Cienkie
+3;SNEAKERS;Jordan 1 High;Nike;799.99;Bardzo modne
+4;ACCESSORIES;Bransoletka;Apart;1000.0;Piekna ozdobna
