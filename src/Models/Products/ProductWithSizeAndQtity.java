@@ -1,11 +1,12 @@
 package Models.Products;
 
 import Exceptions.NotEnoughProductsException;
+import Exceptions.UnavailableException;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ProductWithSizeAndQtity {
+public class ProductWithSizeAndQtity{
 
     private Product product;
     private LinkedHashMap<Size,Integer> sizesAndQuantitiesMap;
@@ -29,86 +30,86 @@ public class ProductWithSizeAndQtity {
             System.out.println(productWithSizeAndQtity.toString());
         }
     }
-    public static void showByCategoryAvailableProductsWithSizesAndQtity(Category category){
+    public static List<ProductWithSizeAndQtity> getProductListByCategory(Category category, List<ProductWithSizeAndQtity> parameterList) throws UnavailableException {
+        // gotowa metoda
         System.out.println("Category -> " + category + ":");
-        for (ProductWithSizeAndQtity productWithSizeAndQtity : availableProductsWithSizesAndQtity){
-            if (productWithSizeAndQtity.product.category.equals(category)){
-                System.out.println(productWithSizeAndQtity.toString());
-            }
+        List<ProductWithSizeAndQtity> availableInCategory= parameterList
+                .stream()
+                .filter(productWithSizeAndQtity -> productWithSizeAndQtity.getProduct().getCategory().equals(category))
+                .toList();
+        if (availableInCategory.isEmpty()){
+            throw new UnavailableException("There are no available products from category " + category);
         }
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return availableInCategory;
     }
-    public static void orderByPriceAscendingAvailableProductsWithSizesAndQtity(){
+    public static List<ProductWithSizeAndQtity> getProductListOrderedByPriceAsc(List<ProductWithSizeAndQtity> parameterList) throws UnavailableException {
+        // gotowa metoda
         System.out.println("Available products ordered by price ascending: ");
-       List<ProductWithSizeAndQtity> orderedByAscending = availableProductsWithSizesAndQtity
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        List<ProductWithSizeAndQtity> orderedByAscending = parameterList
                .stream()
                .sorted(Comparator.comparing(productWithSizeAndQtity -> productWithSizeAndQtity.getProduct().getPrice()))
                .collect(Collectors.toList());
-
-        for (ProductWithSizeAndQtity productWithSizeAndQtity : orderedByAscending){
-            System.out.println(productWithSizeAndQtity.toString());
-        }
+       if (orderedByAscending.isEmpty()){
+           throw new UnavailableException("There are no available products at the moment!");
+       }
+       return orderedByAscending;
     }
 
-    public static void orderByPriceDescendingAvailableProductsWithSizesAndQtity(){
+    public static List<ProductWithSizeAndQtity> getProductListOrderedByPriceDesc(List<ProductWithSizeAndQtity> parameterList) throws UnavailableException {
+        // gotowa metoda
         System.out.println("Available products ordered by price descending: ");
-        List<ProductWithSizeAndQtity> orderedByAscending = availableProductsWithSizesAndQtity
+        List<ProductWithSizeAndQtity> orderedByAscending = parameterList
                 .stream()
                 .sorted(Comparator.comparing(productWithSizeAndQtity -> productWithSizeAndQtity.getProduct().getPrice()))
                 .collect(Collectors.toList());
+        if (orderedByAscending.isEmpty()){
+            throw new UnavailableException("There are no available products at the moment!");
+        }
         List<ProductWithSizeAndQtity> orderedByDescending = new LinkedList<>();
         for (ProductWithSizeAndQtity productWithSizeAndQtity : orderedByAscending) {
             orderedByDescending.add(0, productWithSizeAndQtity);
         }
-        for (ProductWithSizeAndQtity productWithSizeAndQtity : orderedByDescending){
-            System.out.println(productWithSizeAndQtity.toString());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+        return orderedByDescending;
     }
-    public static void showByCategoryOrderedByPriceAscendingAvailableProductsWithSizesAndQtity(Category category) {
+    public static List<ProductWithSizeAndQtity> getProductListByCategoryOrderedByPriceAsc(Category category, List<ProductWithSizeAndQtity> parameterList) throws UnavailableException {
+        // gotowa metoda
         System.out.println("Displaying available products from category: " + category + " ordered by price ascending: ");
-        List<ProductWithSizeAndQtity> selectedCategory= new ArrayList<>();
-        for (ProductWithSizeAndQtity productWithSizeAndQtity : availableProductsWithSizesAndQtity) {
-            if (productWithSizeAndQtity.product.category.equals(category)) {
-                selectedCategory.add(productWithSizeAndQtity);
-            }
-        }
-        List<ProductWithSizeAndQtity> orderedByAscending= selectedCategory
-                .stream()
-                .sorted(Comparator.comparing(productWithSizeAndQtity -> productWithSizeAndQtity.getProduct().getPrice()))
-                .collect(Collectors.toList());
-        for (ProductWithSizeAndQtity productWithSizeAndQtity : orderedByAscending){
-            System.out.println(productWithSizeAndQtity.toString());
-        }
+        List<ProductWithSizeAndQtity> selectedCategory= ProductWithSizeAndQtity.getProductListByCategory(category, parameterList);
+        List<ProductWithSizeAndQtity> orderedByPriceAsc= ProductWithSizeAndQtity.getProductListOrderedByPriceAsc(selectedCategory);
+
+        return orderedByPriceAsc;
     }
-    public static void showByCategoryOrderedByPriceDescendingAvailableProductsWithSizesAndQtity(Category category){
+    public static List<ProductWithSizeAndQtity> getProductListByCategoryOrderedByPriceDesc(Category category, List<ProductWithSizeAndQtity> parameterList) throws UnavailableException {
+        // gotowa metoda
         System.out.println("Displaying available products from category: " + category + " ordered by price descending: ");
-        List<ProductWithSizeAndQtity> selectedCategory= new ArrayList<>();
-        for (ProductWithSizeAndQtity productWithSizeAndQtity : availableProductsWithSizesAndQtity) {
-            if (productWithSizeAndQtity.product.category.equals(category)) {
-                selectedCategory.add(productWithSizeAndQtity);
-            }
-        }
-        List<ProductWithSizeAndQtity> orderedByAscending= selectedCategory
-                .stream()
-                .sorted(Comparator.comparing(productWithSizeAndQtity -> productWithSizeAndQtity.getProduct().getPrice()))
-                .collect(Collectors.toList());
-        List<ProductWithSizeAndQtity> orderedByDescending = new LinkedList<>();
-        for (ProductWithSizeAndQtity productWithSizeAndQtity : orderedByAscending) {
-            orderedByDescending.add(0, productWithSizeAndQtity);
-        }
-        for (ProductWithSizeAndQtity productWithSizeAndQtity : orderedByDescending){
-            System.out.println(productWithSizeAndQtity.toString());
-        }
-
+        List<ProductWithSizeAndQtity> selectedCategory=ProductWithSizeAndQtity.getProductListByCategory(category, parameterList);
+        List<ProductWithSizeAndQtity> orderedByPriceDesc= ProductWithSizeAndQtity.getProductListOrderedByPriceDesc(selectedCategory);
+        return orderedByPriceDesc;
     }
 
-    // dodac jeszcze orderedByPrice ale z wybranej kategorii
 
-    public void increaseQuantityAvailable(Size size, int increaseAmount){
+    public void increaseProductQuantity(Size size, int increaseAmount){
          int currentQuantity= this.sizesAndQuantitiesMap.get(size);
          int newQuantity= currentQuantity + increaseAmount;
          this.sizesAndQuantitiesMap.replace(size,newQuantity);
     }
-    public void decreaseQuantityAvailable(Size size, int decreaseAmount) throws NotEnoughProductsException {
+    public void decreaseProductQuantity(Size size, int decreaseAmount) throws NotEnoughProductsException {
         int currentQuantity= this.sizesAndQuantitiesMap.get(size);
         if (currentQuantity<decreaseAmount){
             throw new NotEnoughProductsException("There are not enough products to reduce their quantity by this amount!");
@@ -140,46 +141,75 @@ public class ProductWithSizeAndQtity {
     public void setSizesAndQuantitiesMap(LinkedHashMap<Size, Integer> sizesAndQuantitiesMap) {
         this.sizesAndQuantitiesMap = sizesAndQuantitiesMap;
     }
-    public static void searchAvailableProductsByName(String name){
+    public static List<ProductWithSizeAndQtity> getProductListByName(String name, List<ProductWithSizeAndQtity> parameterList) throws UnavailableException {
+        // gotowa metoda
         System.out.println("Results for phrase " + name + ":");
         String nameUpper= name.toUpperCase();
-        List<ProductWithSizeAndQtity> availableProducts= availableProductsWithSizesAndQtity
+        List<ProductWithSizeAndQtity> availableProducts= parameterList
                 .stream()
                 .filter(productWithSizeAndQtity -> productWithSizeAndQtity.getProduct().getName().toUpperCase().contains(nameUpper))
                 .toList();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         if (availableProducts.isEmpty()){
-            System.out.println("No results for phrase: " + name + "!");
+            throw new UnavailableException("There are no available products with name " + name);
         }
-        for (ProductWithSizeAndQtity productWithSizeAndQtity : availableProducts){
-            System.out.println(productWithSizeAndQtity.toString());
-        }
+        return availableProducts;
     }
-    public static void searchAvailableProductsBySize(Size size){
+    public static List<ProductWithSizeAndQtity> getProductListBySize(Size size, List<ProductWithSizeAndQtity> parameterList) throws UnavailableException {
+        // gotowa metoda
         System.out.println("Results for size "+ size + ":");
-        List<ProductWithSizeAndQtity> availableProducts= availableProductsWithSizesAndQtity
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        List<ProductWithSizeAndQtity> availableProducts= parameterList
                 .stream()
                 .filter(productWithSizeAndQtity -> productWithSizeAndQtity.getSizesAndQuantitiesMap().containsKey(size))
                 .toList();
         if (availableProducts.isEmpty()){
-            System.out.println("No results for size: " + size + "!");
+            throw new UnavailableException("There are no available " + size + " sized products!");
         }
-        for (ProductWithSizeAndQtity productWithSizeAndQtity : availableProducts){
-            System.out.println(productWithSizeAndQtity.toString());
-        }
+        return availableProducts;
     }
-    public static void searchAvailableProductsByBrandName(String brandName){
-        System.out.println("Results for brand " + brandName + ":");
+    public static List<ProductWithSizeAndQtity> getProductListByBrand(String brandName, List<ProductWithSizeAndQtity> parameterList) throws UnavailableException {
+        // gotowa metoda, jedynie tego sleepa moze zmniejszyc lub usunac
+        System.out.println("Searching for results for a given brand -> " + brandName + "...");
         String brandNameUpper= brandName.toUpperCase();
-        List<ProductWithSizeAndQtity> availableProducts= availableProductsWithSizesAndQtity
+        List<ProductWithSizeAndQtity> availableProducts= parameterList
                 .stream()
                 .filter(productWithSizeAndQtity -> productWithSizeAndQtity.getProduct().getBrand().toUpperCase().contains(brandNameUpper))
                 .toList();
-        if (availableProducts.isEmpty()){
-            System.out.println("No results for brand: " + brandName + "!");
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        for (ProductWithSizeAndQtity productWithSizeAndQtity : availableProducts){
+        if (availableProducts.isEmpty()){
+            throw new UnavailableException("There are no available products for brand: " + brandName);
+        }
+        return availableProducts;
+
+    }
+    public static void getProductListByCategoryAndBrand(Category category, String brandName){
+        // zrobic
+        System.out.println("Results for category " + category + " and brand " + brandName + ":" );
+        String brandNameUpper= brandName.toUpperCase();
+    }
+    public static void printProductsFromSelectedList(List<ProductWithSizeAndQtity> resultList){
+        // gotowa metoda
+        if (resultList.isEmpty()){
+            System.out.println("No results!");
+            return;
+        }
+        for (ProductWithSizeAndQtity productWithSizeAndQtity : resultList){
             System.out.println(productWithSizeAndQtity.toString());
         }
 
     }
+
 }
