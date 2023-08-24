@@ -98,5 +98,11 @@ public class Shop {
 
         String nazwa1="bluza";
         ProductWithSizeAndQtity.searchAvailableProductsByName(nazwa1);
+
+        Size size1= Size.M;
+        ProductWithSizeAndQtity.searchAvailableProductsBySize(size1);
+
+        String brand1="ell";
+        ProductWithSizeAndQtity.searchAvailableProductsByBrandName(brand1);
     }
 }

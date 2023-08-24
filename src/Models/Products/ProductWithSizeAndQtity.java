@@ -154,4 +154,32 @@ public class ProductWithSizeAndQtity {
             System.out.println(productWithSizeAndQtity.toString());
         }
     }
+    public static void searchAvailableProductsBySize(Size size){
+        System.out.println("Results for size "+ size + ":");
+        List<ProductWithSizeAndQtity> availableProducts= availableProductsWithSizesAndQtity
+                .stream()
+                .filter(productWithSizeAndQtity -> productWithSizeAndQtity.getSizesAndQuantitiesMap().containsKey(size))
+                .toList();
+        if (availableProducts.isEmpty()){
+            System.out.println("No results for size: " + size + "!");
+        }
+        for (ProductWithSizeAndQtity productWithSizeAndQtity : availableProducts){
+            System.out.println(productWithSizeAndQtity.toString());
+        }
+    }
+    public static void searchAvailableProductsByBrandName(String brandName){
+        System.out.println("Results for brand " + brandName + ":");
+        String brandNameUpper= brandName.toUpperCase();
+        List<ProductWithSizeAndQtity> availableProducts= availableProductsWithSizesAndQtity
+                .stream()
+                .filter(productWithSizeAndQtity -> productWithSizeAndQtity.getProduct().getBrand().toUpperCase().contains(brandNameUpper))
+                .toList();
+        if (availableProducts.isEmpty()){
+            System.out.println("No results for brand: " + brandName + "!");
+        }
+        for (ProductWithSizeAndQtity productWithSizeAndQtity : availableProducts){
+            System.out.println(productWithSizeAndQtity.toString());
+        }
+
+    }
 }
