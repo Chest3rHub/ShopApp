@@ -176,11 +176,24 @@ public class Shop {
         System.out.println("====");
         System.out.println("Rozpoczecie metody szukania produktow z podanego brandu:");
         String brand1="nike";
-
         List<ProductWithSizeAndQtity> brandSearchingList= ProductWithSizeAndQtity.getProductListByBrand(brand1,ProductWithSizeAndQtity.availableProductsWithSizesAndQtity);
         ProductWithSizeAndQtity.printProductsFromSelectedList(brandSearchingList);
-
         System.out.println("Zakonczenie metody szukania z danego brandu");
         System.out.println("=====");
+
+        System.out.println("======");
+        System.out.println("Wyszukiwanie z okreslonej kategorii i brandu");
+        List<ProductWithSizeAndQtity> categoryAndBrandSearchingList=ProductWithSizeAndQtity.getProductListByCategoryAndBrand(category,brand1,ProductWithSizeAndQtity.availableProductsWithSizesAndQtity);
+        ProductWithSizeAndQtity.printProductsFromSelectedList(categoryAndBrandSearchingList);
+        System.out.println("Koniec wyszukiwania z okreslonej kategorii i brandu");
+        System.out.println("====");
+
+        System.out.println("======");
+        System.out.println("Wyszukiwanie z okreslonego brandu i nazwy produktu");
+        List<ProductWithSizeAndQtity> brandAndProductNameList=ProductWithSizeAndQtity.getProductListByBrandAndName(brand1,nazwa1,ProductWithSizeAndQtity.availableProductsWithSizesAndQtity);
+        ProductWithSizeAndQtity.printProductsFromSelectedList(brandAndProductNameList);
+        System.out.println("Koniec wyszukiwania z okreslonej kategorii i brandu");
+        System.out.println("====");
+
     }
 }

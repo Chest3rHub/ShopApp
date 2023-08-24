@@ -163,7 +163,7 @@ public class ProductWithSizeAndQtity{
         // gotowa metoda
         System.out.println("Results for size "+ size + ":");
         try {
-            Thread.sleep(2000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -185,7 +185,7 @@ public class ProductWithSizeAndQtity{
                 .filter(productWithSizeAndQtity -> productWithSizeAndQtity.getProduct().getBrand().toUpperCase().contains(brandNameUpper))
                 .toList();
         try {
-            Thread.sleep(2000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -195,10 +195,13 @@ public class ProductWithSizeAndQtity{
         return availableProducts;
 
     }
-    public static void getProductListByCategoryAndBrand(Category category, String brandName){
-        // zrobic
+    public static List<ProductWithSizeAndQtity> getProductListByCategoryAndBrand(Category category, String brandName, List<ProductWithSizeAndQtity> parameterList) throws UnavailableException {
+        // gotowa metoda
         System.out.println("Results for category " + category + " and brand " + brandName + ":" );
-        String brandNameUpper= brandName.toUpperCase();
+        List<ProductWithSizeAndQtity> selectedCategory= ProductWithSizeAndQtity.getProductListByCategory(category,parameterList);
+        List<ProductWithSizeAndQtity> selectedBrand=ProductWithSizeAndQtity.getProductListByBrand(brandName,selectedCategory);
+
+        return selectedBrand;
     }
     public static void printProductsFromSelectedList(List<ProductWithSizeAndQtity> resultList){
         // gotowa metoda
@@ -209,6 +212,16 @@ public class ProductWithSizeAndQtity{
         for (ProductWithSizeAndQtity productWithSizeAndQtity : resultList){
             System.out.println(productWithSizeAndQtity.toString());
         }
+
+    }
+    public static List<ProductWithSizeAndQtity> getProductListByBrandAndName(String brandName, String name, List<ProductWithSizeAndQtity> parameterList) throws UnavailableException {
+        // gotowa metoda
+        System.out.println("Results for brand " + brandName + " and product name " + name + ":" );
+        List<ProductWithSizeAndQtity> selectedBrand= ProductWithSizeAndQtity.getProductListByBrand(brandName,parameterList);
+        List<ProductWithSizeAndQtity> selectedProductName= ProductWithSizeAndQtity.getProductListByName(name,selectedBrand);
+
+        return selectedProductName;
+
 
     }
 
