@@ -14,12 +14,14 @@ public abstract class Employee implements IPersonInfo {
     Date hireDate;
     double salary;
     Role role;
+    List<Feedback> feedbackFromManagerList = new ArrayList<>();
+
 
     public static List<Employee> employees= new ArrayList<>();
     public Employee(){}
 
 
-    public Employee(String firstName, String lastName, Date hireDate, double salary, Role role) {
+    public Employee(String firstName, String lastName, Date hireDate, double salary, Role role, List<Feedback> feedbackFromManagerList) {
         this.id=idCounter;
         idCounter++;
         this.firstName = firstName;
@@ -27,6 +29,7 @@ public abstract class Employee implements IPersonInfo {
         this.hireDate = hireDate;
         this.salary = salary;
         this.role = role;
+        this.feedbackFromManagerList =feedbackFromManagerList;
     }
 
     @Override

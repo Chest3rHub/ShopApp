@@ -1,6 +1,8 @@
 package Models.Customers;
 
 import Interfaces.IPersonInfo;
+import Models.Employees.Consultant;
+import Models.Employees.Feedback;
 import Models.Employees.Role;
 import Models.Order;
 
@@ -30,6 +32,11 @@ public class Customer implements IPersonInfo {
                 + this.email + ";"
                 + this.role + ";"
                 + this.orders;
+
+    }
+    public void giveFeedbackOnConsultant(Consultant consultant, Feedback feedback){
+        consultant.addFeedback(feedback);
+
 
     }
 }
