@@ -1,12 +1,12 @@
 package Models.Employees;
 
-import Interfaces.IEmployeeInfo;
+import Interfaces.IPersonInfo;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public abstract class Employee implements IEmployeeInfo {
+public abstract class Employee implements IPersonInfo {
     public static int idCounter=1;
     int id;
     String firstName;
@@ -30,7 +30,7 @@ public abstract class Employee implements IEmployeeInfo {
     }
 
     @Override
-    public String returnPersonalData() {
+    public String getPersonalData() {
 
         return this.id + ";"
                 + this.firstName + ";"

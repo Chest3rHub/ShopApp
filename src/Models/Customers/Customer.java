@@ -1,12 +1,13 @@
 package Models.Customers;
 
+import Interfaces.IPersonInfo;
 import Models.Employees.Role;
 import Models.Order;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Customer {
+public class Customer implements IPersonInfo {
     public static int idCounter=1;
 
     int id;
@@ -20,4 +21,15 @@ public class Customer {
 
     // password dodac, metody register, login, hashowanie hasel itd;
 
+    public String getPersonalData(){
+        return this.id + ";"
+                + this.firstName + ";"
+                + this.lastName + ";"
+                + this.address + ";"
+                + this.tel + ";"
+                + this.email + ";"
+                + this.role + ";"
+                + this.orders;
+
+    }
 }
