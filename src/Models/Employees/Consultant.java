@@ -1,9 +1,14 @@
 package Models.Employees;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Consultant extends Employee{
+public class Consultant extends AbstractEmployee {
+
+    public Consultant(String firstName, String lastName, LocalDate hireDate, double salary, Role role){
+        super(firstName,lastName,hireDate,salary,role);
+    }
 
     List<Feedback> feedbackFromCustomerList = new ArrayList<>();
 
@@ -18,6 +23,11 @@ public class Consultant extends Employee{
 
     @Override
     public String getPersonalData() {
-        return null;
+        return this.id + ";"
+                + this.firstName + ";"
+                + this.lastName + ";"
+                + this. hireDate + ";"
+                + this.salary + ";"
+                + this.role;
     }
 }

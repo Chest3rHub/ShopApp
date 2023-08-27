@@ -2,6 +2,7 @@ package Models;
 
 // import Models.Employees.Employee;
 import Exceptions.NoSuchProductException;
+import Models.Employees.AbstractEmployee;
 import Models.Products.Category;
 import Models.Products.Product;
 import Models.Products.ProductWithSizeAndQtity;
@@ -23,12 +24,13 @@ public class Shop {
 
     public static void openShop(){
         Product.readProductsFromFile();
+        AbstractEmployee.readEmployeesFromFile();
     }
 
     public static void closeShop(){
 
     }
-    public static void seedData() throws Exception {
+    public static void seedProductData() throws Exception {
       //  Product p1= new Product(Category.PANTS,"Spodenki","Champion",149.99,"Przewiewne na lato");
       //  Product p2= new Product()
         int idDoPodaniaPrzyWyszukiwaniu=1;
@@ -196,4 +198,9 @@ public class Shop {
         System.out.println("====");
 
     }
+    public static void seedEmployeeData(){
+
+    }
+
+
 }
