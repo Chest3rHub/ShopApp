@@ -10,29 +10,53 @@ public class Manager extends AbstractEmployee {
     super(firstName,lastName,hireDate,salary,role);
   }
 
-  public void rateEmployee(AbstractEmployee abstractEmployee, Feedback feedback) throws InteractingWithYourselfException {
-    if (this.id== abstractEmployee.id){
+  public void rateEmployee(Consultant consultant, Feedback feedback) throws InteractingWithYourselfException {
+    if (this.id== consultant.id){
       throw new InteractingWithYourselfException("You can't rate yourself!");
     }
-    abstractEmployee.feedbackFromManagerList.add(feedback);
+    consultant.feedbackFromManagerList.add(feedback);
     System.out.println("Employee has received your feedback.");
   }
-  public void hireNewEmployee(AbstractEmployee abstractEmployee){
-    if (AbstractEmployee.abstractEmployees.contains(abstractEmployee)){
+  public void rateEmployee(Worker worker, Feedback feedback) throws InteractingWithYourselfException {
+    if (this.id== worker.id){
+      throw new InteractingWithYourselfException("You can't rate yourself!");
+    }
+    worker.feedbackFromManagerList.add(feedback);
+    System.out.println("Employee has received your feedback.");
+  }
+  public void hireNewEmployee(Worker worker){
+    if (AbstractEmployee.abstractEmployees.contains(worker)){
       System.out.println("This employee is already hired!");
       return;
     }
-    AbstractEmployee.abstractEmployees.add(abstractEmployee);
-    System.out.println("Hired new employee: " + abstractEmployee);
+    AbstractEmployee.abstractEmployees.add(worker);
+    System.out.println("Hired new employee: " + worker);
 
   }
-  public void fireEmployee(AbstractEmployee abstractEmployee){
-    if (!AbstractEmployee.abstractEmployees.contains(abstractEmployee)){
+  public void hireNewEmployee(Consultant consultant){
+    if (AbstractEmployee.abstractEmployees.contains(consultant)){
+      System.out.println("This employee is already hired!");
+      return;
+    }
+    AbstractEmployee.abstractEmployees.add(consultant);
+    System.out.println("Hired new employee: " + consultant);
+
+  }
+  public void fireEmployee(Consultant consultant){
+    if (!AbstractEmployee.abstractEmployees.contains(consultant)){
       System.out.println("There is no such employee to fire.");
       return;
     }
-    AbstractEmployee.abstractEmployees.remove(abstractEmployee);
-    System.out.println("Fired an employee: " + abstractEmployee);
+    AbstractEmployee.abstractEmployees.remove(consultant);
+    System.out.println("Fired an employee: " + consultant);
+  }
+  public void fireEmployee(Worker worker){
+    if (!AbstractEmployee.abstractEmployees.contains(worker)){
+      System.out.println("There is no such employee to fire.");
+      return;
+    }
+    AbstractEmployee.abstractEmployees.remove(worker);
+    System.out.println("Fired an employee: " + worker);
   }
 
   @Override

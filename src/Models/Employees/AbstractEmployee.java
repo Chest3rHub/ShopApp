@@ -19,7 +19,7 @@ public abstract class AbstractEmployee implements IPersonInfo {
     LocalDate hireDate;
     double salary;
     Role role;
-    List<Feedback> feedbackFromManagerList = new ArrayList<>();
+    List<Feedback> feedbackFromManagerList;
 
 
     public static List<AbstractEmployee> abstractEmployees = new ArrayList<>();
