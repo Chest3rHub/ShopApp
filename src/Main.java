@@ -22,9 +22,26 @@ public class Main {
            // e.getMessage();
         }
 
+        // zeby sie zalogowac porownuje hash kombinacji hasla i loginu, poniewaz login jest unikalny dla kazdego
+        // wiec mozna to potraktowac jak salt do zabezpieczenia
+        // czyli osoby o roznych loginach ale tym samym hasle beda mialy rozne hashe jako "password hash"
+
         System.out.println(LocalDate.now());
+        String admin="admin";
+        System.out.println(admin.hashCode());
+        String haslo="Lebioda";
+        int hashed= (admin+haslo).hashCode();
+        String haslo2="Passwordto123!";
+        System.out.println(hashed);
+        System.out.println(haslo2.hashCode());
         SwingUtilities.invokeLater(() -> {
-            ShopGUI.startLoginScreen();
+            try {
+                ShopGUI.readAccountsFromFile();
+                ShopGUI.showAllAccounts();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            ShopGUI.startingScreen();
         });
      //   Product.addProduct();
      //   Product.addProduct();

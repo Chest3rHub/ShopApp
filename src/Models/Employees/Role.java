@@ -1,5 +1,5 @@
 package Models.Employees;
 
 public enum Role {
-    ADMIN, WORKER, MANAGER, CONSULTANT
+    ADMIN, WORKER, MANAGER, CONSULTANT, CLIENT
 }
