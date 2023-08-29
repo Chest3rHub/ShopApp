@@ -10,9 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Customer implements IPersonInfo {
+    public static List<Customer> customers= new ArrayList<>();
     public static int idCounter=1;
 
+
+
     int id;
+    String login;
+    String password;
     String firstName;
     String lastName;
     String address;
@@ -22,6 +27,13 @@ public class Customer implements IPersonInfo {
     List<Order> orders= new ArrayList<>();
 
     // password dodac, metody register, login, hashowanie hasel itd;
+
+    public Customer(String login, String password){
+        this.login=login;
+        this.password=password;
+        this.role=Role.CLIENT;
+        customers.add(this);
+    }
 
     public String getPersonalData(){
         return this.id + ";"
@@ -36,7 +48,22 @@ public class Customer implements IPersonInfo {
     }
     public void giveFeedbackOnConsultant(Consultant consultant, Feedback feedback){
         consultant.addFeedback(feedback);
-
-
     }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
 }

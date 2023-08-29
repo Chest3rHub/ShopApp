@@ -9,6 +9,16 @@ import java.time.LocalDate;
 public class Main {
 
     public static void main(String[] args) {
+        // konto ADMIN:
+        // login: admin
+        // password: Lebioda
+
+        // konto MANAGER:
+        // login: manager
+        // password: Szef
+
+
+        // jedno konto dla admina, jedno dla managera, wiele dla klientow
         Shop.openShop();
         Product.showProducts();
         System.out.println("======");
@@ -27,13 +37,13 @@ public class Main {
         // czyli osoby o roznych loginach ale tym samym hasle beda mialy rozne hashe jako "password hash"
 
         System.out.println(LocalDate.now());
-        String admin="admin";
+        String admin="manager";
         System.out.println(admin.hashCode());
-        String haslo="Lebioda";
+        String haslo="Szef";
         int hashed= (admin+haslo).hashCode();
-        String haslo2="Passwordto123!";
+
         System.out.println(hashed);
-        System.out.println(haslo2.hashCode());
+        System.out.println(ShopGUI._roleManagerHash);
         SwingUtilities.invokeLater(() -> {
             try {
                 ShopGUI.readAccountsFromFile();

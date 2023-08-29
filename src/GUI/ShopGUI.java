@@ -1,6 +1,7 @@
 package GUI;
 
 import DTOs.PasswordRoleDTO;
+import Models.Customers.Customer;
 import Models.Employees.AbstractEmployee;
 import Models.Employees.Role;
 import Models.Products.Product;
@@ -10,8 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,10 +51,10 @@ public class ShopGUI extends JFrame {
         JLabel loginLabel = new JLabel("Login:");
         JTextField loginField = new JTextField();
 
-        JLabel passwordLabel = new JLabel("Hasło:");
+        JLabel passwordLabel = new JLabel("Password:");
         JPasswordField passwordField = new JPasswordField();
 
-        JButton loginButton = new JButton("Zaloguj");
+        JButton loginButton = new JButton("Sign in");
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -101,16 +101,16 @@ public class ShopGUI extends JFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("Welcome to Shop App!");
 
-        // logo w rogu
-      //  ImageIcon imageIcon= new ImageIcon("plik.png");
-      //  frame.setIconImage(imageIcon.getImage());
+      //   logo w rogu
+        ImageIcon imageIcon= new ImageIcon("src/Graphics/shoppingCart.png");
+        frame.setIconImage(imageIcon.getImage());
 
         // kolor tla
        // frame.getContentPane().setBackground(new Color(0,0,0));
         frame.setSize(300, 200);
         JButton loginButton = new JButton("Zaloguj");
         JButton registerButton = new JButton("Utworz nowe konto");
-        mainPanel.add(new JLabel()); // Pusta etykieta jako wypełnienie
+       // mainPanel.add(new JLabel()); // Pusta etykieta jako wypełnienie
         mainPanel.add(loginButton);
         mainPanel.add(registerButton);
         loginButton.addActionListener(new ActionListener() {
@@ -122,7 +122,7 @@ public class ShopGUI extends JFrame {
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // register
+                changeToRegisterScreen();
             }
         });
 
@@ -207,6 +207,7 @@ public class ShopGUI extends JFrame {
     public static void readAccountsFromFile() throws Exception {
         try (BufferedReader br = new BufferedReader(new FileReader(accountsFileName))) {
             String line;
+            line=br.readLine();
             while ((line = br.readLine()) != null) {
                 String[] values = line.split(";");
 
@@ -220,6 +221,7 @@ public class ShopGUI extends JFrame {
                     role=Role.MANAGER;
                 } else if (roleHashedString.equals(_roleClientHash)) {
                     role=Role.CLIENT;
+                    Customer.customers.add(new Customer(loginHashed,passwordHashedString));
                 } else if (roleHashedString.equals(_roleWorkerHash)) {
                     role=Role.WORKER;
                 } else if (roleHashedString.equals(_roleConsultantHash)) {
@@ -231,8 +233,82 @@ public class ShopGUI extends JFrame {
             }
         }
     }
-    public static void Register(){
+    public static void changeToRegisterScreen(){
 
+
+        secondPanel = new JPanel();
+        secondPanel.setLayout(new BorderLayout());
+        frame.setTitle("Login to Shop App");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(300, 200);
+
+        secondPanel.setLayout(new GridLayout(4, 2, 10, 10));
+
+        JLabel login = new JLabel("Login:");
+        JTextField loginField = new JTextField();
+
+        JLabel passwordLabel = new JLabel("Password:");
+        JPasswordField passwordField = new JPasswordField();
+
+        JLabel confirmPasswordLabel = new JLabel("Confirm password:");
+        JPasswordField confirmPasswordField = new JPasswordField();
+
+
+
+        JButton registerButton = new JButton("Register");
+        registerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String login = loginField.getText();
+
+                char[] passwordChars = passwordField.getPassword();
+                String password = new String(passwordChars);
+
+                char[] confirmedPasswordChars = confirmPasswordField.getPassword();
+                String confirmedPassword = new String(confirmedPasswordChars);
+
+                try {
+                    register(login,password,confirmedPassword);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+
+                // rejestrowanie wpisanych danych
+            }
+        });
+        secondPanel.add(login);
+        secondPanel.add(loginField);
+        secondPanel.add(passwordLabel);
+        secondPanel.add(passwordField);
+        secondPanel.add(confirmPasswordLabel);
+        secondPanel.add(confirmPasswordField);
+        secondPanel.add(new JLabel()); // Pusta etykieta jako wypełnienie
+        secondPanel.add(registerButton);
+
+
+        frame.setTitle("Shop App");
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(secondPanel);
+        frame.getContentPane().revalidate();
+        frame.getContentPane().repaint();
+        frame.setVisible(true);
+
+    }
+    public static void register(String loginEntered, String passwordEntered, String confirmedPasswordEntered) throws Exception{
+        int loginHashLong= loginEntered.hashCode();
+        String loginHash= String.valueOf(loginHashLong);
+        if (accounts.containsKey(loginHash)){
+            throw new Exception("This login is already taken!");
+        }
+
+        if (!passwordEntered.equals(confirmedPasswordEntered)){
+            throw new Exception("Passwords are not the same!");
+        }
+        long passwordHashLong= (loginEntered+passwordEntered).hashCode();
+        String passwordHash= String.valueOf(passwordHashLong);
+        Customer customer= new Customer(loginHash,passwordHash);
+        addCustomerToAccountsFile(customer);
+// dodawanie konta do bazy danych itd
     }
     public static void showAllAccounts(){
         for (Map.Entry<String, PasswordRoleDTO> entry : accounts.entrySet()) {
@@ -241,4 +317,17 @@ public class ShopGUI extends JFrame {
             System.out.println("Key: " + key + ", Value: " + passwordRoleDTO.getPassword() + ";" + passwordRoleDTO.getRole());
         }
     }
+    public static void addCustomerToAccountsFile(Customer customer) throws Exception{
+
+        FileOutputStream fos = new FileOutputStream(accountsFileName, true); // true oznacza tryb dopisywania
+        PrintStream ps = new PrintStream(fos);
+        ps.println(customer.getLogin() + ";" + customer.getPassword() + ";" + _roleClientHash);
+
+        ps.close();
+
+//            try (BufferedWriter writer = new BufferedWriter(new FileWriter(accountsFileName, true))) {
+//                writer.write(customer.getLogin() + ";" + customer.getPassword() + ";" + _roleClientHash);
+//                writer.newLine(); // Opcjonalnie dodaj nową linię po dopisaniu zawartości
+//            }
+        }
 }
