@@ -380,7 +380,7 @@ public class ShopGUI extends JFrame {
                 try {
                     register(login,password,confirmedPassword);
                 } catch (Exception ex) {
-                    throw new RuntimeException(ex);
+                    JOptionPane.showMessageDialog(frame, ex.getMessage());
                 }
 
                 // rejestrowanie wpisanych danych
