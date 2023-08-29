@@ -22,6 +22,8 @@ public class Customer implements IPersonInfo {
     String lastName;
     String address;
     int tel;
+
+    double credits;
     String email;
     Role role;
     List<Order> orders= new ArrayList<>();
@@ -33,6 +35,7 @@ public class Customer implements IPersonInfo {
         this.password=password;
         this.role=Role.CLIENT;
         customers.add(this);
+        this.credits=0;
     }
 
     public String getPersonalData(){
@@ -66,4 +69,83 @@ public class Customer implements IPersonInfo {
         this.password = password;
     }
 
+    public static List<Customer> getCustomers() {
+        return customers;
+    }
+
+    public static void setCustomers(List<Customer> customers) {
+        Customer.customers = customers;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    public static int getIdCounter() {
+        return idCounter;
+    }
+
+    public static void setIdCounter(int idCounter) {
+        Customer.idCounter = idCounter;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public int getTel() {
+        return tel;
+    }
+
+    public void setTel(int tel) {
+        this.tel = tel;
+    }
+
+    public double getCredits() {
+        return credits;
+    }
+
+    public void setCredits(double credits) {
+        this.credits = credits;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 }

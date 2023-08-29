@@ -4,21 +4,27 @@ import DTOs.PasswordRoleDTO;
 import Models.Customers.Customer;
 import Models.Employees.AbstractEmployee;
 import Models.Employees.Role;
+import Models.Order;
 import Models.Products.Product;
 import Models.Products.ProductWithSizeAndQtity;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class ShopGUI extends JFrame {
 
+    public static final Font _FONT = new JLabel().getFont();
+    public static final int _minPasswordLength=7;
+
     public static JFrame frame = new JFrame("Default");
-    ;
     public static JPanel mainPanel;
     public static JPanel secondPanel;
 
@@ -64,11 +70,25 @@ public class ShopGUI extends JFrame {
 
                 try {
                     Role role = login(login,password);
-                    if (role==null){
-                        System.out.println("Bledny login lub haslo...");
-                    } else {
-                        System.out.println("Zalogowany jako "+ role);
+
+                    if (role==Role.ADMIN){
+                        adminLoggedIn();
+                    } else if ( role==Role.MANAGER) {
+                        managerLoggedIn();
+                    } else if ( role==Role.CLIENT) {
+                        long hash= login.hashCode();
+                        String hashString= String.valueOf(hash);
+                        Optional<Customer> customerLoggedIn= Customer.customers.stream().filter(customer -> customer.getLogin().equals(hashString)).findFirst();
+                        if (!customerLoggedIn.isPresent()){
+                            throw new Exception("No such customer");
+                        }
+                        clientLoggedIn(customerLoggedIn.get(), login);
                     }
+//                    if (role==null){
+//                        System.out.println("Bledny login lub haslo...");
+//                    } else {
+//                        System.out.println("Zalogowany jako "+ role);
+//                    }
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }
@@ -76,7 +96,6 @@ public class ShopGUI extends JFrame {
                 // weryfikacja hashowanego hasla i loginu z baza danych itd...
 
                 //  JOptionPane.showMessageDialog(frame, "Zalogowano jako: " + login);
-                changeScreenToLoggedIn();
             }
         });
 
@@ -96,23 +115,73 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().repaint();
         frame.setVisible(true);
     }
-    public static void startingScreen(){
-        JPanel mainPanel = new JPanel();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setTitle("Welcome to Shop App!");
+    public static void loggedOutScreen(){
+        BorderLayout borderLayout= new BorderLayout();
+        JPanel mainPanel = new JPanel(borderLayout);
+       // GridBagConstraints constraints= new GridBagConstraints();
 
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(300, 200);
+        frame.setTitle("Shop App");
+        frame.setLayout(new BorderLayout());
+
+
+        mainPanel.setLayout(borderLayout);
+
+
+
+        frame.add(mainPanel,BorderLayout.CENTER);
+
+
+        JLabel welcomeLabel= new JLabel("Welcome to Shop App!",SwingConstants.CENTER);
+        welcomeLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,19));
+        // x kolumna, y wiersz
+      //  constraints.fill=GridBagConstraints.HORIZONTAL;
+      //  constraints.gridx=1;
+      //  constraints.gridy=0;
+     //   constraints.anchor= GridBagConstraints.PAGE_START;
+        mainPanel.add(welcomeLabel, BorderLayout.NORTH);
+
+
+        // frame.setBackground(new Color(255,80,80));
       //   logo w rogu
         ImageIcon imageIcon= new ImageIcon("src/Graphics/shoppingCart.png");
         frame.setIconImage(imageIcon.getImage());
 
         // kolor tla
        // frame.getContentPane().setBackground(new Color(0,0,0));
-        frame.setSize(300, 200);
-        JButton loginButton = new JButton("Zaloguj");
-        JButton registerButton = new JButton("Utworz nowe konto");
+
+        JPanel buttonPanel = new JPanel();
+
+        JButton loginButton = new JButton("Sign in");
+      //  constraints.gridx=0;
+      //  constraints.gridy=1;
+     //   constraints.gridwidth=2;
+     //   constraints.anchor=GridBagConstraints.CENTER;
+        buttonPanel.add(loginButton);
+
+        JButton registerButton = new JButton("Register");
+      //  constraints.gridx=2;
+     //   constraints.gridy=1;
+     //   constraints.gridwidth=2;
+    //    constraints.anchor=GridBagConstraints.CENTER;
+        buttonPanel.add(registerButton);
+
+        mainPanel.add(buttonPanel,BorderLayout.CENTER);
+
+
        // mainPanel.add(new JLabel()); // Pusta etykieta jako wypełnienie
-        mainPanel.add(loginButton);
-        mainPanel.add(registerButton);
+
+
+
+
+        JLabel creditsLabel= new JLabel("~ by Szymon Sawicki :)",SwingConstants.SOUTH_EAST);
+      //  constraints.gridx=0;
+     //   constraints.gridy=2;
+     //   constraints.gridwidth=4;
+     //   constraints.anchor=  GridBagConstraints.CENTER;
+        mainPanel.add(creditsLabel,BorderLayout.SOUTH);
+
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -126,14 +195,28 @@ public class ShopGUI extends JFrame {
             }
         });
 
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+        int windowWidth = frame.getWidth();
+        int windowHeight = frame.getHeight();
+        int x = (screenWidth - windowWidth) / 2;
+        int y = (screenHeight - windowHeight) / 2;
 
+        // Ustaw położenie okna
+        frame.setLocation(x, y);
+
+        frame.getContentPane().removeAll();
         frame.getContentPane().add(mainPanel);
+        frame.setTitle("Shop App");
+        frame.getContentPane().revalidate();
+        frame.getContentPane().repaint();
 
         frame.setVisible(true);
     }
 
 
-    public static void changeScreenToLoggedIn() {
+    public static void adminLoggedIn() {
             secondPanel = new JPanel();
             secondPanel.setLayout(new BorderLayout());
 
@@ -148,6 +231,8 @@ public class ShopGUI extends JFrame {
             JButton button1 = new JButton("Wyswietl produkty");
             JButton button2 = new JButton("Wyswietl produkty");
             JButton button3 = new JButton("Dodaj produkt");
+
+            JButton logOutButton= logOutButton();
 
             button1.addActionListener(new ActionListener() {
                 @Override
@@ -168,9 +253,11 @@ public class ShopGUI extends JFrame {
                     ProductWithSizeAndQtity.showAllAvailableProductsWithSizesAndQtity();
                 }
             });
+
             buttonPanel.add(button1);
             buttonPanel.add(button2);
             buttonPanel.add(button3);
+            buttonPanel.add(logOutButton);
 
             secondPanel.add(buttonPanel, BorderLayout.CENTER);
         // frame= new JFrame();
@@ -179,6 +266,29 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().add(secondPanel);
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
+    }
+    public static void managerLoggedIn(){
+
+    }
+    public static void clientLoggedIn(Customer customer, String enteredLogin){
+        secondPanel = new JPanel();
+        secondPanel.setLayout(new BorderLayout());
+        JLabel welcomeLabel= new JLabel("Welcome " + enteredLogin + "!");
+        welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        secondPanel.add(welcomeLabel, BorderLayout.NORTH);
+
+
+
+      //  List<Order> orders= customer.getOrders();
+
+        frame.setTitle("Shop App");
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(secondPanel);
+        frame.getContentPane().revalidate();
+        frame.getContentPane().repaint();
+    }
+    public static void setClientData(Customer customer){
+        // ustawic imie nazwisko adres dane kontaktowe itd
     }
 
     public static Role login(String loginEntered, String passwordEntered) throws Exception {
@@ -191,16 +301,16 @@ public class ShopGUI extends JFrame {
         String loginHashedString= String.valueOf(hashedLoginLong);
         PasswordRoleDTO loginToCheck= accounts.get(loginHashedString);
         if (loginToCheck==null){
-            throw new Exception("Podano zly login lub haslo") ;
+            throw new Exception("Incorrect login or password") ;
         }
         String passwordToCheck= loginToCheck.getPassword();
-        long hashedPasswordLong= passwordToCheck.hashCode();
-        String passwordHashedString=String.valueOf(hashedPasswordLong);
+//        long hashedPasswordLong= passwordToCheck.hashCode();
+//        String passwordHashedString=String.valueOf(hashedPasswordLong);
 
         if (passwordToCheck.equals(combinedHashString)){
             return loginToCheck.getRole();
         }else {
-            throw new Exception("Podano zly login lub haslo");
+            throw new Exception("Incorrect login or password");
         }
     }
 
@@ -221,7 +331,7 @@ public class ShopGUI extends JFrame {
                     role=Role.MANAGER;
                 } else if (roleHashedString.equals(_roleClientHash)) {
                     role=Role.CLIENT;
-                    Customer.customers.add(new Customer(loginHashed,passwordHashedString));
+                    Customer customer= new Customer(loginHashed,passwordHashedString);
                 } else if (roleHashedString.equals(_roleWorkerHash)) {
                     role=Role.WORKER;
                 } else if (roleHashedString.equals(_roleConsultantHash)) {
@@ -301,13 +411,19 @@ public class ShopGUI extends JFrame {
             throw new Exception("This login is already taken!");
         }
 
+        if (passwordEntered.toCharArray().length<_minPasswordLength){
+            throw new Exception("Too short password! Minimum 7 characters!");
+        }
+
         if (!passwordEntered.equals(confirmedPasswordEntered)){
             throw new Exception("Passwords are not the same!");
         }
         long passwordHashLong= (loginEntered+passwordEntered).hashCode();
         String passwordHash= String.valueOf(passwordHashLong);
         Customer customer= new Customer(loginHash,passwordHash);
+        accounts.put(loginHash,new PasswordRoleDTO(passwordHash,Role.CLIENT));
         addCustomerToAccountsFile(customer);
+        registeredAnAccountScreen();
 // dodawanie konta do bazy danych itd
     }
     public static void showAllAccounts(){
@@ -319,7 +435,7 @@ public class ShopGUI extends JFrame {
     }
     public static void addCustomerToAccountsFile(Customer customer) throws Exception{
 
-        FileOutputStream fos = new FileOutputStream(accountsFileName, true); // true oznacza tryb dopisywania
+        FileOutputStream fos = new FileOutputStream(accountsFileName, true);
         PrintStream ps = new PrintStream(fos);
         ps.println(customer.getLogin() + ";" + customer.getPassword() + ";" + _roleClientHash);
 
@@ -327,7 +443,87 @@ public class ShopGUI extends JFrame {
 
 //            try (BufferedWriter writer = new BufferedWriter(new FileWriter(accountsFileName, true))) {
 //                writer.write(customer.getLogin() + ";" + customer.getPassword() + ";" + _roleClientHash);
-//                writer.newLine(); // Opcjonalnie dodaj nową linię po dopisaniu zawartości
+//                writer.newLine();
 //            }
+        }
+        public static JButton logOutButton(){
+            JButton logOutButton= new JButton("Log out");
+            logOutButton.setBackground(new Color(255,94,90));
+             logOutButton.addActionListener(new ActionListener() {
+                 @Override
+                 public void actionPerformed(ActionEvent e) {
+                     loggedOutScreen();
+                 }
+             });
+
+            return logOutButton;
+        }
+        public static JButton backToMenuClient(Customer customer, String login){
+            JButton backToMenuButton= new JButton("Go back");
+            backToMenuButton.setBackground(new Color(100,200,200));
+
+            backToMenuButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    clientLoggedIn(customer,login);
+                }
+            });
+            return backToMenuButton;
+        }
+        public static void returnToMenuAdmin(){
+
+        }
+        public static void returnToMenuManager(){
+
+        }
+
+        public static void viewAvailableProducts(){
+
+        }
+        public void addCreditsToAccount(Customer customer){
+
+        }
+        public static void registeredAnAccountScreen(){
+            secondPanel = new JPanel();
+            secondPanel.setLayout(new BorderLayout());
+            frame.setTitle("WELCOME!");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(300, 200);
+            JLabel registeredLabel= new JLabel("Registered successfully!");
+
+            registeredLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,24));
+            //registeredLabel.setFont(new Font("Arial",Font.PLAIN,24));
+            registeredLabel.setHorizontalAlignment(JLabel.CENTER);
+            registeredLabel.setVerticalAlignment(JLabel.TOP);
+            secondPanel.add(registeredLabel,BorderLayout.NORTH);
+
+            JButton logInButton= new JButton("Continue");
+
+            JPanel buttonPanel = new JPanel(new FlowLayout());
+            buttonPanel.add(logInButton);
+            secondPanel.add(buttonPanel,BorderLayout.CENTER);
+           // logInButton.setFont(new Font(_FONT.getFontName(),Font.PLAIN,24));
+           // logInButton.setPreferredSize(new Dimension(2,2));
+            logInButton.setBackground(new Color(160,255,125));
+
+            logInButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    loggedOutScreen();
+                }
+            });
+           // secondPanel.add(logInButton,BorderLayout.CENTER);
+
+
+            //secondPanel.add(new JLabel()); // Pusta etykieta jako wypełnienie
+
+
+            frame.setTitle("Shop App");
+            frame.getContentPane().removeAll();
+            frame.getContentPane().add(secondPanel);
+            frame.getContentPane().revalidate();
+            frame.getContentPane().repaint();
+            //frame.pack();
+            frame.setVisible(true);
         }
 }

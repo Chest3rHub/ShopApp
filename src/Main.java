@@ -51,7 +51,7 @@ public class Main {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            ShopGUI.startingScreen();
+            ShopGUI.loggedOutScreen();
         });
      //   Product.addProduct();
      //   Product.addProduct();
