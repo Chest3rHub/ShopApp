@@ -90,7 +90,7 @@ public class ShopGUI extends JFrame {
 //                        System.out.println("Zalogowany jako "+ role);
 //                    }
                 } catch (Exception ex) {
-                    throw new RuntimeException(ex);
+                    JOptionPane.showMessageDialog(frame, ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
                 }
 
                 // weryfikacja hashowanego hasla i loginu z baza danych itd...
@@ -99,12 +99,14 @@ public class ShopGUI extends JFrame {
             }
         });
 
+        JButton backButton= logOutButton();
+        backButton.setText("Back");
 
         secondPanel.add(loginLabel);
         secondPanel.add(loginField);
         secondPanel.add(passwordLabel);
         secondPanel.add(passwordField);
-        secondPanel.add(new JLabel()); // Pusta etykieta jako wypełnienie
+        secondPanel.add(backButton);
         secondPanel.add(loginButton);
 
 
@@ -273,14 +275,34 @@ public class ShopGUI extends JFrame {
     public static void clientLoggedIn(Customer customer, String enteredLogin){
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
+        
         JLabel welcomeLabel= new JLabel("Welcome " + enteredLogin + "!");
+        welcomeLabel.setVerticalAlignment(JLabel.CENTER);
+        welcomeLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,24));
         welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        secondPanel.add(welcomeLabel, BorderLayout.NORTH);
+      //  secondPanel.add(welcomeLabel, BorderLayout.NORTH);
 
+        JLabel creditsLabel= new JLabel("Credits: " + customer.getCredits());
+        creditsLabel.setHorizontalAlignment(SwingConstants.NORTH_EAST);
+       // secondPanel.add(creditsLabel,BorderLayout.NORTH);
 
+        JPanel topPanel= new JPanel(new BorderLayout());
+        topPanel.add(welcomeLabel,BorderLayout.CENTER);
+        topPanel.add(creditsLabel,BorderLayout.EAST);
+        secondPanel.add(topPanel,BorderLayout.NORTH);
 
       //  List<Order> orders= customer.getOrders();
 
+        JButton goToCreditsButton= new JButton("Money");
+
+        goToCreditsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addCreditsScreen(customer,enteredLogin);
+            }
+        });
+
+        secondPanel.add(goToCreditsButton);
         frame.setTitle("Shop App");
         frame.getContentPane().removeAll();
         frame.getContentPane().add(secondPanel);
@@ -380,19 +402,21 @@ public class ShopGUI extends JFrame {
                 try {
                     register(login,password,confirmedPassword);
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(frame, ex.getMessage());
+                    JOptionPane.showMessageDialog(frame, ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
                 }
 
                 // rejestrowanie wpisanych danych
             }
         });
+        JButton backButton= logOutButton();
+        backButton.setText("Back");
         secondPanel.add(login);
         secondPanel.add(loginField);
         secondPanel.add(passwordLabel);
         secondPanel.add(passwordField);
         secondPanel.add(confirmPasswordLabel);
         secondPanel.add(confirmPasswordField);
-        secondPanel.add(new JLabel()); // Pusta etykieta jako wypełnienie
+        secondPanel.add(backButton);
         secondPanel.add(registerButton);
 
 
@@ -459,7 +483,7 @@ public class ShopGUI extends JFrame {
             return logOutButton;
         }
         public static JButton backToMenuClient(Customer customer, String login){
-            JButton backToMenuButton= new JButton("Go back");
+            JButton backToMenuButton= new JButton("Back");
             backToMenuButton.setBackground(new Color(100,200,200));
 
             backToMenuButton.addActionListener(new ActionListener() {
@@ -469,6 +493,12 @@ public class ShopGUI extends JFrame {
                 }
             });
             return backToMenuButton;
+        }
+
+        public static JButton addCreditsButton(){
+         JButton button= new JButton();
+
+         return button;
         }
         public static void returnToMenuAdmin(){
 
@@ -481,6 +511,83 @@ public class ShopGUI extends JFrame {
 
         }
         public void addCreditsToAccount(Customer customer){
+
+        }
+
+
+        public static void addCreditsScreen(Customer customer, String loginEntered){
+            secondPanel = new JPanel();
+            secondPanel.setLayout(new BorderLayout());
+
+            frame.setTitle("Add Credits");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(300, 200);
+
+            JLabel addCreditsLabel= new JLabel("Type the amount of credits to add:");
+            addCreditsLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,14));
+            addCreditsLabel.setHorizontalAlignment(JLabel.CENTER);
+            addCreditsLabel.setVerticalAlignment(JLabel.TOP);
+
+
+            JPanel buttonsPanel= new JPanel(new FlowLayout());
+
+            JPanel textFieldPanel= new JPanel(new FlowLayout());
+
+
+
+           // JLabel credits = new JLabel("Login:");
+            JTextField creditsTextField = new JTextField();
+            Dimension textFieldSize = new Dimension((int)(Toolkit.getDefaultToolkit().getScreenResolution() * 0.78),
+                    (int)(Toolkit.getDefaultToolkit().getScreenResolution() * 0.39));
+            creditsTextField.setPreferredSize(textFieldSize);
+
+            textFieldPanel.setLayout(new BoxLayout(textFieldPanel,BoxLayout.PAGE_AXIS));
+        //    creditsTextField.setBounds(new Rectangle(20,5));
+            GridBagConstraints constraints= new GridBagConstraints();
+            constraints.gridy=2;
+            constraints.gridx=2;
+            constraints.insets = new Insets(10, 10, 10, 10);
+
+          //  textFieldPanel.setBounds(new Rectangle(20,5));
+
+            textFieldPanel.add(creditsTextField);
+            JButton addCreditsButton = new JButton("Add");
+
+            addCreditsButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String credits= creditsTextField.getText();
+                    try{
+                        customer.addCredits(credits);
+                        JOptionPane.showMessageDialog(frame, "Added "+ credits+ " credits successfully!");
+                    }catch(Exception exception){
+                        JOptionPane.showMessageDialog(frame, "Type an integer number!","Error",JOptionPane.ERROR_MESSAGE);
+                    }
+
+                }
+            });
+             JButton backToMenuClientButton= backToMenuClient(customer,loginEntered);
+
+            buttonsPanel.add(backToMenuClientButton);
+            buttonsPanel.add(addCreditsButton);
+
+            secondPanel.add(addCreditsLabel,BorderLayout.NORTH);
+
+            secondPanel.add(buttonsPanel,BorderLayout.SOUTH);
+            secondPanel.add(new JPanel(),BorderLayout.WEST);
+            secondPanel.add(new JPanel(),BorderLayout.EAST);
+            secondPanel.add(textFieldPanel,BorderLayout.CENTER);
+
+           // secondPanel.add(backToMenuClientButton);
+
+
+
+            frame.setTitle("Shop App");
+            frame.getContentPane().removeAll();
+            frame.getContentPane().add(secondPanel);
+            frame.getContentPane().revalidate();
+            frame.getContentPane().repaint();
+            frame.setVisible(true);
 
         }
         public static void registeredAnAccountScreen(){

@@ -37,6 +37,13 @@ public class Customer implements IPersonInfo {
         customers.add(this);
         this.credits=0;
     }
+    public void addCredits(Double credits){
+        this.credits+=credits;
+    }
+    public void addCredits(String creditsString) throws IllegalArgumentException{
+        int amount= Integer.parseInt(creditsString);
+        this.credits+=amount;
+    }
 
     public String getPersonalData(){
         return this.id + ";"
