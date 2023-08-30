@@ -275,6 +275,7 @@ public class ShopGUI extends JFrame {
     public static void clientLoggedIn(Customer customer, String enteredLogin){
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
+        frame.setSize(450,350);
         
         JLabel welcomeLabel= new JLabel("Welcome " + enteredLogin + "!");
         welcomeLabel.setVerticalAlignment(JLabel.CENTER);
@@ -283,27 +284,85 @@ public class ShopGUI extends JFrame {
       //  secondPanel.add(welcomeLabel, BorderLayout.NORTH);
 
         JLabel creditsLabel= new JLabel("Credits: " + customer.getCredits());
-        creditsLabel.setHorizontalAlignment(SwingConstants.NORTH_EAST);
        // secondPanel.add(creditsLabel,BorderLayout.NORTH);
 
-        JPanel topPanel= new JPanel(new BorderLayout());
-        topPanel.add(welcomeLabel,BorderLayout.CENTER);
-        topPanel.add(creditsLabel,BorderLayout.EAST);
+        JPanel topPanel= new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+
+
         secondPanel.add(topPanel,BorderLayout.NORTH);
+
+        JPanel downPanel= new JPanel(new FlowLayout());
 
       //  List<Order> orders= customer.getOrders();
 
-        JButton goToCreditsButton= new JButton("Money");
+        JButton goToCreditsButton= new JButton("Wallet");
+        JButton logOutButton= logOutButton();
+        JButton accountButton= new JButton("Account");
+        JButton helpButton= new JButton("Help");
+        JButton ordersButton= new JButton("Orders");
+        JButton productsButton= new JButton("Products");
+        JButton cartButton= new JButton("Cart");
 
+        secondPanel.add(new JLabel());
+
+
+        topPanel.add(creditsLabel);
+        topPanel.add(new JLabel(""));
+        topPanel.add(welcomeLabel);
+        topPanel.add(cartButton);
+
+        JPanel centerPanel= new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 30));
+
+
+
+        centerPanel.add(goToCreditsButton);
+        centerPanel.add(ordersButton);
+        centerPanel.add(productsButton);
+
+        downPanel.add(logOutButton);
+        downPanel.add(accountButton);
+        downPanel.add(helpButton);
         goToCreditsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 addCreditsScreen(customer,enteredLogin);
             }
         });
+        accountButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-        secondPanel.add(goToCreditsButton);
-        frame.setTitle("Shop App");
+            }
+        });
+        helpButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        ordersButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        productsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        cartButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        secondPanel.add(centerPanel,BorderLayout.CENTER);
+        secondPanel.add(downPanel,BorderLayout.SOUTH);
+
+        frame.setTitle("Menu: Client");
         frame.getContentPane().removeAll();
         frame.getContentPane().add(secondPanel);
         frame.getContentPane().revalidate();
@@ -340,6 +399,7 @@ public class ShopGUI extends JFrame {
         try (BufferedReader br = new BufferedReader(new FileReader(accountsFileName))) {
             String line;
             line=br.readLine();
+            line= br.readLine();
             while ((line = br.readLine()) != null) {
                 String[] values = line.split(";");
 
@@ -551,7 +611,7 @@ public class ShopGUI extends JFrame {
           //  textFieldPanel.setBounds(new Rectangle(20,5));
 
             textFieldPanel.add(creditsTextField);
-            JButton addCreditsButton = new JButton("Add");
+            JButton addCreditsButton = new JButton("Pay");
 
             addCreditsButton.addActionListener(new ActionListener() {
                 @Override
@@ -560,6 +620,7 @@ public class ShopGUI extends JFrame {
                     try{
                         customer.addCredits(credits);
                         JOptionPane.showMessageDialog(frame, "Added "+ credits+ " credits successfully!");
+                        creditsTextField.setText("");
                     }catch(Exception exception){
                         JOptionPane.showMessageDialog(frame, "Type an integer number!","Error",JOptionPane.ERROR_MESSAGE);
                     }
@@ -582,7 +643,7 @@ public class ShopGUI extends JFrame {
 
 
 
-            frame.setTitle("Shop App");
+            frame.setTitle("Wallet");
             frame.getContentPane().removeAll();
             frame.getContentPane().add(secondPanel);
             frame.getContentPane().revalidate();
