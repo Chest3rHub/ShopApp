@@ -21,6 +21,7 @@ public class Customer implements IPersonInfo {
     String password;
     String firstName;
     String lastName;
+    // moze podzielic na kod pocztowy ulice miasto itd...
     String address;
     int tel;
 

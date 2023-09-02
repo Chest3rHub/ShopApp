@@ -16,10 +16,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 public class ShopGUI extends JFrame {
 
@@ -333,7 +331,7 @@ public class ShopGUI extends JFrame {
         accountButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                accountScreenCustomer(customer,enteredLogin);
             }
         });
         helpButton.addActionListener(new ActionListener() {
@@ -654,6 +652,129 @@ public class ShopGUI extends JFrame {
             frame.setVisible(true);
 
         }
+        public static void accountScreenCustomer(Customer customer, String loginEntered){
+            secondPanel = new JPanel();
+
+            secondPanel.setLayout(new GridLayout(8, 2, 10, 10));
+            frame.setTitle("Account");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(500, 300);
+            JLabel firstNameLabel= new JLabel("First name:");
+            JTextField firstNameTextField= new JTextField();
+            firstNameTextField.setText(customer.getFirstName());
+
+            JLabel lastNameLabel= new JLabel("Last name:");
+            JTextField lastNameTextField= new JTextField();
+            lastNameTextField.setText(customer.getLastName());
+
+            JLabel addressLabel= new JLabel("Address:");
+            JTextField addressTextField= new JTextField();
+            addressTextField.setText(customer.getAddress());
+
+            JLabel telLabel= new JLabel("Tel:");
+            JTextField telTextField= new JTextField();
+            if (customer.getTel()==0){
+                telTextField.setText("");
+            }else {
+                telTextField.setText(String.valueOf(customer.getTel()));
+            }
+
+
+            JLabel emailLabel= new JLabel("E-mail:");
+            JTextField emailTextField= new JTextField();
+            emailTextField.setText(customer.getEmail());
+
+            JLabel newPasswordLabel= new JLabel("New password:");
+            JPasswordField newPasswordField= new JPasswordField();
+
+            JLabel confirmNewPasswordLabel= new JLabel("Confirm password:");
+            JPasswordField confirmNewPasswordField= new JPasswordField();
+
+            JButton backButton= backToMenuClient(customer, loginEntered);
+
+            JButton saveButton= new JButton("Save changes");
+            saveButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (!firstNameTextField.getText().equals(customer.getFirstName())){
+                        customer.setFirstName(firstNameTextField.getText());
+                    }
+                    if (!lastNameTextField.getText().equals(customer.getLastName())){
+                        customer.setLastName(lastNameTextField.getText());
+                    }
+                    if (!addressTextField.getText().equals(customer.getAddress())){
+                        customer.setAddress(addressTextField.getText());
+                    }
+                    if (!emailTextField.getText().equals(customer.getEmail())){
+                        customer.setEmail(emailTextField.getText());
+                    }
+                    try {
+
+                        if (!telTextField.getText().equals("") && Integer.parseInt(telTextField.getText()) != (customer.getTel())) {
+                            String text = telTextField.getText();
+                            String enteredPhone = text.trim();
+                            if (!enteredPhone.matches("\\d{9}")) {
+                                throw new Exception("Type 9 digits in phone number field!");
+                            }
+                            customer.setTel(Integer.parseInt(enteredPhone));
+
+                        }
+                        if (newPasswordField.getPassword().length!=0 || confirmNewPasswordField.getPassword().length!=0){
+                            if (newPasswordField.getPassword().length<_minPasswordLength ){
+                                throw new Exception("Too short password! Minimum 7 characters!");
+                            }
+                            if (!Arrays.equals(newPasswordField.getPassword(), confirmNewPasswordField.getPassword())){
+                                throw new Exception("Passwords are not the same!");
+                            }
+                            //ustawianie nowego hasla
+                            char[] passwordChars = newPasswordField.getPassword();
+                            String enteredPassword= new String(passwordChars);
+                            String toHash=loginEntered+enteredPassword;
+                            long newPasswordLong= toHash.hashCode();
+                            String newPassword=String.valueOf(newPasswordLong);
+                            customer.setPassword(newPassword);
+                            long enteredLoginHash= loginEntered.hashCode();
+                            String enteredLoginStringhash= String.valueOf(enteredLoginHash);
+                            accounts.replace(enteredLoginStringhash,new PasswordRoleDTO(newPassword, Role.CLIENT));
+                            // moze uzyc jeszcze listy customers jesli bedzie do czegos potrzebna zeby w niej zmienialo
+                            // sie haslo ale powinno byc zmienione skoro w niej sa referencje a zmieniam haslo
+                            // na danym obiekcie ktorego referencja jest w tej liscie
+                        }
+                        JOptionPane.showMessageDialog(frame, "Saved changes successfully!");
+                    }catch (NumberFormatException numberFormatException){
+                        JOptionPane.showMessageDialog(frame, "Type 9 digits in phone number field!", "Error", JOptionPane.ERROR_MESSAGE);
+                    } catch (Exception exception){
+                        JOptionPane.showMessageDialog(frame, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                }
+            });
+
+            secondPanel.add(firstNameLabel);
+            secondPanel.add(firstNameTextField);
+            secondPanel.add(lastNameLabel);
+            secondPanel.add(lastNameTextField);
+            secondPanel.add(addressLabel);
+            secondPanel.add(addressTextField);
+            secondPanel.add(telLabel);
+            secondPanel.add(telTextField);
+            secondPanel.add(emailLabel);
+            secondPanel.add(emailTextField);
+            secondPanel.add(newPasswordLabel);
+            secondPanel.add(newPasswordField);
+            secondPanel.add(confirmNewPasswordLabel);
+            secondPanel.add(confirmNewPasswordField);
+            secondPanel.add(backButton);
+            secondPanel.add(saveButton);
+
+
+            frame.getContentPane().removeAll();
+            frame.getContentPane().add(secondPanel);
+            frame.getContentPane().revalidate();
+            frame.getContentPane().repaint();
+            frame.setVisible(true);
+
+        }
         public static void cartScreen(Customer customer, String loginEntered){
             secondPanel = new JPanel();
             secondPanel.setLayout(new BorderLayout());
@@ -670,14 +791,14 @@ public class ShopGUI extends JFrame {
             //JSplitPane splitPane= new JSplitPane();
 
 
-            // usunac pote,, tylko do celow testowych
+            // usunac potem, tylko do celow testowych
             ProductWithSizeAndQtity product1= new ProductWithSizeAndQtity(new Product(Category.HOODIE,"Bluza rozpinana","Nike",249.99,"Wygodna sportowa bluza"));
             product1.addSizeAndQuantity(Size.M,5);
             product1.addSizeAndQuantity(Size.L,3);
             customer.addToCart(product1);
             ProductWithSizeAndQtity product2= new ProductWithSizeAndQtity(new Product(Category.PANTS,"Spodnie","Adidas",99.99,"Cienkie i przewiewne"));
-            product1.addSizeAndQuantity(Size.S,2);
-            product1.addSizeAndQuantity(Size.M,4);
+            product2.addSizeAndQuantity(Size.S,2);
+            product2.addSizeAndQuantity(Size.M,4);
             customer.addToCart(product2);
 
             for( ProductWithSizeAndQtity productWithSizeAndQtity : customer.getCurrentCart()){
