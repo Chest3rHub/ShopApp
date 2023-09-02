@@ -426,6 +426,25 @@ public class ShopGUI extends JFrame {
             }
         }
     }
+    public static void savePasswordChangesToFile()throws Exception{
+        try {
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(accountsFileName));
+            bufferedWriter.write("login;password;role -> password hash= (login+password).hash\n");
+            bufferedWriter.write("login is unique for every user so accounts with same passwords have different hash\n");
+            for (Map.Entry<String, PasswordRoleDTO> entry : accounts.entrySet()) {
+                String key = entry.getKey();
+                PasswordRoleDTO value = entry.getValue();
+                Role role=value.getRole();
+                String roleHash= String.valueOf(role.toString().hashCode());
+                bufferedWriter.write(key+";"+value.getPassword()+";"+roleHash);
+                bufferedWriter.write("\n");
+            }
+            bufferedWriter.close();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
     public static void changeToRegisterScreen(){
 
 
@@ -736,6 +755,8 @@ public class ShopGUI extends JFrame {
                             long enteredLoginHash= loginEntered.hashCode();
                             String enteredLoginStringhash= String.valueOf(enteredLoginHash);
                             accounts.replace(enteredLoginStringhash,new PasswordRoleDTO(newPassword, Role.CLIENT));
+                            // zapisanie zmian do pliku
+                            savePasswordChangesToFile();
                             // moze uzyc jeszcze listy customers jesli bedzie do czegos potrzebna zeby w niej zmienialo
                             // sie haslo ale powinno byc zmienione skoro w niej sa referencje a zmieniam haslo
                             // na danym obiekcie ktorego referencja jest w tej liscie
