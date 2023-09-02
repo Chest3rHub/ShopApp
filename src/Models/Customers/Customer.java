@@ -5,6 +5,7 @@ import Models.Employees.Consultant;
 import Models.Employees.Feedback;
 import Models.Employees.Role;
 import Models.Order;
+import Models.Products.ProductWithSizeAndQtity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ public class Customer implements IPersonInfo {
     String email;
     Role role;
     List<Order> orders= new ArrayList<>();
+    List<ProductWithSizeAndQtity> currentCart= new ArrayList<>();
 
     // password dodac, metody register, login, hashowanie hasel itd;
 
@@ -43,6 +45,9 @@ public class Customer implements IPersonInfo {
     public void addCredits(String creditsString) throws IllegalArgumentException{
         int amount= Integer.parseInt(creditsString);
         this.credits+=amount;
+    }
+    public void addToCart(ProductWithSizeAndQtity productWithSizeAndQtity){
+        this.currentCart.add(productWithSizeAndQtity);
     }
 
     public String getPersonalData(){
@@ -70,6 +75,14 @@ public class Customer implements IPersonInfo {
 
     public String getPassword() {
         return password;
+    }
+
+    public List<ProductWithSizeAndQtity> getCurrentCart() {
+        return currentCart;
+    }
+
+    public void setCurrentCart(List<ProductWithSizeAndQtity> currentCart) {
+        this.currentCart = currentCart;
     }
 
     public void setPassword(String password) {

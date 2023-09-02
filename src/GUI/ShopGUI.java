@@ -5,8 +5,10 @@ import Models.Customers.Customer;
 import Models.Employees.AbstractEmployee;
 import Models.Employees.Role;
 import Models.Order;
+import Models.Products.Category;
 import Models.Products.Product;
 import Models.Products.ProductWithSizeAndQtity;
+import Models.Products.Size;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -355,7 +357,7 @@ public class ShopGUI extends JFrame {
         cartButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                cartScreen(customer, enteredLogin);
             }
         });
 
@@ -365,6 +367,7 @@ public class ShopGUI extends JFrame {
         frame.setTitle("Menu: Client");
         frame.getContentPane().removeAll();
         frame.getContentPane().add(secondPanel);
+        frame.pack();
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
     }
@@ -644,6 +647,87 @@ public class ShopGUI extends JFrame {
 
 
             frame.setTitle("Wallet");
+            frame.getContentPane().removeAll();
+            frame.getContentPane().add(secondPanel);
+            frame.getContentPane().revalidate();
+            frame.getContentPane().repaint();
+            frame.setVisible(true);
+
+        }
+        public static void cartScreen(Customer customer, String loginEntered){
+            secondPanel = new JPanel();
+            secondPanel.setLayout(new BorderLayout());
+
+            frame.setTitle("Cart");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(500, 300);
+            JList<ProductWithSizeAndQtity> productsInCart= new JList<>();
+            DefaultListModel<ProductWithSizeAndQtity> listModel= new DefaultListModel<>();
+            JLabel label= new JLabel("Your cart: ");
+            secondPanel.add(label,BorderLayout.NORTH);
+
+
+            //JSplitPane splitPane= new JSplitPane();
+
+
+            // usunac pote,, tylko do celow testowych
+            ProductWithSizeAndQtity product1= new ProductWithSizeAndQtity(new Product(Category.HOODIE,"Bluza rozpinana","Nike",249.99,"Wygodna sportowa bluza"));
+            product1.addSizeAndQuantity(Size.M,5);
+            product1.addSizeAndQuantity(Size.L,3);
+            customer.addToCart(product1);
+            ProductWithSizeAndQtity product2= new ProductWithSizeAndQtity(new Product(Category.PANTS,"Spodnie","Adidas",99.99,"Cienkie i przewiewne"));
+            product1.addSizeAndQuantity(Size.S,2);
+            product1.addSizeAndQuantity(Size.M,4);
+            customer.addToCart(product2);
+
+            for( ProductWithSizeAndQtity productWithSizeAndQtity : customer.getCurrentCart()){
+                listModel.addElement(productWithSizeAndQtity);
+            }
+            productsInCart.setModel(listModel);
+
+
+
+
+
+            secondPanel.add(new JScrollPane(productsInCart),BorderLayout.CENTER);
+
+
+           // splitPane.setLeftComponent(new JScrollPane(productsInCart));
+
+            JPanel buttonsPanel= new JPanel();
+            JButton backButton= backToMenuClient(customer, loginEntered);
+            buttonsPanel.add(backButton);
+
+            JButton removeProductFromCartButton= new JButton("Remove");
+
+            removeProductFromCartButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    ProductWithSizeAndQtity productToRemove= productsInCart.getSelectedValue();
+                    customer.getCurrentCart().remove(productToRemove);
+                    listModel.remove(productsInCart.getSelectedIndex());
+                    JOptionPane.showMessageDialog(frame, "Product has been removed!");
+                }
+            });
+            buttonsPanel.add(removeProductFromCartButton);
+
+            JButton orderButton= new JButton("Order");
+            orderButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // weryfikacja danych osobowych i platnosci.
+                }
+            });
+            buttonsPanel.add(orderButton);
+
+            secondPanel.add(buttonsPanel,BorderLayout.SOUTH);
+
+            // splitPane.setBottomComponent(buttonsPanel);
+            // panel.add(label);
+           // splitPane.setRightComponent(panel);
+
+           // secondPanel.add(splitPane);
+
             frame.getContentPane().removeAll();
             frame.getContentPane().add(secondPanel);
             frame.getContentPane().revalidate();
