@@ -1,1 +1,1 @@
-loginHash;idOrder;pomyslec co dalej dac
+idOrder;orderDate;totalCost;orderedProducts

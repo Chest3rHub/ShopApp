@@ -24,6 +24,14 @@ public class ProductWithSizeAndQtity{
         availableProductsWithSizesAndQtity.add(this);
     }
 
+    public static List<ProductWithSizeAndQtity> getAvailableProductsWithSizesAndQtity() {
+        return availableProductsWithSizesAndQtity;
+    }
+
+    public static void setAvailableProductsWithSizesAndQtity(List<ProductWithSizeAndQtity> availableProductsWithSizesAndQtity) {
+        ProductWithSizeAndQtity.availableProductsWithSizesAndQtity = availableProductsWithSizesAndQtity;
+    }
+
     public void addSizeAndQuantity(Size size, int quantity) {
         sizesAndQuantitiesMap.put(size,quantity);
     }

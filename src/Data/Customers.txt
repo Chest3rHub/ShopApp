@@ -1,3 +1,3 @@
 loginHash;firstName;lastName;address;tel;credits;email;currentCart;orders
 97!null!null!null!0!0.0!null![]![]
--1802365190!Szymon!Sawicki!Legionowo 05-120!798123788!0.0!email@w.plp![3;SHIRT;Jordan 1 Print Logo;Nike;799.99;Bardzo modne;M;2, 4;ACCESSORIES;Bransoletka;Apart;1000.00;Piekna ozdobna;L;1]![]
+-1802365190!Szymon!Sawicki!Legionowo 05-120!798123788!1200.0!email@w.plp![3;SHIRT;Jordan 1 Print Logo;Nike;799.99;Bardzo modne;M;2, 4;ACCESSORIES;Bransoletka;Apart;1000.00;Piekna ozdobna;L;1]![]

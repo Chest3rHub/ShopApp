@@ -2,9 +2,12 @@ package GUI;
 
 import DTOs.PasswordRoleDTO;
 import DTOs.ProductInCartDTO;
+import Exceptions.NotEnoughProductsException;
+import Exceptions.UnavailableException;
 import Models.Customers.Customer;
 import Models.Employees.AbstractEmployee;
 import Models.Employees.Role;
+import Models.Order;
 import Models.Products.Category;
 import Models.Products.Product;
 import Models.Products.ProductWithSizeAndQtity;
@@ -417,7 +420,7 @@ public class ShopGUI extends JFrame {
     }
     public static void readCustomersFromFile() throws Exception{
 
-        //// dokonczyc jak zrobie zapisywanie klientow do pliku.
+        ////dodac jeszcze czytanie historii zamowien
         try (BufferedReader br = new BufferedReader(new FileReader(customersFileName))) {
             String line;
             line=br.readLine();
@@ -446,8 +449,8 @@ public class ShopGUI extends JFrame {
                  //   String oneProduct= scanner.next();
                     while(scanner.hasNext()){
                         String oneProduct= scanner.next();
-                        System.out.println("Cala linia do zeskanowania pod spodem:");
-                        System.out.println(oneProduct);
+//                        System.out.println("Cala linia do zeskanowania pod spodem:");
+//                        System.out.println(oneProduct);
                         Scanner oneProductScanner= new Scanner(oneProduct);
                         oneProductScanner.useDelimiter(";");
                         String idString= oneProductScanner.next();
@@ -482,9 +485,7 @@ public class ShopGUI extends JFrame {
 
 
                 List<Integer> ordersIds= new ArrayList<>();
-                // pod spodem regex ktory weryfikuje orders id list itd...
                 Customer.customers.put(loginHashed, new Customer(loginHashed,firstName,lastName,address,telNumber, creditsDouble,email,cartList,ordersIds));
-
             }
         }
     }
@@ -810,15 +811,15 @@ public class ShopGUI extends JFrame {
             frame.setSize(500, 300);
             JLabel firstNameLabel= new JLabel("First name:");
             JTextField firstNameTextField= new JTextField();
-            firstNameTextField.setText(customer.getFirstName());
+            firstNameTextField.setText(!customer.getFirstName().equals("null") ? customer.getFirstName() : "");
 
             JLabel lastNameLabel= new JLabel("Last name:");
             JTextField lastNameTextField= new JTextField();
-            lastNameTextField.setText(customer.getLastName());
+            lastNameTextField.setText(!customer.getLastName().equals("null") ? customer.getLastName() : "");
 
             JLabel addressLabel= new JLabel("Address:");
             JTextField addressTextField= new JTextField();
-            addressTextField.setText(customer.getAddress());
+            addressTextField.setText(!customer.getAddress().equals("null") ? customer.getAddress() : "");
 
             JLabel telLabel= new JLabel("Tel:");
             JTextField telTextField= new JTextField();
@@ -831,7 +832,7 @@ public class ShopGUI extends JFrame {
 
             JLabel emailLabel= new JLabel("E-mail:");
             JTextField emailTextField= new JTextField();
-            emailTextField.setText(customer.getEmail());
+            emailTextField.setText(!customer.getEmail().equals("null") ? customer.getEmail() : "");
 
             JLabel newPasswordLabel= new JLabel("New password:");
             JPasswordField newPasswordField= new JPasswordField();
@@ -1012,6 +1013,34 @@ public class ShopGUI extends JFrame {
             frame.getContentPane().repaint();
             frame.setVisible(true);
 
+        }
+        public static void placeAnOrder(Customer customer, String loginEntered, List<ProductInCartDTO> productsInCart) throws Exception {
+        // jak wywali blad to i tak sie pewna czesc dostepnych produktow zmniejszy choc zamowienie nie zostanie zlozone wiec
+            // zrobic to tak zeby dopiero na sam koniec gdy na pewno nie ma bledu zmiejszalo ilosc
+        for (ProductInCartDTO product : productsInCart){
+
+            ProductWithSizeAndQtity productFromWarehouse= ProductWithSizeAndQtity.availableProductsWithSizesAndQtity.get(product.getIdProduct());
+            Size size= product.getSize();
+            int quantity= product.getQuantity();
+            LinkedHashMap<Size, Integer> sizesAndQuantitiesAvailable= productFromWarehouse.getSizesAndQuantitiesMap();
+
+            if (sizesAndQuantitiesAvailable.containsKey(size)){
+
+                int availableQuantity= sizesAndQuantitiesAvailable.get(size);
+
+                if (quantity<=availableQuantity){
+
+                    ProductWithSizeAndQtity.availableProductsWithSizesAndQtity.get(product.getIdProduct()).decreaseProductQuantity(size,quantity);
+
+                } else {
+                    throw new NotEnoughProductsException("For product: " + product + " this amount is unavailable at the moment!");
+                }
+            } else {
+                throw new UnavailableException("For product: " + product + " this size is unavailable at the moment!");
+            }
+        }
+
+        Order order= new Order(productsInCart);
         }
         public static void registeredAnAccountScreen(){
             secondPanel = new JPanel();
