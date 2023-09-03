@@ -18,12 +18,28 @@ public class ProductWithSizeAndQtity{
         this.sizesAndQuantitiesMap = new LinkedHashMap<>();
         availableProductsWithSizesAndQtity.add(this);
     }
+    public ProductWithSizeAndQtity(Product product, LinkedHashMap<Size, Integer> sizes) {
+        this.product = product;
+        this.sizesAndQuantitiesMap = sizes;
+        availableProductsWithSizesAndQtity.add(this);
+    }
+
+    public static List<ProductWithSizeAndQtity> getAvailableProductsWithSizesAndQtity() {
+        return availableProductsWithSizesAndQtity;
+    }
+
+    public static void setAvailableProductsWithSizesAndQtity(List<ProductWithSizeAndQtity> availableProductsWithSizesAndQtity) {
+        ProductWithSizeAndQtity.availableProductsWithSizesAndQtity = availableProductsWithSizesAndQtity;
+    }
 
     public void addSizeAndQuantity(Size size, int quantity) {
         sizesAndQuantitiesMap.put(size,quantity);
     }
-    public String toString(){
+    public String getProductWithSizeAndQtityInfo(){
         return this.product + " \nAvailable: " + sizesAndQuantitiesMap;
+    }
+    public String toString(){
+        return this.product.toString()+ ";" + sizesAndQuantitiesMap;
     }
     public static void showAllAvailableProductsWithSizesAndQtity(){
         for (ProductWithSizeAndQtity productWithSizeAndQtity : availableProductsWithSizesAndQtity){

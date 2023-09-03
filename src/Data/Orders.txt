@@ -1,0 +1,1 @@
+idOrder;orderDate;totalCost;orderedProducts

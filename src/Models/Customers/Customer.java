@@ -1,16 +1,18 @@
 package Models.Customers;
 
+import DTOs.ProductInCartDTO;
 import Interfaces.IPersonInfo;
 import Models.Employees.Consultant;
 import Models.Employees.Feedback;
 import Models.Employees.Role;
-import Models.Order;
+import Models.Products.ProductWithSizeAndQtity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Customer implements IPersonInfo {
-    public static List<Customer> customers= new ArrayList<>();
+    public static HashMap<String, Customer> customers= new HashMap<>();
     public static int idCounter=1;
 
 
@@ -20,13 +22,15 @@ public class Customer implements IPersonInfo {
     String password;
     String firstName;
     String lastName;
+    // moze podzielic na kod pocztowy ulice miasto itd...
     String address;
     int tel;
 
     double credits;
     String email;
     Role role;
-    List<Order> orders= new ArrayList<>();
+    List<Integer> ordersIds = new ArrayList<>();
+    List<ProductInCartDTO> currentCart= new ArrayList<>();
 
     // password dodac, metody register, login, hashowanie hasel itd;
 
@@ -34,9 +38,22 @@ public class Customer implements IPersonInfo {
         this.login=login;
         this.password=password;
         this.role=Role.CLIENT;
-        customers.add(this);
+        customers.put(login,this);
         this.credits=0;
     }
+
+    public Customer(String login, String firstName, String lastName, String address, int tel, double credits, String email, List<ProductInCartDTO> currentCart, List<Integer> ordersIds) {
+        this.login = login;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.tel = tel;
+        this.credits = credits;
+        this.email = email;
+        this.ordersIds = this.ordersIds;
+        this.currentCart = currentCart;
+    }
+
     public void addCredits(Double credits){
         this.credits+=credits;
     }
@@ -44,6 +61,10 @@ public class Customer implements IPersonInfo {
         int amount= Integer.parseInt(creditsString);
         this.credits+=amount;
     }
+    public void addToCart(ProductInCartDTO productWithSizeAndQtity){
+        this.currentCart.add(productWithSizeAndQtity);
+    }
+
 
     public String getPersonalData(){
         return this.id + ";"
@@ -53,7 +74,7 @@ public class Customer implements IPersonInfo {
                 + this.tel + ";"
                 + this.email + ";"
                 + this.role + ";"
-                + this.orders;
+                + this.ordersIds;
 
     }
     public void giveFeedbackOnConsultant(Consultant consultant, Feedback feedback){
@@ -72,24 +93,32 @@ public class Customer implements IPersonInfo {
         return password;
     }
 
+    public List<ProductInCartDTO> getCurrentCart() {
+        return currentCart;
+    }
+
+    public void setCurrentCart(List<ProductInCartDTO> currentCart) {
+        this.currentCart = currentCart;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public static List<Customer> getCustomers() {
+    public static HashMap<String, Customer> getCustomers() {
         return customers;
     }
 
-    public static void setCustomers(List<Customer> customers) {
+    public static void setCustomers(HashMap<String, Customer> customers) {
         Customer.customers = customers;
     }
 
-    public List<Order> getOrders() {
-        return orders;
+    public List<Integer> getOrdersIds() {
+        return ordersIds;
     }
 
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
+    public void setOrdersIds(List<Integer> ordersIds) {
+        this.ordersIds = ordersIds;
     }
 
     public static int getIdCounter() {
