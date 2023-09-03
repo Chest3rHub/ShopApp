@@ -62,7 +62,7 @@ public class Product {
 
     }
 
-    public String toString(){
+    public String getProductInfo(){
         DecimalFormat decimalFormat = new DecimalFormat("#.00");
         String formattedPrice = decimalFormat.format(price);
         return "ID: "+ id
@@ -72,6 +72,17 @@ public class Product {
                 + ", CENA: " + formattedPrice + "PLN"
                 + ", OPIS: " + description;
     }
+public String toString(){
+    DecimalFormat decimalFormat = new DecimalFormat("#.00");
+    String formattedPrice = decimalFormat.format(price);
+    String noCommaPrice= formattedPrice.replace(",",".");
+    return id
+            + ";" + category
+            + ";" + name
+            + ";" + brand
+            + ";" + noCommaPrice
+            + ";" + description;
+}
 
     public static void showProducts(){
         for (Product product : allProducts){

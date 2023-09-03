@@ -1,23 +1,26 @@
 package GUI;
 
 import DTOs.PasswordRoleDTO;
+import DTOs.ProductInCartDTO;
 import Models.Customers.Customer;
 import Models.Employees.AbstractEmployee;
 import Models.Employees.Role;
-import Models.Order;
 import Models.Products.Category;
 import Models.Products.Product;
 import Models.Products.ProductWithSizeAndQtity;
 import Models.Products.Size;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.*;
 import java.util.*;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ShopGUI extends JFrame {
 
@@ -28,6 +31,7 @@ public class ShopGUI extends JFrame {
     public static JPanel mainPanel;
     public static JPanel secondPanel;
 
+    public final static String customersFileName="src/Data/Customers.txt";
     public final static String accountsFileName = "src/Data/Accounts.txt";
     // struktura pliku:
     // login;haslo;rola
@@ -38,6 +42,22 @@ public class ShopGUI extends JFrame {
     public final static String _roleWorkerHash = String.valueOf(Role.WORKER.toString().hashCode());
 
     public static HashMap<String, PasswordRoleDTO> accounts= new HashMap<>();
+
+    public ShopGUI(){
+        // dodac jeszcze aktualizacje klientow, produktow itd
+        loggedOutScreen();
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                try {
+                    savePasswordChangesToFile();
+                    saveCustomersChangesToFile();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+    }
 
     public static void changeToLoginScreen() {
 
@@ -78,11 +98,11 @@ public class ShopGUI extends JFrame {
                     } else if ( role==Role.CLIENT) {
                         long hash= login.hashCode();
                         String hashString= String.valueOf(hash);
-                        Optional<Customer> customerLoggedIn= Customer.customers.stream().filter(customer -> customer.getLogin().equals(hashString)).findFirst();
-                        if (!customerLoggedIn.isPresent()){
+                        Customer customerLoggedIn= Customer.customers.get(hashString);
+                        if (customerLoggedIn==null){
                             throw new Exception("No such customer");
                         }
-                        clientLoggedIn(customerLoggedIn.get(), login);
+                        clientLoggedIn(customerLoggedIn, login);
                     }
 //                    if (role==null){
 //                        System.out.println("Bledny login lub haslo...");
@@ -395,6 +415,92 @@ public class ShopGUI extends JFrame {
             throw new Exception("Incorrect login or password");
         }
     }
+    public static void readCustomersFromFile() throws Exception{
+
+        //// dokonczyc jak zrobie zapisywanie klientow do pliku.
+        try (BufferedReader br = new BufferedReader(new FileReader(customersFileName))) {
+            String line;
+            line=br.readLine();
+            while ((line = br.readLine()) != null) {
+                String[] values = line.split("!");
+                String loginHashed = values[0];
+                String firstName= values[1];
+                String lastName= values[2];
+                String address= values[3];
+                String tel= values[4];
+                int telNumber= Integer.parseInt(tel);
+                String credits=values[5];
+                double creditsDouble= Double.parseDouble(credits);
+                String email=values[6];
+                String currentCart=values[7];
+                String orders=values[8];
+
+                List<ProductInCartDTO> cartList= new ArrayList<>();
+
+                String toScan= currentCart.replace("[","");
+                String toScanFinally= toScan.replace("]","");
+
+                if (!toScanFinally.equals("")){
+                    Scanner scanner= new Scanner(toScanFinally);
+                    scanner.useDelimiter(",");
+                 //   String oneProduct= scanner.next();
+                    while(scanner.hasNext()){
+                        String oneProduct= scanner.next();
+                        System.out.println("Cala linia do zeskanowania pod spodem:");
+                        System.out.println(oneProduct);
+                        Scanner oneProductScanner= new Scanner(oneProduct);
+                        oneProductScanner.useDelimiter(";");
+                        String idString= oneProductScanner.next();
+                        String idNoWhite =idString.trim();
+                        int idProduct=Integer.parseInt(idNoWhite);
+                       // System.out.println("Pobrane id " + idProduct);
+                        String category=oneProductScanner.next();
+                       // System.out.println("Pobrana kategoria "+ category);
+
+                        String nazwa= oneProductScanner.next();
+                       // System.out.println("Pobrana nazwa " + nazwa);
+                        String marka= oneProductScanner.next();
+
+                      //  System.out.println("Pobrana marka: "+ marka);
+                        String koszt= oneProductScanner.next();
+                       // System.out.println("Pobrany koszt+ " + koszt);
+
+                        String opis= oneProductScanner.next();
+                       // System.out.println("Pobrany opis: " + opis);
+
+                        Size size= Size.valueOf(oneProductScanner.next());
+                       // System.out.println("Pobrany rozmiar : " + size);
+                        int quantity= oneProductScanner.nextInt();
+                       // System.out.println("Pobrana ilosc "+ quantity);
+                        // juz git tylko ogarnac ID bo sie przesuwa
+                        cartList.add(new ProductInCartDTO(idProduct-1,size,quantity));
+                    }
+
+                }
+
+
+
+
+                List<Integer> ordersIds= new ArrayList<>();
+                // pod spodem regex ktory weryfikuje orders id list itd...
+                Customer.customers.put(loginHashed, new Customer(loginHashed,firstName,lastName,address,telNumber, creditsDouble,email,cartList,ordersIds));
+
+            }
+        }
+    }
+    public static LinkedHashMap<Size, Integer> parseSizeQuantityData(String data) {
+        LinkedHashMap<Size, Integer> sizeQuantityMap = new LinkedHashMap<>();
+        String[] sizeQuantityPairs = data.split(",\\s*");
+
+        for (String pair : sizeQuantityPairs) {
+            String[] parts = pair.split("=");
+            Size size = Size.valueOf(parts[0]);
+            int quantity = Integer.parseInt(parts[1]);
+            sizeQuantityMap.put(size, quantity);
+        }
+
+        return sizeQuantityMap;
+    }
 
     public static void readAccountsFromFile() throws Exception {
         try (BufferedReader br = new BufferedReader(new FileReader(accountsFileName))) {
@@ -426,7 +532,7 @@ public class ShopGUI extends JFrame {
             }
         }
     }
-    public static void savePasswordChangesToFile()throws Exception{
+    public static void savePasswordChangesToFile(){
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(accountsFileName));
             bufferedWriter.write("login;password;role -> password hash= (login+password).hash\n");
@@ -437,6 +543,30 @@ public class ShopGUI extends JFrame {
                 Role role=value.getRole();
                 String roleHash= String.valueOf(role.toString().hashCode());
                 bufferedWriter.write(key+";"+value.getPassword()+";"+roleHash);
+                bufferedWriter.write("\n");
+            }
+            bufferedWriter.close();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public static void saveCustomersChangesToFile(){
+        try {
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(customersFileName));
+            bufferedWriter.write("loginHash;firstName;lastName;address;tel;credits;email;currentCart;orders\n");
+            for (Map.Entry<String, Customer> customer : Customer.customers.entrySet()) {
+                String key = customer.getKey();
+                Customer customerValue = customer.getValue();
+
+                bufferedWriter.write(key+"!"
+                        + customerValue.getFirstName() +"!"
+                        + customerValue.getLastName() + "!"
+                        + customerValue.getAddress() + "!"
+                        + customerValue.getTel() + "!"
+                        + customerValue.getCredits() + "!"
+                        + customerValue.getEmail() + "!"
+                        + customerValue.getCurrentCart() + "!"
+                        + customerValue.getOrdersIds());
                 bufferedWriter.write("\n");
             }
             bufferedWriter.close();
@@ -755,8 +885,8 @@ public class ShopGUI extends JFrame {
                             long enteredLoginHash= loginEntered.hashCode();
                             String enteredLoginStringhash= String.valueOf(enteredLoginHash);
                             accounts.replace(enteredLoginStringhash,new PasswordRoleDTO(newPassword, Role.CLIENT));
-                            // zapisanie zmian do pliku
-                            savePasswordChangesToFile();
+//                            // zapisanie zmian do pliku
+//                            savePasswordChangesToFile();
                             // moze uzyc jeszcze listy customers jesli bedzie do czegos potrzebna zeby w niej zmienialo
                             // sie haslo ale powinno byc zmienione skoro w niej sa referencje a zmieniam haslo
                             // na danym obiekcie ktorego referencja jest w tej liscie
@@ -803,8 +933,8 @@ public class ShopGUI extends JFrame {
             frame.setTitle("Cart");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(500, 300);
-            JList<ProductWithSizeAndQtity> productsInCart= new JList<>();
-            DefaultListModel<ProductWithSizeAndQtity> listModel= new DefaultListModel<>();
+            JList<ProductInCartDTO> productsInCart= new JList<>();
+            DefaultListModel<ProductInCartDTO> listModel= new DefaultListModel<>();
             JLabel label= new JLabel("Your cart: ");
             secondPanel.add(label,BorderLayout.NORTH);
 
@@ -813,17 +943,23 @@ public class ShopGUI extends JFrame {
 
 
             // usunac potem, tylko do celow testowych
-            ProductWithSizeAndQtity product1= new ProductWithSizeAndQtity(new Product(Category.HOODIE,"Bluza rozpinana","Nike",249.99,"Wygodna sportowa bluza"));
-            product1.addSizeAndQuantity(Size.M,5);
-            product1.addSizeAndQuantity(Size.L,3);
-            customer.addToCart(product1);
-            ProductWithSizeAndQtity product2= new ProductWithSizeAndQtity(new Product(Category.PANTS,"Spodnie","Adidas",99.99,"Cienkie i przewiewne"));
-            product2.addSizeAndQuantity(Size.S,2);
-            product2.addSizeAndQuantity(Size.M,4);
-            customer.addToCart(product2);
+//            ProductWithSizeAndQtity product1= new ProductWithSizeAndQtity(new Product(Category.HOODIE,"Bluza rozpinana","Nike",249.99,"Wygodna sportowa bluza"));
+//            product1.addSizeAndQuantity(Size.M,5);
+//            product1.addSizeAndQuantity(Size.L,3);
+//            customer.addToCart(product1);
+//            ProductWithSizeAndQtity product2= new ProductWithSizeAndQtity(new Product(Category.PANTS,"Spodnie","Adidas",99.99,"Cienkie i przewiewne"));
+//            product2.addSizeAndQuantity(Size.S,2);
+//            product2.addSizeAndQuantity(Size.M,4);
+//            customer.addToCart(product2);
+//            ProductInCartDTO p1= new ProductInCartDTO(1-1,Size.M,2);
+//            ProductInCartDTO p2= new ProductInCartDTO(2-1,Size.L,1);
+//
+//            customer.addToCart(p1);
+//            customer.addToCart(p2);
 
-            for( ProductWithSizeAndQtity productWithSizeAndQtity : customer.getCurrentCart()){
-                listModel.addElement(productWithSizeAndQtity);
+
+            for( ProductInCartDTO productInCartDTO : customer.getCurrentCart()){
+                listModel.addElement(productInCartDTO);
             }
             productsInCart.setModel(listModel);
 
@@ -845,7 +981,7 @@ public class ShopGUI extends JFrame {
             removeProductFromCartButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    ProductWithSizeAndQtity productToRemove= productsInCart.getSelectedValue();
+                    ProductInCartDTO productToRemove= productsInCart.getSelectedValue();
                     customer.getCurrentCart().remove(productToRemove);
                     listModel.remove(productsInCart.getSelectedIndex());
                     JOptionPane.showMessageDialog(frame, "Product has been removed!");
