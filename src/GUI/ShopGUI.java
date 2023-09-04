@@ -433,7 +433,10 @@ public class ShopGUI extends JFrame {
 
         comboBoxPanel.add(quantityComboBox);
 
-
+        JLabel costLabel= new JLabel();
+        comboBoxPanel.add(costLabel);
+        JLabel costLabelPLN= new JLabel();
+        comboBoxPanel.add(costLabelPLN);
 
         sizeComboBox.addActionListener(new ActionListener() {
             @Override
@@ -452,11 +455,24 @@ public class ShopGUI extends JFrame {
             }
         });
 
+        quantityComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Object quantityObject= quantityComboBox.getSelectedItem();
+                String quantityString= String.valueOf(quantityObject);
+                int quantity= Integer.parseInt(quantityString);
+
+                costLabel.setText("Cost: ");
+                costLabelPLN.setText(productList.getSelectedValue().getProduct().getPrice()*quantity+ "PLN");
+            }
+        });
+
 
 
         productList.addListSelectionListener(e -> {
             // Po wybraniu produktu, aktualizujemy dostępne rozmiary w JComboBox
-
+            costLabel.setText("");
+            costLabelPLN.setText("");
             ProductWithSizeAndQtity selectedProduct = productList.getSelectedValue();
             if (selectedProduct != null) {
                 String [] partsEmpty= new String[0];
@@ -1118,6 +1134,7 @@ public class ShopGUI extends JFrame {
             secondPanel = new JPanel();
             secondPanel.setLayout(new BorderLayout());
 
+
             frame.setTitle("Cart");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(500, 300);
@@ -1184,7 +1201,6 @@ public class ShopGUI extends JFrame {
                             listModel.remove(productsInCart.getSelectedIndex());
                             JOptionPane.showMessageDialog(frame, "Product has been removed!");
                             totalCostLabel.setText("Cost: " + calculateCartCost(customer.getCurrentCart()));
-                            JOptionPane.showMessageDialog(frame,"Product has been removed!");
                         } catch (Exception ex) {
                             JOptionPane.showMessageDialog(frame,ex.getMessage(),"Error", JOptionPane.ERROR_MESSAGE);
                         }
@@ -1200,6 +1216,8 @@ public class ShopGUI extends JFrame {
                     // weryfikacja danych osobowych i platnosci.
                     try {
                         placeAnOrder(customer,loginEntered,customer.getCurrentCart());
+                        listModel.removeAllElements();
+                        totalCostLabel.setText("Cost: " + calculateCartCost(customer.getCurrentCart()));
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(frame,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
                     }

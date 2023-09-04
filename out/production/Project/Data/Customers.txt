@@ -1,4 +1,4 @@
 loginHash;firstName;lastName;address;tel;credits;email;currentCart;orders
-2030634502!Gibbs!Surname!My street 00-420!123123123!100.02!email@wpwp.a![]![]
+2030634502!Gibbs!Surname!My street 00-420!123123123!80.02!email@wpwp.a![]![]
 97!null!null!null!0!0.0!null![]![]
 -1802365190!Szymon!Sawicki!Legionowo 05-120!798123788!200.0!email@w.plp![3;SHIRT;Jordan 1 Print Logo;Nike;799.99;Modne;M;2, 3;SHIRT;Jordan 1 Print Logo;Nike;799.99;Modne;M;3]![]
