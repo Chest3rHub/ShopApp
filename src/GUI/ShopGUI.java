@@ -995,6 +995,11 @@ public class ShopGUI extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // weryfikacja danych osobowych i platnosci.
+                    try {
+                        placeAnOrder(customer,loginEntered,customer.getCurrentCart());
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(frame,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             });
             buttonsPanel.add(orderButton);
@@ -1015,32 +1020,79 @@ public class ShopGUI extends JFrame {
 
         }
         public static void placeAnOrder(Customer customer, String loginEntered, List<ProductInCartDTO> productsInCart) throws Exception {
-        // jak wywali blad to i tak sie pewna czesc dostepnych produktow zmniejszy choc zamowienie nie zostanie zlozone wiec
-            // zrobic to tak zeby dopiero na sam koniec gdy na pewno nie ma bledu zmiejszalo ilosc
-        for (ProductInCartDTO product : productsInCart){
+        double totalCost=0;
 
+        if (customer.getFirstName()==null){
+            throw new Exception("Fill first name in the Account section.");
+        }
+        if (customer.getLastName()==null){
+            throw new Exception("Fill last name in the Account section.");
+        }
+        if (customer.getAddress()==null){
+            throw new Exception("Fill address in the Account section.");
+        }
+        if (customer.getTel()==0){
+            throw new Exception("Fill phone number in the Account section.");
+        }
+        if (customer.getEmail()==null){
+            throw new Exception("Fill e-mail in the Account section.");
+        }
+            LinkedHashMap<Integer, ProductInCartDTO> productsToOrder= new LinkedHashMap<>();
+            if (productsInCart.isEmpty()){
+                throw new Exception("Your cart is empty!");
+            }
+
+            System.out.println("Weryfikacja danych osobowych i koszyka ze nie jest pusty GIT");
+        for (ProductInCartDTO product : productsInCart){
+            // dla kazdego produktu z koszyka:
+            // 1. pobieramy jego id
+            // 2. pobieramy rozmiar i ilosc
+            // tworzymy Obiekt ProductWithSizeAndQtity o takim id jak ten produkt z koszyka
+            // tworzymy mape DOSTEPNYCH NA MAGAZYNIE  rozmiar ilosc uzywajac tego obiektu z magazynu
+            // jesli ta mapa dostepnych zawiera klucz o danym SIZE to sprawdzam czy jest ilosc dostepna
+            // gdy wszystkie warunki sa spelnione dodajemy do LinkedHashMap obiekt klucz- ID PRODUKTU Z KOSZYKA, wartosc- DTO obiekt o Size i quantity
+            // na koniec przechodze przez ta liste i zmniejszam dostepne produkty o podanym rozmiarze i podanej ilosci
+            System.out.println("Przed pobieraniem id");
             ProductWithSizeAndQtity productFromWarehouse= ProductWithSizeAndQtity.availableProductsWithSizesAndQtity.get(product.getIdProduct());
+            // na tej linii wywala blad
+            // trzeba zaseedowac baze produktami o ilosci i rozmiarach
+            System.out.println("Po pobieraniu id");
             Size size= product.getSize();
             int quantity= product.getQuantity();
             LinkedHashMap<Size, Integer> sizesAndQuantitiesAvailable= productFromWarehouse.getSizesAndQuantitiesMap();
+
 
             if (sizesAndQuantitiesAvailable.containsKey(size)){
 
                 int availableQuantity= sizesAndQuantitiesAvailable.get(size);
 
-                if (quantity<=availableQuantity){
+                if (quantity>availableQuantity){
 
-                    ProductWithSizeAndQtity.availableProductsWithSizesAndQtity.get(product.getIdProduct()).decreaseProductQuantity(size,quantity);
-
-                } else {
-                    throw new NotEnoughProductsException("For product: " + product + " this amount is unavailable at the moment!");
+                 //   ProductWithSizeAndQtity.availableProductsWithSizesAndQtity.get(product.getIdProduct()).decreaseProductQuantity(size,quantity);
+                    throw new NotEnoughProductsException("For product: " + product.getProductName() + " this amount is unavailable at the moment!");
                 }
+                // powiekszamy koszt calkowity o ilosc produktow * cena za sztuke
+                totalCost+=ProductWithSizeAndQtity.availableProductsWithSizesAndQtity.get(product.getIdProduct()).getProduct().getPrice()*quantity;
             } else {
-                throw new UnavailableException("For product: " + product + " this size is unavailable at the moment!");
+                throw new UnavailableException("For product: " + product.getProductName() + ", size: " + size + " is unavailable at the moment!");
             }
+            if (totalCost>customer.getCredits()){
+                throw new Exception("Not enough credits! Buy more in the Wallet section.");
+            }
+            ProductInCartDTO productTemp= new ProductInCartDTO(product.getIdProduct(),size,quantity);
+            productsToOrder.put(product.getIdProduct(),productTemp);
         }
 
+            for (Map.Entry<Integer, ProductInCartDTO> entry : productsToOrder.entrySet()) {
+                Integer key = entry.getKey();
+                ProductInCartDTO value = entry.getValue();
+                ProductWithSizeAndQtity.availableProductsWithSizesAndQtity.get(key).decreaseProductQuantity(value.getSize(),value.getQuantity());
+            }
+
         Order order= new Order(productsInCart);
+            // zmniejszenie ilosci kredytow o kwote zamowienia
+            customer.setCredits(customer.getCredits()-order.calculateCost());
+
         }
         public static void registeredAnAccountScreen(){
             secondPanel = new JPanel();

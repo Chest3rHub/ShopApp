@@ -21,6 +21,9 @@ public class ProductInCartDTO {
     public void setIdProduct(int idProduct) {
         this.idProduct = idProduct;
     }
+    public String getProductName(){
+        return Product.allProducts.get(this.getIdProduct()).getName();
+    }
 
     public Size getSize() {
         return size;

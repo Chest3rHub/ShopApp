@@ -24,6 +24,7 @@ public class Shop {
 
     public static void openShop(){
         Product.readProductsFromFile();
+        ProductWithSizeAndQtity.seedData();
         AbstractEmployee.readEmployeesFromFile();
     }
 

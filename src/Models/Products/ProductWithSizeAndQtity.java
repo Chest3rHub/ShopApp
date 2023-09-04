@@ -23,6 +23,28 @@ public class ProductWithSizeAndQtity{
         this.sizesAndQuantitiesMap = sizes;
         availableProductsWithSizesAndQtity.add(this);
     }
+    public static void seedData(){
+        List<Size> sizes= new ArrayList<>();
+        sizes.add(Size.XS);
+        sizes.add(Size.S);
+        sizes.add(Size.M);
+        sizes.add(Size.L);
+        sizes.add(Size.XL);
+        Random random= new Random();
+
+        for (Product product : Product.allProducts){
+            int availableSizesNumber= random.nextInt(sizes.size());
+            ProductWithSizeAndQtity productWithSizeAndQtity= new ProductWithSizeAndQtity(product);
+
+            for (int i=0; i < availableSizesNumber; i++){
+                int sizeIndex = random.nextInt(sizes.size());
+                Size size= sizes.get(sizeIndex);
+                int quantity = random.nextInt(20) + 1;
+                productWithSizeAndQtity.addSizeAndQuantity(size,quantity);
+            }
+
+        }
+    }
 
     public static List<ProductWithSizeAndQtity> getAvailableProductsWithSizesAndQtity() {
         return availableProductsWithSizesAndQtity;

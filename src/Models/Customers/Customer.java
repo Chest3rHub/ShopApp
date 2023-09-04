@@ -7,6 +7,7 @@ import Models.Employees.Feedback;
 import Models.Employees.Role;
 import Models.Products.ProductWithSizeAndQtity;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -162,7 +163,11 @@ public class Customer implements IPersonInfo {
     }
 
     public double getCredits() {
-        return credits;
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+
+        String formattedCredits = decimalFormat.format(credits);
+        String noComma= formattedCredits.replace(",",".");
+        return Double.parseDouble(noComma);
     }
 
     public void setCredits(double credits) {
