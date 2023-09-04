@@ -43,6 +43,62 @@ public class Order {
         return cost;
     }
 
+    public static List<Order> getAllOrders() {
+        return allOrders;
+    }
+
+    public static void setAllOrders(List<Order> allOrders) {
+        Order.allOrders = allOrders;
+    }
+
+    public static double getTotalRevenue() {
+        return totalRevenue;
+    }
+
+    public static void setTotalRevenue(double totalRevenue) {
+        Order.totalRevenue = totalRevenue;
+    }
+
+    public static int getIdCounter() {
+        return idCounter;
+    }
+
+    public static void setIdCounter(int idCounter) {
+        Order.idCounter = idCounter;
+    }
+
+    public int getIdOrder() {
+        return idOrder;
+    }
+
+    public void setIdOrder(int idOrder) {
+        this.idOrder = idOrder;
+    }
+
+    public LocalDate getOrderedAt() {
+        return orderedAt;
+    }
+
+    public void setOrderedAt(LocalDate orderedAt) {
+        this.orderedAt = orderedAt;
+    }
+
+    public List<ProductInCartDTO> getOrderedProducts() {
+        return orderedProducts;
+    }
+
+    public void setOrderedProducts(List<ProductInCartDTO> orderedProducts) {
+        this.orderedProducts = orderedProducts;
+    }
+
+    public double getTotalCost() {
+        return totalCost;
+    }
+
+    public void setTotalCost(double totalCost) {
+        this.totalCost = totalCost;
+    }
+
     public String toString(){
         return this.idOrder + ";"
                 + this.orderedAt + ";"

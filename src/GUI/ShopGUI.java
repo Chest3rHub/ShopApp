@@ -14,6 +14,7 @@ import Models.Products.ProductWithSizeAndQtity;
 import Models.Products.Size;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -372,7 +373,7 @@ public class ShopGUI extends JFrame {
         productsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                productsMenuClient(customer,enteredLogin);
             }
         });
         cartButton.addActionListener(new ActionListener() {
@@ -392,9 +393,173 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
     }
-    public static void setClientData(Customer customer){
-        // ustawic imie nazwisko adres dane kontaktowe itd
+    public static void productsMenuClient(Customer customer, String loginEntered){
+
+        frame.setSize(575,400);
+        secondPanel = new JPanel(new BorderLayout());
+
+        secondPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+
+        DefaultListModel<ProductWithSizeAndQtity> productModel = new DefaultListModel<>();
+        JList<ProductWithSizeAndQtity> productList = new JList<>(productModel);
+
+        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+            productModel.addElement(product);
+        }
+        JPanel comboBoxPanel= new JPanel(new GridLayout(8,1));
+
+        JComboBox<String> sizeComboBox = new JComboBox<>();
+        sizeComboBox.setSize(100,100);
+        sizeComboBox.setEnabled(false);
+
+        JComboBox<String> quantityComboBox = new JComboBox<>();
+        quantityComboBox.setSize(100,100);
+        quantityComboBox.setEnabled(false);
+
+        JLabel sizeLabel= new JLabel("SIZE");
+        sizeLabel.setVerticalAlignment(JLabel.CENTER);
+
+        comboBoxPanel.add(sizeLabel);
+
+
+        comboBoxPanel.add(sizeComboBox);
+
+        JLabel amountLabel= new JLabel("AMOUNT");
+        amountLabel.setVerticalAlignment(JLabel.CENTER);
+
+
+        comboBoxPanel.add(amountLabel);
+
+
+        comboBoxPanel.add(quantityComboBox);
+
+
+
+        sizeComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Object sizeObject= sizeComboBox.getSelectedItem();
+                String sizeString= String.valueOf(sizeObject);
+                Size size= Size.valueOf(sizeString);
+                ProductWithSizeAndQtity selectedProduct = productList.getSelectedValue();
+                int quantity= selectedProduct.getSizesAndQuantitiesMap().get(size);
+                String[] parts= new String[quantity];
+                for (int i=0; i <quantity; i++){
+                    parts[i]=String.valueOf(i+1);
+                }
+                quantityComboBox.setModel(new DefaultComboBoxModel<>(parts));
+                quantityComboBox.setEnabled(true);
+            }
+        });
+
+
+
+        productList.addListSelectionListener(e -> {
+            // Po wybraniu produktu, aktualizujemy dostępne rozmiary w JComboBox
+
+            ProductWithSizeAndQtity selectedProduct = productList.getSelectedValue();
+            if (selectedProduct != null) {
+                String [] partsEmpty= new String[0];
+                quantityComboBox.setModel(new DefaultComboBoxModel<>(partsEmpty));
+                List<String> sizesToArrayList= new ArrayList<>();
+                // Rozdzielamy napis, aby uzyskać dostępne rozmiary
+                LinkedHashMap<Size,Integer> sizes= selectedProduct.getSizesAndQuantitiesMap();
+                // mozna usunac ta liste pod spodem
+                List<Integer> quantitiesToArrayList= new ArrayList<>();
+                if (sizes.containsKey(Size.XS)){
+                    sizesToArrayList.add("XS");
+                    quantitiesToArrayList.add(sizes.get(Size.XS));
+                }
+                if (sizes.containsKey(Size.S)){
+                    sizesToArrayList.add("S");
+                    quantitiesToArrayList.add(sizes.get(Size.S));
+                }
+                if (sizes.containsKey(Size.M)){
+                    sizesToArrayList.add("M");
+                    quantitiesToArrayList.add(sizes.get(Size.M));
+                }
+                if (sizes.containsKey(Size.L)){
+                    sizesToArrayList.add("L");
+                    quantitiesToArrayList.add(sizes.get(Size.L));
+                }
+                if (sizes.containsKey(Size.XL)){
+                    sizesToArrayList.add("XL");
+                    quantitiesToArrayList.add(sizes.get(Size.L));
+                }
+                if (sizes.containsKey(Size.ONESIZE)){
+                    sizesToArrayList.add("ONESIZE");
+                    quantitiesToArrayList.add(sizes.get(Size.ONESIZE));
+                }
+                String[] parts= sizesToArrayList.toArray(new String[0]);
+
+
+                    sizeComboBox.setModel(new DefaultComboBoxModel<>(parts));
+                    if (sizes.isEmpty()){
+                        sizeComboBox.setEnabled(false);
+                        quantityComboBox.setModel(new DefaultComboBoxModel<>(partsEmpty));
+                        quantityComboBox.setEnabled(false);
+                    } else {
+                        sizeComboBox.setEnabled(true);
+                    }
+
+
+
+            }
+        });
+
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+        JButton backButton = backToMenuClient(customer,loginEntered);
+        JButton addToCartButton = new JButton("Add to Cart");
+        addToCartButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                    try {
+                        if (productList.getSelectedValue()==null){
+                            throw new Exception("Choose a product!");
+                        }
+                        if (sizeComboBox.getSelectedItem() == null){
+                            throw new Exception("Choose a size!");
+                        }
+                        if (quantityComboBox.getSelectedItem()==null){
+                            throw new Exception("Choose a quantity!");
+                        }
+                        // id minus jeden
+                        int id= productList.getSelectedValue().getProduct().getId()-1;
+                        Object sizeObject= sizeComboBox.getSelectedItem();
+                        String sizeString = String.valueOf(sizeObject);
+                        Size size= Size.valueOf(sizeString);
+
+                        Object quantityObject= quantityComboBox.getSelectedItem();
+                        String quantityString= String.valueOf(quantityObject);
+                        int quantity= Integer.parseInt(quantityString);
+
+                        customer.addToCart(new ProductInCartDTO(id,size,quantity));
+                        JOptionPane.showMessageDialog(frame,"Added to cart!", "Congrats :)", JOptionPane.PLAIN_MESSAGE);
+
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(frame,ex.getMessage(),"Error", JOptionPane.ERROR_MESSAGE);
+                    }
+
+
+            }
+        });
+
+        buttonPanel.add(backButton);
+        buttonPanel.add(addToCartButton);
+
+
+        secondPanel.add(new JScrollPane(productList), BorderLayout.WEST);
+        secondPanel.add(comboBoxPanel, BorderLayout.CENTER);
+        secondPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(secondPanel);
+      //  frame.pack();
+        frame.getContentPane().revalidate();
+        frame.getContentPane().repaint();
     }
+
 
     public static Role login(String loginEntered, String passwordEntered) throws Exception {
 
@@ -811,15 +976,31 @@ public class ShopGUI extends JFrame {
             frame.setSize(500, 300);
             JLabel firstNameLabel= new JLabel("First name:");
             JTextField firstNameTextField= new JTextField();
-            firstNameTextField.setText(!customer.getFirstName().equals("null") ? customer.getFirstName() : "");
+            if (customer.getFirstName()==null){
+                firstNameTextField.setText("");
+            }else {
+                firstNameTextField.setText(!customer.getFirstName().equals("null") ? customer.getFirstName() : "");
+            }
+
 
             JLabel lastNameLabel= new JLabel("Last name:");
             JTextField lastNameTextField= new JTextField();
-            lastNameTextField.setText(!customer.getLastName().equals("null") ? customer.getLastName() : "");
+
+            if (customer.getLastName()==null){
+                lastNameTextField.setText("");
+            }else {
+                lastNameTextField.setText(!customer.getLastName().equals("null") ? customer.getLastName() : "");
+            }
+
 
             JLabel addressLabel= new JLabel("Address:");
             JTextField addressTextField= new JTextField();
-            addressTextField.setText(!customer.getAddress().equals("null") ? customer.getAddress() : "");
+            if (customer.getAddress()==null){
+                addressTextField.setText("");
+            }else {
+                addressTextField.setText(!customer.getAddress().equals("null") ? customer.getAddress() : "");
+            }
+
 
             JLabel telLabel= new JLabel("Tel:");
             JTextField telTextField= new JTextField();
@@ -832,7 +1013,13 @@ public class ShopGUI extends JFrame {
 
             JLabel emailLabel= new JLabel("E-mail:");
             JTextField emailTextField= new JTextField();
-            emailTextField.setText(!customer.getEmail().equals("null") ? customer.getEmail() : "");
+            if (customer.getEmail()==null){
+                emailTextField.setText("");
+            }else {
+                emailTextField.setText(!customer.getEmail().equals("null") ? customer.getEmail() : "");
+            }
+
+
 
             JLabel newPasswordLabel= new JLabel("New password:");
             JPasswordField newPasswordField= new JPasswordField();
@@ -940,6 +1127,11 @@ public class ShopGUI extends JFrame {
             secondPanel.add(label,BorderLayout.NORTH);
 
 
+
+            // ustawic label w lepszym miejscu i zeby sie aktualizowal odrazu po usunieciu produktu
+            JLabel totalCostLabel= new JLabel("Cost: " + calculateCartCost(customer.getCurrentCart()));
+            secondPanel.add(totalCostLabel,BorderLayout.EAST);
+
             //JSplitPane splitPane= new JSplitPane();
 
 
@@ -982,10 +1174,21 @@ public class ShopGUI extends JFrame {
             removeProductFromCartButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    ProductInCartDTO productToRemove= productsInCart.getSelectedValue();
-                    customer.getCurrentCart().remove(productToRemove);
-                    listModel.remove(productsInCart.getSelectedIndex());
-                    JOptionPane.showMessageDialog(frame, "Product has been removed!");
+
+                        try {
+                            if (productsInCart.getSelectedValue()==null){
+                                throw new Exception("Select a product!");
+                            }
+                            ProductInCartDTO productToRemove= productsInCart.getSelectedValue();
+                            customer.getCurrentCart().remove(productToRemove);
+                            listModel.remove(productsInCart.getSelectedIndex());
+                            JOptionPane.showMessageDialog(frame, "Product has been removed!");
+                            totalCostLabel.setText("Cost: " + calculateCartCost(customer.getCurrentCart()));
+                            JOptionPane.showMessageDialog(frame,"Product has been removed!");
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(frame,ex.getMessage(),"Error", JOptionPane.ERROR_MESSAGE);
+                        }
+
                 }
             });
             buttonsPanel.add(removeProductFromCartButton);
@@ -1018,6 +1221,16 @@ public class ShopGUI extends JFrame {
             frame.getContentPane().repaint();
             frame.setVisible(true);
 
+        }
+        public static double calculateCartCost(List<ProductInCartDTO> productInCartDTOS){
+        double totalCost=0;
+        for (ProductInCartDTO product : productInCartDTOS){
+            double pricePerOne= ProductWithSizeAndQtity.availableProductsWithSizesAndQtity.get(product.getIdProduct()).getProduct().getPrice();
+            int quantity= product.getQuantity();
+
+            totalCost+=pricePerOne*quantity;
+        }
+        return totalCost;
         }
         public static void placeAnOrder(Customer customer, String loginEntered, List<ProductInCartDTO> productsInCart) throws Exception {
         double totalCost=0;
@@ -1090,8 +1303,11 @@ public class ShopGUI extends JFrame {
             }
 
         Order order= new Order(productsInCart);
+
             // zmniejszenie ilosci kredytow o kwote zamowienia
             customer.setCredits(customer.getCredits()-order.calculateCost());
+            customer.getCurrentCart().clear();
+            JOptionPane.showMessageDialog(frame,"Order nr " + order.getIdOrder()+ " has been placed!", "Order", JOptionPane.PLAIN_MESSAGE);
 
         }
         public static void registeredAnAccountScreen(){
