@@ -1344,14 +1344,15 @@ public class ShopGUI extends JFrame {
             ProductInCartDTO productTemp= new ProductInCartDTO(product.getIdProduct(),size,quantity);
             productsToOrder.put(product.getIdProduct(),productTemp);
         }
-
+                List<ProductInCartDTO> orderedProducts= new ArrayList<>();
             for (Map.Entry<Integer, ProductInCartDTO> entry : productsToOrder.entrySet()) {
                 Integer key = entry.getKey();
                 ProductInCartDTO value = entry.getValue();
+                orderedProducts.add(value);
                 ProductWithSizeAndQtity.availableProductsWithSizesAndQtity.get(key).decreaseProductQuantity(value.getSize(),value.getQuantity());
             }
 
-        Order order= new Order(productsInCart);
+        Order order= new Order(orderedProducts);
             customer.getOrdersIds().add(order.getIdOrder());
 
             // zmniejszenie ilosci kredytow o kwote zamowienia

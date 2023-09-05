@@ -24,7 +24,7 @@ public class Order {
     // chyba zmienic na ProductDTO
     // moze dodac date zlozenia zamowienia i statyczna liste wszystkich zamowien
     LocalDate orderedAt;
-    List<ProductInCartDTO> orderedProducts= new ArrayList<DTOs.ProductInCartDTO>();
+    List<ProductInCartDTO> orderedProducts;
     double totalCost;
 
     public Order(List<ProductInCartDTO> orderedProducts) {

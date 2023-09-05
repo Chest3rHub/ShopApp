@@ -1,5 +1,5 @@
 loginHash;firstName;lastName;address;tel;credits;email;currentCart;orders
-2162502!asd!asd!asd!123123123!1000.0!aaa![15;SHIRT;Koszulka;Vans;49.99;Na deske i rolki;L;1]![]
+2162502!asd!asd!asd!123123123!180.65!aaa![]![10531]
 2030634502!null!null!null!0!0.0!null![]![]
 97!null!null!null!0!0.0!null![]![]
 -1802365190!null!null!null!0!0.0!null![]![]
