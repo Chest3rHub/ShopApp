@@ -1,16 +1,21 @@
 package Models;
 
 import DTOs.ProductInCartDTO;
+import Models.Customers.Customer;
 import Models.Products.Product;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Order {
     public static List<Order> allOrders= new ArrayList<>();
+    public final static String ordersFileName= "src/Data/Orders.txt";
     public static double totalRevenue=0;
-    public static int idCounter=1;
+    public static int idCounter=10531;
     int idOrder;
     //String loginHash;
    // List<Product> products= new ArrayList<>();
@@ -32,6 +37,24 @@ public class Order {
         allOrders.add(this);
         idCounter++;
     }
+    public static void saveOrdersToFile(){
+        try {
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(ordersFileName));
+            bufferedWriter.write("idOrder;orderDate;totalCost;orderedProducts\n");
+            for (Order order : allOrders) {
+                bufferedWriter.write(order.idOrder+"!"
+                        + order.orderedAt +"!"
+                        + order.totalCost + "!"
+                        + order.orderedProducts);
+                bufferedWriter.write("\n");
+            }
+            bufferedWriter.close();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
 
     public double calculateCost(){
         double cost=0;

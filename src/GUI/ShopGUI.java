@@ -21,6 +21,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -56,6 +57,7 @@ public class ShopGUI extends JFrame {
                 try {
                     savePasswordChangesToFile();
                     saveCustomersChangesToFile();
+                    Order.saveOrdersToFile();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -542,6 +544,7 @@ public class ShopGUI extends JFrame {
                         }
                         // id minus jeden
                         int id= productList.getSelectedValue().getProduct().getId()-1;
+                        System.out.println("Dodawane do koszyka id produktu id-1 :" + id);
                         Object sizeObject= sizeComboBox.getSelectedItem();
                         String sizeString = String.valueOf(sizeObject);
                         Size size= Size.valueOf(sizeString);
@@ -1146,7 +1149,10 @@ public class ShopGUI extends JFrame {
 
 
             // ustawic label w lepszym miejscu i zeby sie aktualizowal odrazu po usunieciu produktu
-            JLabel totalCostLabel= new JLabel("Cost: " + calculateCartCost(customer.getCurrentCart()));
+            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+            double cost=calculateCartCost(customer.getCurrentCart());
+            String formattedCredits = decimalFormat.format(cost);
+            JLabel totalCostLabel= new JLabel("Cost: " + formattedCredits+"PLN");
             secondPanel.add(totalCostLabel,BorderLayout.EAST);
 
             //JSplitPane splitPane= new JSplitPane();
@@ -1200,7 +1206,10 @@ public class ShopGUI extends JFrame {
                             customer.getCurrentCart().remove(productToRemove);
                             listModel.remove(productsInCart.getSelectedIndex());
                             JOptionPane.showMessageDialog(frame, "Product has been removed!");
-                            totalCostLabel.setText("Cost: " + calculateCartCost(customer.getCurrentCart()));
+                            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+                            double cost=calculateCartCost(customer.getCurrentCart());
+                            String formattedCredits = decimalFormat.format(cost);
+                            totalCostLabel.setText("Cost: " +formattedCredits+"PLN");
                         } catch (Exception ex) {
                             JOptionPane.showMessageDialog(frame,ex.getMessage(),"Error", JOptionPane.ERROR_MESSAGE);
                         }
@@ -1217,7 +1226,9 @@ public class ShopGUI extends JFrame {
                     try {
                         placeAnOrder(customer,loginEntered,customer.getCurrentCart());
                         listModel.removeAllElements();
-                        totalCostLabel.setText("Cost: " + calculateCartCost(customer.getCurrentCart()));
+                        double cost=calculateCartCost(customer.getCurrentCart());
+                        String formattedCredits = decimalFormat.format(cost);
+                        totalCostLabel.setText("Cost: " +formattedCredits+ "PLN");
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(frame,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
                     }
@@ -1243,7 +1254,8 @@ public class ShopGUI extends JFrame {
         public static double calculateCartCost(List<ProductInCartDTO> productInCartDTOS){
         double totalCost=0;
         for (ProductInCartDTO product : productInCartDTOS){
-            double pricePerOne= ProductWithSizeAndQtity.availableProductsWithSizesAndQtity.get(product.getIdProduct()).getProduct().getPrice();
+            System.out.println("Calculating price for: "+ product);
+            double pricePerOne= Product.allProducts.get(product.getIdProduct()).getPrice();
             int quantity= product.getQuantity();
 
             totalCost+=pricePerOne*quantity;
@@ -1275,6 +1287,21 @@ public class ShopGUI extends JFrame {
 
             System.out.println("Weryfikacja danych osobowych i koszyka ze nie jest pusty GIT");
         for (ProductInCartDTO product : productsInCart){
+            System.out.println("Pod spodem kod sie wypierdala:");
+            Optional<ProductWithSizeAndQtity> optionalProduct= ProductWithSizeAndQtity.availableProductsWithSizesAndQtity
+                    .stream()
+                    .filter(productWithSizeAndQtity -> productWithSizeAndQtity.getProduct().getId()-1==product.getIdProduct())
+                    .findFirst();
+            ProductWithSizeAndQtity p2Temp=null;
+            if (optionalProduct.isPresent()){
+                p2Temp=optionalProduct.get();
+            }
+            System.out.println("Produkt z koszyka id-1: " + product.getIdProduct());
+            System.out.println("Produkt z magazynu id-1: " + p2Temp.getProduct().getId());
+
+            if (!ProductWithSizeAndQtity.availableProductsWithSizesAndQtity.contains(p2Temp)){
+                throw new Exception("Product: " +  Product.allProducts.get(product.getIdProduct())+ "  is unavailable!");
+            }
             // dla kazdego produktu z koszyka:
             // 1. pobieramy jego id
             // 2. pobieramy rozmiar i ilosc
@@ -1284,8 +1311,10 @@ public class ShopGUI extends JFrame {
             // gdy wszystkie warunki sa spelnione dodajemy do LinkedHashMap obiekt klucz- ID PRODUKTU Z KOSZYKA, wartosc- DTO obiekt o Size i quantity
             // na koniec przechodze przez ta liste i zmniejszam dostepne produkty o podanym rozmiarze i podanej ilosci
             System.out.println("Przed pobieraniem id");
-            ProductWithSizeAndQtity productFromWarehouse= ProductWithSizeAndQtity.availableProductsWithSizesAndQtity.get(product.getIdProduct());
+           // ProductWithSizeAndQtity productFromWarehouse= ProductWithSizeAndQtity.availableProductsWithSizesAndQtity.stream().filter(productWithSizeAndQtity -> productWithSizeAndQtity.getProduct().getId()==product.getIdProduct()).findFirst().get();
+            ProductWithSizeAndQtity productFromWarehouse=p2Temp;
             // na tej linii wywala blad
+            System.out.println("Pobrany produkt: "+ productFromWarehouse);
             // trzeba zaseedowac baze produktami o ilosci i rozmiarach
             System.out.println("Po pobieraniu id");
             Size size= product.getSize();
@@ -1302,8 +1331,10 @@ public class ShopGUI extends JFrame {
                  //   ProductWithSizeAndQtity.availableProductsWithSizesAndQtity.get(product.getIdProduct()).decreaseProductQuantity(size,quantity);
                     throw new NotEnoughProductsException("For product: " + product.getProductName() + " this amount is unavailable at the moment!");
                 }
+                System.out.println("Przed wywolaniem x");
                 // powiekszamy koszt calkowity o ilosc produktow * cena za sztuke
-                totalCost+=ProductWithSizeAndQtity.availableProductsWithSizesAndQtity.get(product.getIdProduct()).getProduct().getPrice()*quantity;
+                totalCost+=ProductWithSizeAndQtity.availableProductsWithSizesAndQtity.get(Product.allProducts.get(product.getIdProduct()).getId()-1).getProduct().getPrice()*quantity;
+                System.out.println("Po wywolaniu x");
             } else {
                 throw new UnavailableException("For product: " + product.getProductName() + ", size: " + size + " is unavailable at the moment!");
             }
@@ -1321,6 +1352,7 @@ public class ShopGUI extends JFrame {
             }
 
         Order order= new Order(productsInCart);
+            customer.getOrdersIds().add(order.getIdOrder());
 
             // zmniejszenie ilosci kredytow o kwote zamowienia
             customer.setCredits(customer.getCredits()-order.calculateCost());

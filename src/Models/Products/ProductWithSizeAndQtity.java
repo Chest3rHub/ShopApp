@@ -42,6 +42,9 @@ public class ProductWithSizeAndQtity{
                 int quantity = random.nextInt(20) + 1;
                 productWithSizeAndQtity.addSizeAndQuantity(size,quantity);
             }
+//            if (productWithSizeAndQtity.getSizesAndQuantitiesMap().isEmpty()){
+//                ProductWithSizeAndQtity.availableProductsWithSizesAndQtity.remove(productWithSizeAndQtity);
+//            }
 
         }
     }
