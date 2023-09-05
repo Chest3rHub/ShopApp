@@ -54,6 +54,9 @@ public class Customer implements IPersonInfo {
         this.ordersIds = this.ordersIds;
         this.currentCart = currentCart;
     }
+    public static void addOrdersToCustomersStartUp(){
+        // na poczatku dodac odpowiednim klientom zamowienia o takich id jakie sa w ich liscie ordersIds
+    }
 
     public void addCredits(Double credits){
         this.credits+=credits;

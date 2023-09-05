@@ -1287,7 +1287,6 @@ public class ShopGUI extends JFrame {
 
             System.out.println("Weryfikacja danych osobowych i koszyka ze nie jest pusty GIT");
         for (ProductInCartDTO product : productsInCart){
-            System.out.println("Pod spodem kod sie wypierdala:");
             Optional<ProductWithSizeAndQtity> optionalProduct= ProductWithSizeAndQtity.availableProductsWithSizesAndQtity
                     .stream()
                     .filter(productWithSizeAndQtity -> productWithSizeAndQtity.getProduct().getId()-1==product.getIdProduct())
