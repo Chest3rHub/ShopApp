@@ -38,6 +38,16 @@ public class ShopGUI extends JFrame {
     public static JPanel mainPanel;
     public static JPanel secondPanel;
 
+    public final static String _RED="\u001B[31m";
+
+    public final static String _RESET="\u001B[0m";
+    public final static String _GREEN="\u001B[32m";
+    public final static String _BLUE="\u001B[34m";
+    public final static String _YELLOW="\u001B[33m";
+
+    public final static String _PURPLE="\u001B[35m";
+
+    public final static String _CYAN="\u001B[36m";
     public final static String customersFileName="src/Data/Customers.txt";
     public final static String accountsFileName = "src/Data/Accounts.txt";
     // struktura pliku:
@@ -428,7 +438,7 @@ public class ShopGUI extends JFrame {
 
         comboBoxPanel.add(sizeComboBox);
 
-        JLabel amountLabel= new JLabel("AMOUNT");
+        JLabel amountLabel= new JLabel("AVAILABLE AMOUNT:");
         amountLabel.setVerticalAlignment(JLabel.CENTER);
 
 
@@ -468,6 +478,19 @@ public class ShopGUI extends JFrame {
 
                 costLabel.setText("Cost: ");
                 costLabelPLN.setText(productList.getSelectedValue().getProduct().getPrice()*quantity+ "PLN");
+            }
+        });
+        productList.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(
+                    JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof ProductWithSizeAndQtity) {
+                    value = "BRAND: " +((ProductWithSizeAndQtity) value).getProduct().getBrand()
+                            + ", PRODUCT: " + ((ProductWithSizeAndQtity) value).getProduct().getName()
+                            + ", PRICE: " +((ProductWithSizeAndQtity) value).getProduct().getPrice()
+                            + ", SIZES: " +((ProductWithSizeAndQtity) value).getSizesAndQuantitiesMap();
+                }
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             }
         });
 
@@ -576,7 +599,7 @@ public class ShopGUI extends JFrame {
 
         frame.getContentPane().removeAll();
         frame.getContentPane().add(secondPanel);
-      //  frame.pack();
+        frame.pack();
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
     }

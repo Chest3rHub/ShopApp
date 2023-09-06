@@ -69,7 +69,7 @@ public class Order {
         String info="";
         for (ProductInCartDTO product : this.orderedProducts){
             info+="BRAND: " + product.getProductBrand()
-                    + ", NAME: " + product.getProductName()
+                    + ", PRODUCT: " + product.getProductName()
                     + ", SIZE: " + product.getSize()
                     + ", QUANTITY: " + product.getQuantity()
                     + "\n";
