@@ -25,6 +25,10 @@ public class ProductInCartDTO {
         return Product.allProducts.get(this.getIdProduct()).getName();
     }
 
+    public String getProductBrand(){
+        return Product.allProducts.get(this.getIdProduct()).getBrand();
+    }
+
     public Size getSize() {
         return size;
     }

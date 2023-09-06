@@ -1,5 +1,7 @@
 import GUI.ShopGUI;
+import Models.Customers.Customer;
 import Models.Employees.AbstractEmployee;
+import Models.Order;
 import Models.Products.Product;
 import Models.Shop;
 
@@ -19,6 +21,8 @@ public class Main {
 
 
         // jedno konto dla admina, jedno dla managera, wiele dla klientow
+
+        // produkty, pozniej seeduje ilosci i rozmiary a na kooniec pracownikow
         Shop.openShop();
         Product.showProducts();
         System.out.println("======");
@@ -26,6 +30,8 @@ public class Main {
         System.out.println("======");
         try {
           //  Shop.seedProductData();
+
+            // pusta metoda
             Shop.seedEmployeeData();
         }catch (Exception e){
             e.printStackTrace();
@@ -56,6 +62,8 @@ public class Main {
         try {
             ShopGUI.readAccountsFromFile();
             ShopGUI.readCustomersFromFile();
+            Order.readOrdersFromFile();
+            Customer.addOrdersToCustomersStartUp();
         } catch (Exception e) {
             e.printStackTrace();
         }

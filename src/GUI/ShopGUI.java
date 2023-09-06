@@ -15,6 +15,8 @@ import Models.Products.Size;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -369,7 +371,7 @@ public class ShopGUI extends JFrame {
         ordersButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                ordersMenuClient(customer,enteredLogin);
             }
         });
         productsButton.addActionListener(new ActionListener() {
@@ -579,6 +581,72 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().repaint();
     }
 
+    public static void ordersMenuClient(Customer customer, String loginEntered) {
+        secondPanel = new JPanel();
+        secondPanel.setLayout(new BorderLayout());
+        frame.setSize(600, 500);
+
+        JLabel ordersHistoryLabel = new JLabel("History: ");
+        ordersHistoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        secondPanel.add(ordersHistoryLabel, BorderLayout.NORTH);
+
+        DefaultListModel<Order> orderModel = new DefaultListModel<>();
+        JList<Order> ordersList = new JList<>(orderModel);
+        for (Order order : customer.getOrders()) {
+            orderModel.addElement(order);
+        }
+
+        ordersList.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(
+                    JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof Order) {
+                    value = "ID: " + ((Order) value).getIdOrder()
+                            + ", DATE: " + ((Order) value).getOrderedAt()
+                            + ", COST: " + ((Order) value).getTotalCost() + "PLN";
+                }
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
+
+        JTextArea productInfoTextArea = new JTextArea();
+        productInfoTextArea.setEditable(false);
+        productInfoTextArea.setWrapStyleWord(true);
+        productInfoTextArea.setLineWrap(true);
+
+       // JLabel orderProductsInfoLabel = new JLabel();
+
+        ordersList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                Order order = ordersList.getSelectedValue();
+              //  orderProductsInfoLabel.setText("ORDERED: \n" + order.getSelectedOrderInfo());
+                productInfoTextArea.setText("ORDERED: \n" + order.getSelectedOrderInfo());
+            }
+        });
+
+        // Tworzymy panel, który będzie zawierać ordersList i orderProductsInfoLabel
+        JPanel listAndInfoPanel = new JPanel(new BorderLayout());
+        listAndInfoPanel.add(new JScrollPane(ordersList), BorderLayout.CENTER);
+     //   listAndInfoPanel.add(orderProductsInfoLabel, BorderLayout.SOUTH);
+
+        listAndInfoPanel.add(productInfoTextArea, BorderLayout.SOUTH);
+        JButton backButton = backToMenuClient(customer, loginEntered);
+
+        // Tworzymy panel na przycisk backButton
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+        buttonPanel.add(backButton);
+
+        // Dodajemy panele do secondPanel
+        secondPanel.add(listAndInfoPanel, BorderLayout.CENTER);
+        secondPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        frame.setTitle("Orders");
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(secondPanel);
+        frame.getContentPane().revalidate();
+        frame.getContentPane().repaint();
+    }
 
     public static Role login(String loginEntered, String passwordEntered) throws Exception {
 
@@ -621,6 +689,9 @@ public class ShopGUI extends JFrame {
                 String email=values[6];
                 String currentCart=values[7];
                 String orders=values[8];
+
+                System.out.println("Pobrany koszyk : " + currentCart);
+                System.out.println("Pobrane id zamowien: " + orders);
 
                 List<ProductInCartDTO> cartList= new ArrayList<>();
 
@@ -669,7 +740,26 @@ public class ShopGUI extends JFrame {
 
 
                 List<Integer> ordersIds= new ArrayList<>();
+
+                if (!orders.equals("[]")){
+                    String firstReplace= orders.replace("[","");
+                    String secondReplace= firstReplace.replace("]","");
+
+                    Scanner scanner= new Scanner(secondReplace);
+                    scanner.useDelimiter(",");
+                    //   String oneProduct= scanner.next();
+                    while(scanner.hasNext()){
+                        String idOrderString= scanner.next();
+                        String trimmed=idOrderString.trim();
+                        int idOrder= Integer.parseInt(trimmed);
+                        ordersIds.add(idOrder);
+                    }
+                }
+                System.out.println("Id zamowien po dodaniu: " + ordersIds);
                 Customer.customers.put(loginHashed, new Customer(loginHashed,firstName,lastName,address,telNumber, creditsDouble,email,cartList,ordersIds));
+                System.out.println("Koszyk: "+Customer.customers.get(loginHashed).getCurrentCart());
+                System.out.println("Lista id zamowien: "+Customer.customers.get(loginHashed).getOrdersIds());
+
             }
         }
     }

@@ -5,12 +5,12 @@ import Interfaces.IPersonInfo;
 import Models.Employees.Consultant;
 import Models.Employees.Feedback;
 import Models.Employees.Role;
+import Models.Order;
 import Models.Products.ProductWithSizeAndQtity;
 
+import javax.swing.text.html.Option;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class Customer implements IPersonInfo {
     public static HashMap<String, Customer> customers= new HashMap<>();
@@ -32,6 +32,7 @@ public class Customer implements IPersonInfo {
     Role role;
     List<Integer> ordersIds = new ArrayList<>();
     List<ProductInCartDTO> currentCart= new ArrayList<>();
+    List<Order> orders= new ArrayList<>();
 
     // password dodac, metody register, login, hashowanie hasel itd;
 
@@ -51,11 +52,30 @@ public class Customer implements IPersonInfo {
         this.tel = tel;
         this.credits = credits;
         this.email = email;
-        this.ordersIds = this.ordersIds;
+        this.ordersIds = ordersIds;
         this.currentCart = currentCart;
     }
     public static void addOrdersToCustomersStartUp(){
         // na poczatku dodac odpowiednim klientom zamowienia o takich id jakie sa w ich liscie ordersIds
+        for (Map.Entry<String, Customer> customerFromMap : customers.entrySet()) {
+            String loginHash = customerFromMap.getKey();
+            Customer customer = customerFromMap.getValue();
+            List<Integer> ordersIdsTemp=customer.getOrdersIds();
+            System.out.println("Dodawanie zamowien do klientow: "+ ordersIdsTemp);
+            if (ordersIdsTemp.isEmpty()){
+                continue;
+            }
+            for (int id : ordersIdsTemp){
+                Optional<Order> orderTemp = Order.allOrders.stream()
+                        .filter(order -> order.getIdOrder()==id)
+                        .findFirst();
+                if (!orderTemp.isPresent()){
+                    continue;
+                }
+                Order orderToAdd= orderTemp.get();
+                customer.orders.add(orderToAdd);
+            }
+        }
     }
 
     public void addCredits(Double credits){
@@ -69,6 +89,21 @@ public class Customer implements IPersonInfo {
         this.currentCart.add(productWithSizeAndQtity);
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
 
     public String getPersonalData(){
         return this.id + ";"

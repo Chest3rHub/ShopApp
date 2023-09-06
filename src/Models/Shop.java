@@ -8,6 +8,7 @@ import Models.Products.Product;
 import Models.Products.ProductWithSizeAndQtity;
 import Models.Products.Size;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +25,6 @@ public class Shop {
 
     public static void openShop(){
         Product.readProductsFromFile();
-        Order.readOrdersFromFile();
         ProductWithSizeAndQtity.seedData();
         AbstractEmployee.readEmployeesFromFile();
     }

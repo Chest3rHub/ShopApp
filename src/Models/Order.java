@@ -3,13 +3,14 @@ package Models;
 import DTOs.ProductInCartDTO;
 import Models.Customers.Customer;
 import Models.Products.Product;
+import Models.Products.Size;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 public class Order {
     public static List<Order> allOrders= new ArrayList<>();
@@ -37,6 +38,17 @@ public class Order {
         allOrders.add(this);
         idCounter++;
     }
+
+    public Order(int idOrder, LocalDate date ,List<ProductInCartDTO> orderedProducts) {
+        this.idOrder = idOrder;
+        this.orderedAt=date;
+        this.orderedProducts = orderedProducts;
+        this.totalCost = this.calculateCost();
+        totalRevenue+=this.totalCost;
+        allOrders.add(this);
+        idCounter++;
+    }
+
     public static void saveOrdersToFile(){
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(ordersFileName));
@@ -53,7 +65,77 @@ public class Order {
             e.printStackTrace();
         }
     }
-    public static void readOrdersFromFile(){
+    public String getSelectedOrderInfo(){
+        String info="";
+        for (ProductInCartDTO product : this.orderedProducts){
+            info+="BRAND: " + product.getProductBrand()
+                    + ", NAME: " + product.getProductName()
+                    + ", SIZE: " + product.getSize()
+                    + ", QUANTITY: " + product.getQuantity()
+                    + "\n";
+        }
+
+        return info;
+    }
+    public static void readOrdersFromFile() throws Exception {
+        try (BufferedReader br = new BufferedReader(new FileReader(ordersFileName))) {
+            String line;
+            line=br.readLine();
+            while ((line = br.readLine()) != null) {
+                String[] values = line.split("!");
+                String idOrderString = values[0];
+                int idOrder = Integer.parseInt(idOrderString);
+                String dateString= values[1];
+                LocalDate date= LocalDate.parse(dateString);
+                String costString= values[2];
+                double cost= Double.parseDouble(costString);
+                String products=values[3];
+
+                List<ProductInCartDTO> productInCartDTOList= new ArrayList<>();
+                String toScan= products.replace("[","");
+                String toScanFinally= toScan.replace("]","");
+
+                if (!toScanFinally.equals("")){
+                    Scanner scanner= new Scanner(toScanFinally);
+                    scanner.useDelimiter(",");
+                    //   String oneProduct= scanner.next();
+                    while(scanner.hasNext()){
+                        String oneProduct= scanner.next();
+//                        System.out.println("Cala linia do zeskanowania pod spodem:");
+//                        System.out.println(oneProduct);
+                        Scanner oneProductScanner= new Scanner(oneProduct);
+                        oneProductScanner.useDelimiter(";");
+                        String idString= oneProductScanner.next();
+                        String idNoWhite =idString.trim();
+                        int idProduct=Integer.parseInt(idNoWhite);
+                        // System.out.println("Pobrane id " + idProduct);
+                        String category=oneProductScanner.next();
+                        // System.out.println("Pobrana kategoria "+ category);
+
+                        String nazwa= oneProductScanner.next();
+                        // System.out.println("Pobrana nazwa " + nazwa);
+                        String marka= oneProductScanner.next();
+
+                        //  System.out.println("Pobrana marka: "+ marka);
+                        String koszt= oneProductScanner.next();
+                        // System.out.println("Pobrany koszt+ " + koszt);
+
+                        String opis= oneProductScanner.next();
+                        // System.out.println("Pobrany opis: " + opis);
+
+                        Size size= Size.valueOf(oneProductScanner.next());
+                        // System.out.println("Pobrany rozmiar : " + size);
+                        int quantity= oneProductScanner.nextInt();
+                        // System.out.println("Pobrana ilosc "+ quantity);
+                        // juz git tylko ogarnac ID bo sie przesuwa
+
+                        productInCartDTOList.add(new ProductInCartDTO(idProduct-1,size,quantity));
+                    }
+                    Order o1= new Order(idOrder,date,productInCartDTOList);
+
+                }
+            }
+        }
 
     }
 
