@@ -477,7 +477,11 @@ public class ShopGUI extends JFrame {
                 int quantity= Integer.parseInt(quantityString);
 
                 costLabel.setText("Cost: ");
-                costLabelPLN.setText(productList.getSelectedValue().getProduct().getPrice()*quantity+ "PLN");
+                DecimalFormat decimalFormat = new DecimalFormat("#.00");
+                String formattedPrice = decimalFormat.format(productList.getSelectedValue().getProduct().getPrice()*quantity);
+                String noCommaPrice= formattedPrice.replace(",",".");
+                double formattedCost=Double.parseDouble(noCommaPrice);
+                costLabelPLN.setText(formattedCost+ "PLN");
             }
         });
         productList.setCellRenderer(new DefaultListCellRenderer() {
@@ -1373,7 +1377,12 @@ public class ShopGUI extends JFrame {
 
             totalCost+=pricePerOne*quantity;
         }
-        return totalCost;
+            DecimalFormat decimalFormat = new DecimalFormat("#.00");
+            String formattedPrice = decimalFormat.format(totalCost);
+            String noCommaPrice= formattedPrice.replace(",",".");
+            double formattedCost=Double.parseDouble(noCommaPrice);
+
+        return formattedCost;
         }
         public static void placeAnOrder(Customer customer, String loginEntered, List<ProductInCartDTO> productsInCart) throws Exception {
         double totalCost=0;
@@ -1466,6 +1475,7 @@ public class ShopGUI extends JFrame {
 
         Order order= new Order(orderedProducts);
             customer.getOrdersIds().add(order.getIdOrder());
+            customer.getOrders().add(order);
 
             // zmniejszenie ilosci kredytow o kwote zamowienia
             customer.setCredits(customer.getCredits()-order.calculateCost());

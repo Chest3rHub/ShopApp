@@ -6,6 +6,7 @@ import Models.Products.Product;
 import Models.Products.Size;
 
 import java.io.*;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,11 +68,17 @@ public class Order {
     }
     public String getSelectedOrderInfo(){
         String info="";
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+
         for (ProductInCartDTO product : this.orderedProducts){
+            String formattedPrice = decimalFormat.format(product.getProductCost() * product.getQuantity());
+            String noCommaPrice= formattedPrice.replace(",",".");
+            double finalCost= Double.parseDouble(noCommaPrice);
             info+="BRAND: " + product.getProductBrand()
                     + ", PRODUCT: " + product.getProductName()
                     + ", SIZE: " + product.getSize()
                     + ", QUANTITY: " + product.getQuantity()
+                    + ", COST: " + finalCost + "PLN"
                     + "\n";
         }
 
@@ -148,7 +155,11 @@ public class Order {
             double itemCost = Product.allProducts.get(idProduct).getPrice();
             cost+=product.getQuantity() * itemCost;
         }
-        return cost;
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+        String formattedPrice = decimalFormat.format(cost);
+        String noCommaPrice= formattedPrice.replace(",",".");
+        double finalCost= Double.parseDouble(noCommaPrice);
+        return finalCost;
     }
 
     public static List<Order> getAllOrders() {

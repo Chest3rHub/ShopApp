@@ -24,7 +24,9 @@ public class ProductInCartDTO {
     public String getProductName(){
         return Product.allProducts.get(this.getIdProduct()).getName();
     }
-
+    public double getProductCost(){
+        return Product.allProducts.get(this.getIdProduct()).getPrice();
+    }
     public String getProductBrand(){
         return Product.allProducts.get(this.getIdProduct()).getBrand();
     }
