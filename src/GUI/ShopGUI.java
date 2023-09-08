@@ -418,9 +418,11 @@ public class ShopGUI extends JFrame {
         JList<ProductWithSizeAndQtity> productList = new JList<>(productModel);
 
         for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
-            productModel.addElement(product);
+            if (!product.getSizesAndQuantitiesMap().isEmpty()){
+                productModel.addElement(product);
+            }
         }
-        JPanel comboBoxPanel= new JPanel(new GridLayout(8,1));
+        JPanel comboBoxPanel= new JPanel(new GridLayout(12,1));
 
         JComboBox<String> sizeComboBox = new JComboBox<>();
         sizeComboBox.setSize(100,100);
@@ -451,6 +453,49 @@ public class ShopGUI extends JFrame {
         comboBoxPanel.add(costLabel);
         JLabel costLabelPLN= new JLabel();
         comboBoxPanel.add(costLabelPLN);
+
+        JLabel sortLabel= new JLabel("SORT: ");
+        comboBoxPanel.add(sortLabel);
+        JCheckBox orderByPriceAscendingBox= new JCheckBox("Price ascending");
+        orderByPriceAscendingBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                productModel.removeAllElements();
+                List<ProductWithSizeAndQtity> listTemp= new ArrayList<>();
+                for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                    if (!product.getSizesAndQuantitiesMap().isEmpty()){
+                        listTemp.add(product);
+                    }
+                }
+
+                if (orderByPriceAscendingBox.isSelected()){
+                    List<ProductWithSizeAndQtity> resultList= new ArrayList<>();
+                    try{
+                        resultList= ProductWithSizeAndQtity.getProductListOrderedByPriceAsc(listTemp);
+
+                    }catch(UnavailableException unavailableException){
+                        unavailableException.printStackTrace();
+                    }
+                    productModel.addAll(resultList);
+                }else {
+                    productModel.addAll(listTemp);
+                }
+
+
+            }
+        });
+
+        comboBoxPanel.add(orderByPriceAscendingBox);
+
+        JCheckBox orderByPriceDescendingBox= new JCheckBox("Price descending");
+
+        comboBoxPanel.add(orderByPriceDescendingBox);
+
+        JLabel filterLabel= new JLabel("FILTER:");
+        comboBoxPanel.add(filterLabel);
+
+
+
 
         sizeComboBox.addActionListener(new ActionListener() {
             @Override
