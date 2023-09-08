@@ -4,3 +4,4 @@ idOrder;orderDate;totalCost;orderedProducts
 10533!2023-09-06!119.97![12;ACCESSORIES;Case;Apple;49.99;Pancerny;S;2, 9;SOCKS;Skarpetki;Vans;19.99;Wysokie i grube;XS;1]
 10534!2023-09-08!169.49![14;HOODIE;Bluza;Lego;119.49;Z klockow lego;XS;1, 2;SOCKS;Skarpetki;Adidas;10.00;Cienkie;XL;5]
 10535!2023-09-08!399.92![9;SOCKS;Skarpetki;Vans;19.99;Wysokie i grube;L;5, 8;PANTS;Spodenki z dziurami;Pepe Jeans;99.99;Miekkie;S;3]
+10536!2023-09-08!1399.93![1;HOODIE;Bluza rozpinana;Nike;199.99;Wygodna;XS;7]

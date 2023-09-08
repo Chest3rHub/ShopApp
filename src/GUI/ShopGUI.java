@@ -243,7 +243,6 @@ public class ShopGUI extends JFrame {
         int x = (screenWidth - windowWidth) / 2;
         int y = (screenHeight - windowHeight) / 2;
 
-        // Ustaw położenie okna
         frame.setLocation(x, y);
 
         frame.getContentPane().removeAll();
@@ -422,7 +421,7 @@ public class ShopGUI extends JFrame {
                 productModel.addElement(product);
             }
         }
-        JPanel comboBoxPanel= new JPanel(new GridLayout(12,1));
+        JPanel comboBoxPanel= new JPanel(new GridLayout(22,1));
 
         JComboBox<String> sizeComboBox = new JComboBox<>();
         sizeComboBox.setSize(100,100);
@@ -456,22 +455,223 @@ public class ShopGUI extends JFrame {
 
         JLabel sortLabel= new JLabel("SORT: ");
         comboBoxPanel.add(sortLabel);
+
+
+//        ButtonGroup sortButtonGroup= new ButtonGroup();
+//
+//        JRadioButton orderByPriceAscButton= new JRadioButton("Price ascending");
+//
+//        sortButtonGroup.add(orderByPriceAscButton);
+
+
+//        comboBoxPanel.add(orderByPriceAscButton);
+//
+//        JRadioButton orderByPriceDescButton= new JRadioButton("Price descending");
+//
+//        sortButtonGroup.add(orderByPriceDescButton);
+
+
         JCheckBox orderByPriceAscendingBox= new JCheckBox("Price ascending");
+
+        comboBoxPanel.add(orderByPriceAscendingBox);
+
+        JCheckBox orderByPriceDescendingBox= new JCheckBox("Price descending");
+
+        comboBoxPanel.add(orderByPriceDescendingBox);
+
+        JLabel categoryLabel= new JLabel("CATEGORY: ");
+
+        comboBoxPanel.add(categoryLabel);
+
+        JRadioButton allRadioButton= new JRadioButton("All");
+        comboBoxPanel.add(allRadioButton);
+
+        JRadioButton accessoriesRadioButton= new JRadioButton("Accessories");
+
+        comboBoxPanel.add(accessoriesRadioButton);
+
+        JRadioButton hoodieRadioButton= new JRadioButton("Hoodie");
+        comboBoxPanel.add(hoodieRadioButton);
+
+        JRadioButton pantsRadioButton= new JRadioButton("Pants");
+        comboBoxPanel.add(pantsRadioButton);
+
+        JRadioButton shirtRadioButton= new JRadioButton("Shirt");
+        comboBoxPanel.add(shirtRadioButton);
+
+        JRadioButton socksRadioButton= new JRadioButton("Socks");
+        comboBoxPanel.add(socksRadioButton);
+
+        ButtonGroup categoryButtons= new ButtonGroup();
+
+        categoryButtons.add(allRadioButton);
+        categoryButtons.add(accessoriesRadioButton);
+        categoryButtons.add(hoodieRadioButton);
+        categoryButtons.add(pantsRadioButton);
+        categoryButtons.add(shirtRadioButton);
+        categoryButtons.add(socksRadioButton);
+
+        allRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (allRadioButton.isSelected()){
+                    if (orderByPriceAscendingBox.isSelected()){
+                        productModel.removeAllElements();
+                        List<ProductWithSizeAndQtity> listTemp= new ArrayList<>();
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty()){
+                                listTemp.add(product);
+                            }
+                        }
+
+                        if (orderByPriceAscendingBox.isSelected()){
+                            List<ProductWithSizeAndQtity> resultList= new ArrayList<>();
+                            try{
+                                resultList= ProductWithSizeAndQtity.getProductListOrderedByPriceAsc(listTemp);
+
+                            }catch(UnavailableException unavailableException){
+                                unavailableException.printStackTrace();
+                            }
+                            productModel.addAll(resultList);
+                        }else {
+                            productModel.addAll(listTemp);
+                        }
+                    }else if (orderByPriceDescendingBox.isSelected()){
+                        productModel.removeAllElements();
+                        List<ProductWithSizeAndQtity> listTemp= new ArrayList<>();
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty()){
+                                listTemp.add(product);
+                            }
+                        }
+
+                        if (orderByPriceDescendingBox.isSelected()){
+                            List<ProductWithSizeAndQtity> resultList= new ArrayList<>();
+                            try{
+                                resultList= ProductWithSizeAndQtity.getProductListOrderedByPriceDesc(listTemp);
+
+                            }catch(UnavailableException unavailableException){
+                                unavailableException.printStackTrace();
+                            }
+                            productModel.addAll(resultList);
+                        }else {
+                            productModel.addAll(listTemp);
+                        }
+                    }else if (!orderByPriceAscendingBox.isSelected() && !orderByPriceDescendingBox.isSelected()){
+                        productModel.removeAllElements();
+                        List<ProductWithSizeAndQtity> listTemp= new ArrayList<>();
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty()){
+                                listTemp.add(product);
+                            }
+                        }
+                        productModel.addAll(listTemp);
+                    }
+
+                }
+            }
+        });
+        accessoriesRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (accessoriesRadioButton.isSelected()){
+
+                    if (orderByPriceAscendingBox.isSelected()){
+                        productModel.removeAllElements();
+                        List<ProductWithSizeAndQtity> listTemp= new ArrayList<>();
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.ACCESSORIES)){
+                                listTemp.add(product);
+                            }
+                        }
+                        try {
+                            List<ProductWithSizeAndQtity> resultList= ProductWithSizeAndQtity.getProductListOrderedByPriceAsc(listTemp);
+                            productModel.addAll(resultList);
+                        }catch(UnavailableException unavailableException){
+                            unavailableException.printStackTrace();
+                        }
+                    }else if (orderByPriceDescendingBox.isSelected()){
+                        productModel.removeAllElements();
+                        List<ProductWithSizeAndQtity> listTemp= new ArrayList<>();
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.ACCESSORIES)){
+                                listTemp.add(product);
+                            }
+                        }
+                        try {
+                            List<ProductWithSizeAndQtity> resultList= ProductWithSizeAndQtity.getProductListOrderedByPriceDesc(listTemp);
+                            productModel.addAll(resultList);
+                        }catch(UnavailableException unavailableException){
+                            unavailableException.printStackTrace();
+                        }
+                    } else {
+                        productModel.removeAllElements();
+
+                        List<ProductWithSizeAndQtity> listTemp= new ArrayList<>();
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (product.getProduct().getCategory().equals(Category.ACCESSORIES) && !product.getSizesAndQuantitiesMap().isEmpty()){
+                                listTemp.add(product);
+                            }
+                        }
+                        productModel.addAll(listTemp);
+                    }
+
+
+                }
+            }
+        });
+
+
         orderByPriceAscendingBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                    orderByPriceDescendingBox.setSelected(false);
+                    List<ProductWithSizeAndQtity> previousList = Collections.list(productModel.elements());
+
+                    productModel.removeAllElements();
+                    List<ProductWithSizeAndQtity> listTemp= new ArrayList<>();
+                    for (ProductWithSizeAndQtity product : previousList){
+                        if (!product.getSizesAndQuantitiesMap().isEmpty()){
+                            listTemp.add(product);
+                        }
+                    }
+
+                    if (orderByPriceAscendingBox.isSelected()){
+                        List<ProductWithSizeAndQtity> resultList= new ArrayList<>();
+                        try{
+                            resultList= ProductWithSizeAndQtity.getProductListOrderedByPriceAsc(listTemp);
+
+                        }catch(UnavailableException unavailableException){
+                            unavailableException.printStackTrace();
+                        }
+                        productModel.addAll(resultList);
+                    }else {
+                        productModel.addAll(listTemp);
+                    }
+
+
+            }
+
+        });
+
+        orderByPriceDescendingBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                orderByPriceAscendingBox.setSelected(false);
+                List<ProductWithSizeAndQtity> previousList = Collections.list(productModel.elements());
+
                 productModel.removeAllElements();
                 List<ProductWithSizeAndQtity> listTemp= new ArrayList<>();
-                for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                for (ProductWithSizeAndQtity product : previousList){
                     if (!product.getSizesAndQuantitiesMap().isEmpty()){
                         listTemp.add(product);
                     }
                 }
 
-                if (orderByPriceAscendingBox.isSelected()){
+                if (orderByPriceDescendingBox.isSelected()){
                     List<ProductWithSizeAndQtity> resultList= new ArrayList<>();
                     try{
-                        resultList= ProductWithSizeAndQtity.getProductListOrderedByPriceAsc(listTemp);
+                        resultList= ProductWithSizeAndQtity.getProductListOrderedByPriceDesc(listTemp);
 
                     }catch(UnavailableException unavailableException){
                         unavailableException.printStackTrace();
@@ -481,19 +681,28 @@ public class ShopGUI extends JFrame {
                     productModel.addAll(listTemp);
                 }
 
-
             }
         });
 
-        comboBoxPanel.add(orderByPriceAscendingBox);
 
-        JCheckBox orderByPriceDescendingBox= new JCheckBox("Price descending");
 
-        comboBoxPanel.add(orderByPriceDescendingBox);
-
-        JLabel filterLabel= new JLabel("FILTER:");
+        JLabel filterLabel= new JLabel("FILTER BY SIZE: ");
         comboBoxPanel.add(filterLabel);
 
+        JCheckBox xsCheckBox= new JCheckBox("XS");
+        comboBoxPanel.add(xsCheckBox);
+
+        JCheckBox sCheckBox= new JCheckBox("S");
+        comboBoxPanel.add(sCheckBox);
+
+        JCheckBox mCheckBox= new JCheckBox("M");
+        comboBoxPanel.add(mCheckBox);
+
+        JCheckBox lCheckBox= new JCheckBox("L");
+        comboBoxPanel.add(lCheckBox);
+
+        JCheckBox xlCheckBox= new JCheckBox("XL");
+        comboBoxPanel.add(xlCheckBox);
 
 
 
@@ -642,6 +851,10 @@ public class ShopGUI extends JFrame {
         buttonPanel.add(addToCartButton);
 
 
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+
+
         secondPanel.add(new JScrollPane(productList), BorderLayout.WEST);
         secondPanel.add(comboBoxPanel, BorderLayout.CENTER);
         secondPanel.add(buttonPanel, BorderLayout.SOUTH);
@@ -651,6 +864,15 @@ public class ShopGUI extends JFrame {
         frame.pack();
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
+
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+        int windowWidth = frame.getWidth();
+        int windowHeight = frame.getHeight();
+        int x = (screenWidth - windowWidth) / 2;
+        int y = (screenHeight - windowHeight) / 2;
+
+        frame.setLocation(x, y);
     }
 
     public static void ordersMenuClient(Customer customer, String loginEntered) {
