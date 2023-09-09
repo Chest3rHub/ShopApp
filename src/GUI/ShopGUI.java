@@ -621,6 +621,205 @@ public class ShopGUI extends JFrame {
             }
         });
 
+        pantsRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (pantsRadioButton.isSelected()){
+
+                    if (orderByPriceAscendingBox.isSelected()){
+                        productModel.removeAllElements();
+                        List<ProductWithSizeAndQtity> listTemp= new ArrayList<>();
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.PANTS)){
+                                listTemp.add(product);
+                            }
+                        }
+                        try {
+                            List<ProductWithSizeAndQtity> resultList= ProductWithSizeAndQtity.getProductListOrderedByPriceAsc(listTemp);
+                            productModel.addAll(resultList);
+                        }catch(UnavailableException unavailableException){
+                            unavailableException.printStackTrace();
+                        }
+                    }else if (orderByPriceDescendingBox.isSelected()){
+                        productModel.removeAllElements();
+                        List<ProductWithSizeAndQtity> listTemp= new ArrayList<>();
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.PANTS)){
+                                listTemp.add(product);
+                            }
+                        }
+                        try {
+                            List<ProductWithSizeAndQtity> resultList= ProductWithSizeAndQtity.getProductListOrderedByPriceDesc(listTemp);
+                            productModel.addAll(resultList);
+                        }catch(UnavailableException unavailableException){
+                            unavailableException.printStackTrace();
+                        }
+                    } else {
+                        productModel.removeAllElements();
+
+                        List<ProductWithSizeAndQtity> listTemp= new ArrayList<>();
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (product.getProduct().getCategory().equals(Category.PANTS) && !product.getSizesAndQuantitiesMap().isEmpty()){
+                                listTemp.add(product);
+                            }
+                        }
+                        productModel.addAll(listTemp);
+                    }
+
+
+                }
+            }
+        });
+
+
+        hoodieRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (hoodieRadioButton.isSelected()){
+
+                    if (orderByPriceAscendingBox.isSelected()){
+                        productModel.removeAllElements();
+                        List<ProductWithSizeAndQtity> listTemp= new ArrayList<>();
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.HOODIE)){
+                                listTemp.add(product);
+                            }
+                        }
+                        try {
+                            List<ProductWithSizeAndQtity> resultList= ProductWithSizeAndQtity.getProductListOrderedByPriceAsc(listTemp);
+                            productModel.addAll(resultList);
+                        }catch(UnavailableException unavailableException){
+                            unavailableException.printStackTrace();
+                        }
+                    }else if (orderByPriceDescendingBox.isSelected()){
+                        productModel.removeAllElements();
+                        List<ProductWithSizeAndQtity> listTemp= new ArrayList<>();
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.HOODIE)){
+                                listTemp.add(product);
+                            }
+                        }
+                        try {
+                            List<ProductWithSizeAndQtity> resultList= ProductWithSizeAndQtity.getProductListOrderedByPriceDesc(listTemp);
+                            productModel.addAll(resultList);
+                        }catch(UnavailableException unavailableException){
+                            unavailableException.printStackTrace();
+                        }
+                    } else {
+                        productModel.removeAllElements();
+
+                        List<ProductWithSizeAndQtity> listTemp= new ArrayList<>();
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (product.getProduct().getCategory().equals(Category.HOODIE) && !product.getSizesAndQuantitiesMap().isEmpty()){
+                                listTemp.add(product);
+                            }
+                        }
+                        productModel.addAll(listTemp);
+                    }
+
+
+                }
+            }
+        });
+        shirtRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (shirtRadioButton.isSelected()){
+
+                    if (orderByPriceAscendingBox.isSelected()){
+                        productModel.removeAllElements();
+                        List<ProductWithSizeAndQtity> listTemp= new ArrayList<>();
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.SHIRT)){
+                                listTemp.add(product);
+                            }
+                        }
+                        try {
+                            List<ProductWithSizeAndQtity> resultList= ProductWithSizeAndQtity.getProductListOrderedByPriceAsc(listTemp);
+                            productModel.addAll(resultList);
+                        }catch(UnavailableException unavailableException){
+                            unavailableException.printStackTrace();
+                        }
+                    }else if (orderByPriceDescendingBox.isSelected()){
+                        productModel.removeAllElements();
+                        List<ProductWithSizeAndQtity> listTemp= new ArrayList<>();
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.SHIRT)){
+                                listTemp.add(product);
+                            }
+                        }
+                        try {
+                            List<ProductWithSizeAndQtity> resultList= ProductWithSizeAndQtity.getProductListOrderedByPriceDesc(listTemp);
+                            productModel.addAll(resultList);
+                        }catch(UnavailableException unavailableException){
+                            unavailableException.printStackTrace();
+                        }
+                    } else {
+                        productModel.removeAllElements();
+
+                        List<ProductWithSizeAndQtity> listTemp= new ArrayList<>();
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (product.getProduct().getCategory().equals(Category.SHIRT) && !product.getSizesAndQuantitiesMap().isEmpty()){
+                                listTemp.add(product);
+                            }
+                        }
+                        productModel.addAll(listTemp);
+                    }
+
+
+                }
+            }
+        });
+
+        socksRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (socksRadioButton.isSelected()){
+
+                    if (orderByPriceAscendingBox.isSelected()){
+                        productModel.removeAllElements();
+                        List<ProductWithSizeAndQtity> listTemp= new ArrayList<>();
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.SOCKS)){
+                                listTemp.add(product);
+                            }
+                        }
+                        try {
+                            List<ProductWithSizeAndQtity> resultList= ProductWithSizeAndQtity.getProductListOrderedByPriceAsc(listTemp);
+                            productModel.addAll(resultList);
+                        }catch(UnavailableException unavailableException){
+                            unavailableException.printStackTrace();
+                        }
+                    }else if (orderByPriceDescendingBox.isSelected()){
+                        productModel.removeAllElements();
+                        List<ProductWithSizeAndQtity> listTemp= new ArrayList<>();
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.SOCKS)){
+                                listTemp.add(product);
+                            }
+                        }
+                        try {
+                            List<ProductWithSizeAndQtity> resultList= ProductWithSizeAndQtity.getProductListOrderedByPriceDesc(listTemp);
+                            productModel.addAll(resultList);
+                        }catch(UnavailableException unavailableException){
+                            unavailableException.printStackTrace();
+                        }
+                    } else {
+                        productModel.removeAllElements();
+
+                        List<ProductWithSizeAndQtity> listTemp= new ArrayList<>();
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (product.getProduct().getCategory().equals(Category.SOCKS) && !product.getSizesAndQuantitiesMap().isEmpty()){
+                                listTemp.add(product);
+                            }
+                        }
+                        productModel.addAll(listTemp);
+                    }
+
+
+                }
+            }
+        });
 
         orderByPriceAscendingBox.addActionListener(new ActionListener() {
             @Override

@@ -1,5 +1,6 @@
 loginHash;firstName;lastName;address;tel;credits;email;currentCart;orders
 3401!null!null!null!0!0.0!null![]![]
+-2050287700!Lebioda!Junior!Krakow -0123-!123123123!550.04!awsdkja@awd.pl![]![10537]
 2162502!asd!asd!asd!123123123!80.7!aaa![2;SOCKS;Skarpetki;Adidas;10.00;Cienkie;S;1]![10531, 10532]
 2030634502!null!null!null!0!0.0!null![]![]
 97!null!null!null!0!0.0!null![]![]
