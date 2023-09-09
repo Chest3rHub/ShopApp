@@ -61,11 +61,14 @@ public class ShopGUI extends JFrame {
     public static HashMap<String, PasswordRoleDTO> accounts= new HashMap<>();
 
     public ShopGUI(){
-        // dodac jeszcze aktualizacje klientow, produktow itd
         loggedOutScreen();
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                /**
+                 * This method saves customers, products, orders changes to file
+                 * when window is closed
+                 */
                 try {
                     savePasswordChangesToFile();
                     saveCustomersChangesToFile();
@@ -78,7 +81,9 @@ public class ShopGUI extends JFrame {
     }
 
     public static void changeToLoginScreen() {
-
+        /**
+         * This method changes frame to login
+         */
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
        // JLabel welcomeLabel = new JLabel("Wprowadz login i hasło");
@@ -156,6 +161,9 @@ public class ShopGUI extends JFrame {
         frame.setVisible(true);
     }
     public static void loggedOutScreen(){
+        /**
+         * This method changes frame to logged out screen with register and login buttons.
+         */
         BorderLayout borderLayout= new BorderLayout();
         JPanel mainPanel = new JPanel(borderLayout);
        // GridBagConstraints constraints= new GridBagConstraints();
@@ -256,7 +264,10 @@ public class ShopGUI extends JFrame {
 
 
     public static void adminLoggedIn() {
-            secondPanel = new JPanel();
+        /**
+         * This method changes frame to admin logged in
+         */
+        secondPanel = new JPanel();
             secondPanel.setLayout(new BorderLayout());
 
             JLabel welcomeLabel = new JLabel("Witaj");
@@ -310,6 +321,11 @@ public class ShopGUI extends JFrame {
 
     }
     public static void clientLoggedIn(Customer customer, String enteredLogin){
+        /**
+         * This method changes frame to client logged in
+         * @param customer Customer value attached to entered login
+         * @param enteredLogin String login value entered while logging in
+         */
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
         frame.setSize(450,350);
@@ -407,7 +423,11 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().repaint();
     }
     public static void productsMenuClient(Customer customer, String loginEntered){
-
+        /**
+         * This method changes frame to products Menu for client
+         * @param customer Customer value attached to entered login
+         * @param loginEntered String login value entered while logging in
+         */
         frame.setSize(575,400);
         secondPanel = new JPanel(new BorderLayout());
 
@@ -816,7 +836,6 @@ public class ShopGUI extends JFrame {
                         productModel.addAll(listTemp);
                     }
 
-
                 }
             }
         });
@@ -1075,6 +1094,11 @@ public class ShopGUI extends JFrame {
     }
 
     public static void ordersMenuClient(Customer customer, String loginEntered) {
+        /**
+         * This method changes frame to orders Menu for client
+         * @param customer Customer value attached to entered login
+         * @param loginEntered String login value entered while logging in
+         */
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
         frame.setSize(600, 500);
@@ -1143,6 +1167,14 @@ public class ShopGUI extends JFrame {
 
     public static Role login(String loginEntered, String passwordEntered) throws Exception {
 
+        /**
+         * This method generates hash for entered login and password
+         * then compares it to the values stored in database
+         * @param loginEntered String login value entered while logging in
+         * @param passwordEntered String login value entered while logging in
+         * @throws Exception when didnt find entered login or password in database
+         * @return Role of the person who logged in
+         */
 
         String loginPasswordCombination= loginEntered+passwordEntered;
         long loginPasswordCombinationHash= loginPasswordCombination.hashCode();
@@ -1164,8 +1196,10 @@ public class ShopGUI extends JFrame {
         }
     }
     public static void readCustomersFromFile() throws Exception{
-
-        ////dodac jeszcze czytanie historii zamowien
+        /**
+         * This method read all customers,their orders and cart from file
+         * @throws Exception when file with specified path not found
+         */
         try (BufferedReader br = new BufferedReader(new FileReader(customersFileName))) {
             String line;
             line=br.readLine();
@@ -1194,44 +1228,24 @@ public class ShopGUI extends JFrame {
                 if (!toScanFinally.equals("")){
                     Scanner scanner= new Scanner(toScanFinally);
                     scanner.useDelimiter(",");
-                 //   String oneProduct= scanner.next();
+
                     while(scanner.hasNext()){
                         String oneProduct= scanner.next();
-//                        System.out.println("Cala linia do zeskanowania pod spodem:");
-//                        System.out.println(oneProduct);
                         Scanner oneProductScanner= new Scanner(oneProduct);
                         oneProductScanner.useDelimiter(";");
                         String idString= oneProductScanner.next();
                         String idNoWhite =idString.trim();
                         int idProduct=Integer.parseInt(idNoWhite);
-                       // System.out.println("Pobrane id " + idProduct);
                         String category=oneProductScanner.next();
-                       // System.out.println("Pobrana kategoria "+ category);
-
                         String nazwa= oneProductScanner.next();
-                       // System.out.println("Pobrana nazwa " + nazwa);
                         String marka= oneProductScanner.next();
-
-                      //  System.out.println("Pobrana marka: "+ marka);
                         String koszt= oneProductScanner.next();
-                       // System.out.println("Pobrany koszt+ " + koszt);
-
                         String opis= oneProductScanner.next();
-                       // System.out.println("Pobrany opis: " + opis);
-
                         Size size= Size.valueOf(oneProductScanner.next());
-                       // System.out.println("Pobrany rozmiar : " + size);
                         int quantity= oneProductScanner.nextInt();
-                       // System.out.println("Pobrana ilosc "+ quantity);
-                        // juz git tylko ogarnac ID bo sie przesuwa
                         cartList.add(new ProductInCartDTO(idProduct-1,size,quantity));
                     }
-
                 }
-
-
-
-
                 List<Integer> ordersIds= new ArrayList<>();
 
                 if (!orders.equals("[]")){
@@ -1240,7 +1254,6 @@ public class ShopGUI extends JFrame {
 
                     Scanner scanner= new Scanner(secondReplace);
                     scanner.useDelimiter(",");
-                    //   String oneProduct= scanner.next();
                     while(scanner.hasNext()){
                         String idOrderString= scanner.next();
                         String trimmed=idOrderString.trim();
@@ -1248,29 +1261,14 @@ public class ShopGUI extends JFrame {
                         ordersIds.add(idOrder);
                     }
                 }
-                System.out.println("Id zamowien po dodaniu: " + ordersIds);
-                Customer.customers.put(loginHashed, new Customer(loginHashed,firstName,lastName,address,telNumber, creditsDouble,email,cartList,ordersIds));
-                System.out.println("Koszyk: "+Customer.customers.get(loginHashed).getCurrentCart());
-                System.out.println("Lista id zamowien: "+Customer.customers.get(loginHashed).getOrdersIds());
-
             }
         }
     }
-    public static LinkedHashMap<Size, Integer> parseSizeQuantityData(String data) {
-        LinkedHashMap<Size, Integer> sizeQuantityMap = new LinkedHashMap<>();
-        String[] sizeQuantityPairs = data.split(",\\s*");
-
-        for (String pair : sizeQuantityPairs) {
-            String[] parts = pair.split("=");
-            Size size = Size.valueOf(parts[0]);
-            int quantity = Integer.parseInt(parts[1]);
-            sizeQuantityMap.put(size, quantity);
-        }
-
-        return sizeQuantityMap;
-    }
-
     public static void readAccountsFromFile() throws Exception {
+        /**
+         * This method reads all account from file
+         * @throws Exception when file with specified path not found
+         */
         try (BufferedReader br = new BufferedReader(new FileReader(accountsFileName))) {
             String line;
             line=br.readLine();
@@ -1294,13 +1292,14 @@ public class ShopGUI extends JFrame {
                 } else if (roleHashedString.equals(_roleConsultantHash)) {
                     role=Role.CONSULTANT;
                 }
-               // int hashedPassword = Integer.parseInt(passwordHashedString);
                 accounts.put(loginHashed,new PasswordRoleDTO(passwordHashedString,role));
-
             }
         }
     }
     public static void savePasswordChangesToFile(){
+        /**
+         * This method writes password changes to file
+         */
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(accountsFileName));
             bufferedWriter.write("login;password;role -> password hash= (login+password).hash\n");
@@ -1319,6 +1318,9 @@ public class ShopGUI extends JFrame {
         }
     }
     public static void saveCustomersChangesToFile(){
+        /**
+         * This method writes to file all customers' changes
+         */
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(customersFileName));
             bufferedWriter.write("loginHash;firstName;lastName;address;tel;credits;email;currentCart;orders\n");
@@ -1344,8 +1346,9 @@ public class ShopGUI extends JFrame {
     }
 
     public static void changeToRegisterScreen(){
-
-
+        /**
+         * This method changes frame to register
+         */
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
         frame.setTitle("Login to Shop App");
@@ -1362,8 +1365,6 @@ public class ShopGUI extends JFrame {
 
         JLabel confirmPasswordLabel = new JLabel("Confirm password:");
         JPasswordField confirmPasswordField = new JPasswordField();
-
-
 
         JButton registerButton = new JButton("Register");
         registerButton.addActionListener(new ActionListener() {
@@ -1382,8 +1383,6 @@ public class ShopGUI extends JFrame {
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(frame, ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
                 }
-
-                // rejestrowanie wpisanych danych
             }
         });
         JButton backButton= logOutButton();
@@ -1404,9 +1403,15 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
         frame.setVisible(true);
-
     }
     public static void register(String loginEntered, String passwordEntered, String confirmedPasswordEntered) throws Exception{
+        /**
+         * This method registers new user
+         * @param loginEntered String value of login entered while registering
+         * @param passwordEntered String value of password entered while registering
+         * @param confirmedPasswordEntered String value of confirmed password entered while registering
+         * @throws Exception when login is already taken, password is less than 7 characters, entered passwords are not the same
+         */
         int loginHashLong= loginEntered.hashCode();
         String loginHash= String.valueOf(loginHashLong);
         if (accounts.containsKey(loginHash)){
@@ -1426,9 +1431,11 @@ public class ShopGUI extends JFrame {
         accounts.put(loginHash,new PasswordRoleDTO(passwordHash,Role.CLIENT));
         addCustomerToAccountsFile(customer);
         registeredAnAccountScreen();
-// dodawanie konta do bazy danych itd
     }
     public static void showAllAccounts(){
+        /**
+         * This method shows all acounts
+         */
         for (Map.Entry<String, PasswordRoleDTO> entry : accounts.entrySet()) {
             String key = entry.getKey();
             PasswordRoleDTO passwordRoleDTO = entry.getValue();
@@ -1436,19 +1443,21 @@ public class ShopGUI extends JFrame {
         }
     }
     public static void addCustomerToAccountsFile(Customer customer) throws Exception{
-
+        /**
+         * This method adds new registered user to file with accounts
+         * @param customer Value of registered customer
+         * @throws Exception when file with specified path not found
+         */
         FileOutputStream fos = new FileOutputStream(accountsFileName, true);
         PrintStream ps = new PrintStream(fos);
         ps.println(customer.getLogin() + ";" + customer.getPassword() + ";" + _roleClientHash);
-
         ps.close();
-
-//            try (BufferedWriter writer = new BufferedWriter(new FileWriter(accountsFileName, true))) {
-//                writer.write(customer.getLogin() + ";" + customer.getPassword() + ";" + _roleClientHash);
-//                writer.newLine();
-//            }
         }
         public static JButton logOutButton(){
+            /**
+             * This method creates log out button
+             * @return JButton with logging out function
+             */
             JButton logOutButton= new JButton("Log out");
             logOutButton.setBackground(new Color(255,94,90));
              logOutButton.addActionListener(new ActionListener() {
@@ -1461,6 +1470,12 @@ public class ShopGUI extends JFrame {
             return logOutButton;
         }
         public static JButton backToMenuClient(Customer customer, String login){
+            /**
+             * This method creates back to menu button
+             * @param customer Customer value attached to entered login
+             * @param login String value of entered login
+             * @return JButton with going back to client's menu function
+             */
             JButton backToMenuButton= new JButton("Back");
             backToMenuButton.setBackground(new Color(100,200,200));
 
@@ -1494,6 +1509,11 @@ public class ShopGUI extends JFrame {
 
 
         public static void addCreditsScreen(Customer customer, String loginEntered){
+            /**
+             * This method changes frame to add credits frame
+             * @param customer Customer value attached to entered login
+             * @param loginEntered String value of entered login
+             */
             secondPanel = new JPanel();
             secondPanel.setLayout(new BorderLayout());
 
@@ -1506,27 +1526,20 @@ public class ShopGUI extends JFrame {
             addCreditsLabel.setHorizontalAlignment(JLabel.CENTER);
             addCreditsLabel.setVerticalAlignment(JLabel.TOP);
 
-
             JPanel buttonsPanel= new JPanel(new FlowLayout());
 
             JPanel textFieldPanel= new JPanel(new FlowLayout());
 
-
-
-           // JLabel credits = new JLabel("Login:");
             JTextField creditsTextField = new JTextField();
             Dimension textFieldSize = new Dimension((int)(Toolkit.getDefaultToolkit().getScreenResolution() * 0.78),
                     (int)(Toolkit.getDefaultToolkit().getScreenResolution() * 0.39));
             creditsTextField.setPreferredSize(textFieldSize);
 
             textFieldPanel.setLayout(new BoxLayout(textFieldPanel,BoxLayout.PAGE_AXIS));
-        //    creditsTextField.setBounds(new Rectangle(20,5));
             GridBagConstraints constraints= new GridBagConstraints();
             constraints.gridy=2;
             constraints.gridx=2;
             constraints.insets = new Insets(10, 10, 10, 10);
-
-          //  textFieldPanel.setBounds(new Rectangle(20,5));
 
             textFieldPanel.add(creditsTextField);
             JButton addCreditsButton = new JButton("Pay");
@@ -1557,22 +1570,22 @@ public class ShopGUI extends JFrame {
             secondPanel.add(new JPanel(),BorderLayout.EAST);
             secondPanel.add(textFieldPanel,BorderLayout.CENTER);
 
-           // secondPanel.add(backToMenuClientButton);
-
-
-
             frame.setTitle("Wallet");
             frame.getContentPane().removeAll();
             frame.getContentPane().add(secondPanel);
             frame.getContentPane().revalidate();
             frame.getContentPane().repaint();
             frame.setVisible(true);
-
         }
         public static void accountScreenCustomer(Customer customer, String loginEntered){
+            /**
+             * This method changes frame to account customer screen
+             * @param customer Customer value attached to entered login
+             * @param loginEntered String value of entered login
+             */
             secondPanel = new JPanel();
-
             secondPanel.setLayout(new GridLayout(8, 2, 10, 10));
+
             frame.setTitle("Account");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(500, 300);
@@ -1583,8 +1596,6 @@ public class ShopGUI extends JFrame {
             }else {
                 firstNameTextField.setText(!customer.getFirstName().equals("null") ? customer.getFirstName() : "");
             }
-
-
             JLabel lastNameLabel= new JLabel("Last name:");
             JTextField lastNameTextField= new JTextField();
 
@@ -1594,7 +1605,6 @@ public class ShopGUI extends JFrame {
                 lastNameTextField.setText(!customer.getLastName().equals("null") ? customer.getLastName() : "");
             }
 
-
             JLabel addressLabel= new JLabel("Address:");
             JTextField addressTextField= new JTextField();
             if (customer.getAddress()==null){
@@ -1602,7 +1612,6 @@ public class ShopGUI extends JFrame {
             }else {
                 addressTextField.setText(!customer.getAddress().equals("null") ? customer.getAddress() : "");
             }
-
 
             JLabel telLabel= new JLabel("Tel:");
             JTextField telTextField= new JTextField();
@@ -1612,7 +1621,6 @@ public class ShopGUI extends JFrame {
                 telTextField.setText(String.valueOf(customer.getTel()));
             }
 
-
             JLabel emailLabel= new JLabel("E-mail:");
             JTextField emailTextField= new JTextField();
             if (customer.getEmail()==null){
@@ -1620,8 +1628,6 @@ public class ShopGUI extends JFrame {
             }else {
                 emailTextField.setText(!customer.getEmail().equals("null") ? customer.getEmail() : "");
             }
-
-
 
             JLabel newPasswordLabel= new JLabel("New password:");
             JPasswordField newPasswordField= new JPasswordField();
@@ -1665,7 +1671,7 @@ public class ShopGUI extends JFrame {
                             if (!Arrays.equals(newPasswordField.getPassword(), confirmNewPasswordField.getPassword())){
                                 throw new Exception("Passwords are not the same!");
                             }
-                            //ustawianie nowego hasla
+//                          password changing
                             char[] passwordChars = newPasswordField.getPassword();
                             String enteredPassword= new String(passwordChars);
                             String toHash=loginEntered+enteredPassword;
@@ -1675,11 +1681,6 @@ public class ShopGUI extends JFrame {
                             long enteredLoginHash= loginEntered.hashCode();
                             String enteredLoginStringhash= String.valueOf(enteredLoginHash);
                             accounts.replace(enteredLoginStringhash,new PasswordRoleDTO(newPassword, Role.CLIENT));
-//                            // zapisanie zmian do pliku
-//                            savePasswordChangesToFile();
-                            // moze uzyc jeszcze listy customers jesli bedzie do czegos potrzebna zeby w niej zmienialo
-                            // sie haslo ale powinno byc zmienione skoro w niej sa referencje a zmieniam haslo
-                            // na danym obiekcie ktorego referencja jest w tej liscie
                         }
                         JOptionPane.showMessageDialog(frame, "Saved changes successfully!");
                     }catch (NumberFormatException numberFormatException){
@@ -1687,7 +1688,6 @@ public class ShopGUI extends JFrame {
                     } catch (Exception exception){
                         JOptionPane.showMessageDialog(frame, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                     }
-
                 }
             });
 
@@ -1708,18 +1708,20 @@ public class ShopGUI extends JFrame {
             secondPanel.add(backButton);
             secondPanel.add(saveButton);
 
-
             frame.getContentPane().removeAll();
             frame.getContentPane().add(secondPanel);
             frame.getContentPane().revalidate();
             frame.getContentPane().repaint();
             frame.setVisible(true);
-
         }
         public static void cartScreen(Customer customer, String loginEntered){
+            /**
+             * This method changes frame to cart screen
+             * @param customer Customer value attached to entered login
+             * @param loginEntered String value of entered login
+             */
             secondPanel = new JPanel();
             secondPanel.setLayout(new BorderLayout());
-
 
             frame.setTitle("Cart");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -1729,47 +1731,18 @@ public class ShopGUI extends JFrame {
             JLabel label= new JLabel("Your cart: ");
             secondPanel.add(label,BorderLayout.NORTH);
 
-
-
-            // ustawic label w lepszym miejscu i zeby sie aktualizowal odrazu po usunieciu produktu
             DecimalFormat decimalFormat = new DecimalFormat("0.00");
             double cost=calculateCartCost(customer.getCurrentCart());
             String formattedCredits = decimalFormat.format(cost);
             JLabel totalCostLabel= new JLabel("Cost: " + formattedCredits+"PLN");
             secondPanel.add(totalCostLabel,BorderLayout.EAST);
 
-            //JSplitPane splitPane= new JSplitPane();
-
-
-            // usunac potem, tylko do celow testowych
-//            ProductWithSizeAndQtity product1= new ProductWithSizeAndQtity(new Product(Category.HOODIE,"Bluza rozpinana","Nike",249.99,"Wygodna sportowa bluza"));
-//            product1.addSizeAndQuantity(Size.M,5);
-//            product1.addSizeAndQuantity(Size.L,3);
-//            customer.addToCart(product1);
-//            ProductWithSizeAndQtity product2= new ProductWithSizeAndQtity(new Product(Category.PANTS,"Spodnie","Adidas",99.99,"Cienkie i przewiewne"));
-//            product2.addSizeAndQuantity(Size.S,2);
-//            product2.addSizeAndQuantity(Size.M,4);
-//            customer.addToCart(product2);
-//            ProductInCartDTO p1= new ProductInCartDTO(1-1,Size.M,2);
-//            ProductInCartDTO p2= new ProductInCartDTO(2-1,Size.L,1);
-//
-//            customer.addToCart(p1);
-//            customer.addToCart(p2);
-
-
             for( ProductInCartDTO productInCartDTO : customer.getCurrentCart()){
                 listModel.addElement(productInCartDTO);
             }
             productsInCart.setModel(listModel);
 
-
-
-
-
             secondPanel.add(new JScrollPane(productsInCart),BorderLayout.CENTER);
-
-
-           // splitPane.setLeftComponent(new JScrollPane(productsInCart));
 
             JPanel buttonsPanel= new JPanel();
             JButton backButton= backToMenuClient(customer, loginEntered);
@@ -1805,7 +1778,7 @@ public class ShopGUI extends JFrame {
             orderButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // weryfikacja danych osobowych i platnosci.
+                    // verifying account data and payment
                     try {
                         placeAnOrder(customer,loginEntered,customer.getCurrentCart());
                         listModel.removeAllElements();
@@ -1821,20 +1794,18 @@ public class ShopGUI extends JFrame {
 
             secondPanel.add(buttonsPanel,BorderLayout.SOUTH);
 
-            // splitPane.setBottomComponent(buttonsPanel);
-            // panel.add(label);
-           // splitPane.setRightComponent(panel);
-
-           // secondPanel.add(splitPane);
-
             frame.getContentPane().removeAll();
             frame.getContentPane().add(secondPanel);
             frame.getContentPane().revalidate();
             frame.getContentPane().repaint();
             frame.setVisible(true);
-
         }
         public static double calculateCartCost(List<ProductInCartDTO> productInCartDTOS){
+            /**
+             * This method calculates cost of the current cart
+             * @param productInCartDTOS List of products in cart
+             * @return Cost of the current cart as a Double
+             */
         double totalCost=0;
         for (ProductInCartDTO product : productInCartDTOS){
             System.out.println("Calculating price for: "+ product);
@@ -1851,6 +1822,13 @@ public class ShopGUI extends JFrame {
         return formattedCost;
         }
         public static void placeAnOrder(Customer customer, String loginEntered, List<ProductInCartDTO> productsInCart) throws Exception {
+            /**
+             * This method places an order
+             * @param customer Customer value attached to entered login
+             * @param loginEntered String value of entered login
+             * @param productsInCart List of products in cart
+             * @throws Exception When account data isn't filled, cart is empty, product's size or quantity is unavailable, there are not enough creduts to pay
+             */
         double totalCost=0;
 
         if (customer.getFirstName()==null){
@@ -1873,7 +1851,6 @@ public class ShopGUI extends JFrame {
                 throw new Exception("Your cart is empty!");
             }
 
-            System.out.println("Weryfikacja danych osobowych i koszyka ze nie jest pusty GIT");
         for (ProductInCartDTO product : productsInCart){
             Optional<ProductWithSizeAndQtity> optionalProduct= ProductWithSizeAndQtity.availableProductsWithSizesAndQtity
                     .stream()
@@ -1883,8 +1860,6 @@ public class ShopGUI extends JFrame {
             if (optionalProduct.isPresent()){
                 p2Temp=optionalProduct.get();
             }
-            System.out.println("Produkt z koszyka id-1: " + product.getIdProduct());
-            System.out.println("Produkt z magazynu id-1: " + p2Temp.getProduct().getId());
 
             if (!ProductWithSizeAndQtity.availableProductsWithSizesAndQtity.contains(p2Temp)){
                 throw new Exception("Product: " +  Product.allProducts.get(product.getIdProduct())+ "  is unavailable!");
@@ -1897,31 +1872,18 @@ public class ShopGUI extends JFrame {
             // jesli ta mapa dostepnych zawiera klucz o danym SIZE to sprawdzam czy jest ilosc dostepna
             // gdy wszystkie warunki sa spelnione dodajemy do LinkedHashMap obiekt klucz- ID PRODUKTU Z KOSZYKA, wartosc- DTO obiekt o Size i quantity
             // na koniec przechodze przez ta liste i zmniejszam dostepne produkty o podanym rozmiarze i podanej ilosci
-            System.out.println("Przed pobieraniem id");
-           // ProductWithSizeAndQtity productFromWarehouse= ProductWithSizeAndQtity.availableProductsWithSizesAndQtity.stream().filter(productWithSizeAndQtity -> productWithSizeAndQtity.getProduct().getId()==product.getIdProduct()).findFirst().get();
             ProductWithSizeAndQtity productFromWarehouse=p2Temp;
-            // na tej linii wywala blad
-            System.out.println("Pobrany produkt: "+ productFromWarehouse);
-            // trzeba zaseedowac baze produktami o ilosci i rozmiarach
-            System.out.println("Po pobieraniu id");
             Size size= product.getSize();
             int quantity= product.getQuantity();
             LinkedHashMap<Size, Integer> sizesAndQuantitiesAvailable= productFromWarehouse.getSizesAndQuantitiesMap();
 
-
             if (sizesAndQuantitiesAvailable.containsKey(size)){
-
                 int availableQuantity= sizesAndQuantitiesAvailable.get(size);
-
                 if (quantity>availableQuantity){
-
-                 //   ProductWithSizeAndQtity.availableProductsWithSizesAndQtity.get(product.getIdProduct()).decreaseProductQuantity(size,quantity);
                     throw new NotEnoughProductsException("For product: " + product.getProductName() + " this amount is unavailable at the moment!");
                 }
-                System.out.println("Przed wywolaniem x");
-                // powiekszamy koszt calkowity o ilosc produktow * cena za sztuke
+                // increasing total cost by product cost * quantity
                 totalCost+=ProductWithSizeAndQtity.availableProductsWithSizesAndQtity.get(Product.allProducts.get(product.getIdProduct()).getId()-1).getProduct().getPrice()*quantity;
-                System.out.println("Po wywolaniu x");
             } else {
                 throw new UnavailableException("For product: " + product.getProductName() + ", size: " + size + " is unavailable at the moment!");
             }
@@ -1939,17 +1901,20 @@ public class ShopGUI extends JFrame {
                 ProductWithSizeAndQtity.availableProductsWithSizesAndQtity.get(key).decreaseProductQuantity(value.getSize(),value.getQuantity());
             }
 
-        Order order= new Order(orderedProducts);
+            Order order= new Order(orderedProducts);
             customer.getOrdersIds().add(order.getIdOrder());
             customer.getOrders().add(order);
 
-            // zmniejszenie ilosci kredytow o kwote zamowienia
+            // decreasing credits by cost of the order
             customer.setCredits(customer.getCredits()-order.calculateCost());
             customer.getCurrentCart().clear();
             JOptionPane.showMessageDialog(frame,"Order nr " + order.getIdOrder()+ " has been placed!", "Order", JOptionPane.PLAIN_MESSAGE);
 
         }
         public static void registeredAnAccountScreen(){
+            /**
+             * This method changes frame to registered an account screen
+             */
             secondPanel = new JPanel();
             secondPanel.setLayout(new BorderLayout());
             frame.setTitle("WELCOME!");
@@ -1958,7 +1923,6 @@ public class ShopGUI extends JFrame {
             JLabel registeredLabel= new JLabel("Registered successfully!");
 
             registeredLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,24));
-            //registeredLabel.setFont(new Font("Arial",Font.PLAIN,24));
             registeredLabel.setHorizontalAlignment(JLabel.CENTER);
             registeredLabel.setVerticalAlignment(JLabel.TOP);
             secondPanel.add(registeredLabel,BorderLayout.NORTH);
@@ -1968,8 +1932,6 @@ public class ShopGUI extends JFrame {
             JPanel buttonPanel = new JPanel(new FlowLayout());
             buttonPanel.add(logInButton);
             secondPanel.add(buttonPanel,BorderLayout.CENTER);
-           // logInButton.setFont(new Font(_FONT.getFontName(),Font.PLAIN,24));
-           // logInButton.setPreferredSize(new Dimension(2,2));
             logInButton.setBackground(new Color(160,255,125));
 
             logInButton.addActionListener(new ActionListener() {
@@ -1978,11 +1940,6 @@ public class ShopGUI extends JFrame {
                     loggedOutScreen();
                 }
             });
-           // secondPanel.add(logInButton,BorderLayout.CENTER);
-
-
-            //secondPanel.add(new JLabel()); // Pusta etykieta jako wypełnienie
-
 
             frame.setTitle("Shop App");
             frame.getContentPane().removeAll();
