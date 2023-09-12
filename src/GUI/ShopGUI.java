@@ -86,10 +86,6 @@ public class ShopGUI extends JFrame {
          */
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
-       // JLabel welcomeLabel = new JLabel("Wprowadz login i hasło");
-       // welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-
-       // secondPanel.add(welcomeLabel, BorderLayout.NORTH);
 
         frame.setTitle("Login to Shop App");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -127,18 +123,9 @@ public class ShopGUI extends JFrame {
                         }
                         clientLoggedIn(customerLoggedIn, login);
                     }
-//                    if (role==null){
-//                        System.out.println("Bledny login lub haslo...");
-//                    } else {
-//                        System.out.println("Zalogowany jako "+ role);
-//                    }
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(frame, ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
                 }
-
-                // weryfikacja hashowanego hasla i loginu z baza danych itd...
-
-                //  JOptionPane.showMessageDialog(frame, "Zalogowano jako: " + login);
             }
         });
 
@@ -166,68 +153,38 @@ public class ShopGUI extends JFrame {
          */
         BorderLayout borderLayout= new BorderLayout();
         JPanel mainPanel = new JPanel(borderLayout);
-       // GridBagConstraints constraints= new GridBagConstraints();
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(300, 200);
         frame.setTitle("Shop App");
         frame.setLayout(new BorderLayout());
 
-
         mainPanel.setLayout(borderLayout);
-
-
 
         frame.add(mainPanel,BorderLayout.CENTER);
 
-
         JLabel welcomeLabel= new JLabel("Welcome to Shop App!",SwingConstants.CENTER);
         welcomeLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,19));
-        // x kolumna, y wiersz
-      //  constraints.fill=GridBagConstraints.HORIZONTAL;
-      //  constraints.gridx=1;
-      //  constraints.gridy=0;
-     //   constraints.anchor= GridBagConstraints.PAGE_START;
+
         mainPanel.add(welcomeLabel, BorderLayout.NORTH);
 
-
-        // frame.setBackground(new Color(255,80,80));
-      //   logo w rogu
         ImageIcon imageIcon= new ImageIcon("src/Graphics/shoppingCart.png");
         frame.setIconImage(imageIcon.getImage());
-
-        // kolor tla
-       // frame.getContentPane().setBackground(new Color(0,0,0));
 
         JPanel buttonPanel = new JPanel();
 
         JButton loginButton = new JButton("Sign in");
-      //  constraints.gridx=0;
-      //  constraints.gridy=1;
-     //   constraints.gridwidth=2;
-     //   constraints.anchor=GridBagConstraints.CENTER;
+
         buttonPanel.add(loginButton);
 
         JButton registerButton = new JButton("Register");
-      //  constraints.gridx=2;
-     //   constraints.gridy=1;
-     //   constraints.gridwidth=2;
-    //    constraints.anchor=GridBagConstraints.CENTER;
+
         buttonPanel.add(registerButton);
 
         mainPanel.add(buttonPanel,BorderLayout.CENTER);
 
-
-       // mainPanel.add(new JLabel()); // Pusta etykieta jako wypełnienie
-
-
-
-
         JLabel creditsLabel= new JLabel("~ by Szymon Sawicki :)",SwingConstants.SOUTH_EAST);
-      //  constraints.gridx=0;
-     //   constraints.gridy=2;
-     //   constraints.gridwidth=4;
-     //   constraints.anchor=  GridBagConstraints.CENTER;
+
         mainPanel.add(creditsLabel,BorderLayout.SOUTH);
 
         loginButton.addActionListener(new ActionListener() {
@@ -310,7 +267,7 @@ public class ShopGUI extends JFrame {
             buttonPanel.add(logOutButton);
 
             secondPanel.add(buttonPanel, BorderLayout.CENTER);
-        // frame= new JFrame();
+
         frame.setTitle("Shop App");
         frame.getContentPane().removeAll();
         frame.getContentPane().add(secondPanel);
@@ -334,19 +291,15 @@ public class ShopGUI extends JFrame {
         welcomeLabel.setVerticalAlignment(JLabel.CENTER);
         welcomeLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,24));
         welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-      //  secondPanel.add(welcomeLabel, BorderLayout.NORTH);
+
 
         JLabel creditsLabel= new JLabel("Credits: " + customer.getCredits());
-       // secondPanel.add(creditsLabel,BorderLayout.NORTH);
 
         JPanel topPanel= new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-
 
         secondPanel.add(topPanel,BorderLayout.NORTH);
 
         JPanel downPanel= new JPanel(new FlowLayout());
-
-      //  List<Order> orders= customer.getOrders();
 
         JButton goToCreditsButton= new JButton("Wallet");
         JButton logOutButton= logOutButton();
@@ -358,15 +311,12 @@ public class ShopGUI extends JFrame {
 
         secondPanel.add(new JLabel());
 
-
         topPanel.add(creditsLabel);
         topPanel.add(new JLabel(""));
         topPanel.add(welcomeLabel);
         topPanel.add(cartButton);
 
         JPanel centerPanel= new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 30));
-
-
 
         centerPanel.add(goToCreditsButton);
         centerPanel.add(ordersButton);
@@ -456,15 +406,12 @@ public class ShopGUI extends JFrame {
 
         comboBoxPanel.add(sizeLabel);
 
-
         comboBoxPanel.add(sizeComboBox);
 
         JLabel amountLabel= new JLabel("AVAILABLE AMOUNT:");
         amountLabel.setVerticalAlignment(JLabel.CENTER);
 
-
         comboBoxPanel.add(amountLabel);
-
 
         comboBoxPanel.add(quantityComboBox);
 
@@ -476,38 +423,19 @@ public class ShopGUI extends JFrame {
         JLabel sortLabel= new JLabel("SORT: ");
         comboBoxPanel.add(sortLabel);
 
-
-//        ButtonGroup sortButtonGroup= new ButtonGroup();
-//
-//        JRadioButton orderByPriceAscButton= new JRadioButton("Price ascending");
-//
-//        sortButtonGroup.add(orderByPriceAscButton);
-
-
-//        comboBoxPanel.add(orderByPriceAscButton);
-//
-//        JRadioButton orderByPriceDescButton= new JRadioButton("Price descending");
-//
-//        sortButtonGroup.add(orderByPriceDescButton);
-
-
         JCheckBox orderByPriceAscendingBox= new JCheckBox("Price ascending");
-
         comboBoxPanel.add(orderByPriceAscendingBox);
 
         JCheckBox orderByPriceDescendingBox= new JCheckBox("Price descending");
-
         comboBoxPanel.add(orderByPriceDescendingBox);
 
         JLabel categoryLabel= new JLabel("CATEGORY: ");
-
         comboBoxPanel.add(categoryLabel);
 
         JRadioButton allRadioButton= new JRadioButton("All");
         comboBoxPanel.add(allRadioButton);
 
         JRadioButton accessoriesRadioButton= new JRadioButton("Accessories");
-
         comboBoxPanel.add(accessoriesRadioButton);
 
         JRadioButton hoodieRadioButton= new JRadioButton("Hoodie");
@@ -1131,30 +1059,23 @@ public class ShopGUI extends JFrame {
         productInfoTextArea.setWrapStyleWord(true);
         productInfoTextArea.setLineWrap(true);
 
-       // JLabel orderProductsInfoLabel = new JLabel();
-
         ordersList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 Order order = ordersList.getSelectedValue();
-              //  orderProductsInfoLabel.setText("ORDERED: \n" + order.getSelectedOrderInfo());
                 productInfoTextArea.setText("ORDERED: \n" + order.getSelectedOrderInfo());
             }
         });
 
-        // Tworzymy panel, który będzie zawierać ordersList i orderProductsInfoLabel
         JPanel listAndInfoPanel = new JPanel(new BorderLayout());
         listAndInfoPanel.add(new JScrollPane(ordersList), BorderLayout.CENTER);
-     //   listAndInfoPanel.add(orderProductsInfoLabel, BorderLayout.SOUTH);
 
         listAndInfoPanel.add(productInfoTextArea, BorderLayout.SOUTH);
         JButton backButton = backToMenuClient(customer, loginEntered);
 
-        // Tworzymy panel na przycisk backButton
         JPanel buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.add(backButton);
 
-        // Dodajemy panele do secondPanel
         secondPanel.add(listAndInfoPanel, BorderLayout.CENTER);
         secondPanel.add(buttonPanel, BorderLayout.SOUTH);
 
@@ -1186,8 +1107,6 @@ public class ShopGUI extends JFrame {
             throw new Exception("Incorrect login or password") ;
         }
         String passwordToCheck= loginToCheck.getPassword();
-//        long hashedPasswordLong= passwordToCheck.hashCode();
-//        String passwordHashedString=String.valueOf(hashedPasswordLong);
 
         if (passwordToCheck.equals(combinedHashString)){
             return loginToCheck.getRole();
@@ -1203,6 +1122,7 @@ public class ShopGUI extends JFrame {
         try (BufferedReader br = new BufferedReader(new FileReader(customersFileName))) {
             String line;
             line=br.readLine();
+            System.out.println("METODA READCUSTOMERSFROMFILE:");
             while ((line = br.readLine()) != null) {
                 String[] values = line.split("!");
                 String loginHashed = values[0];
@@ -1261,6 +1181,7 @@ public class ShopGUI extends JFrame {
                         ordersIds.add(idOrder);
                     }
                 }
+                Customer c= new Customer(loginHashed,firstName,lastName,address,telNumber,creditsDouble,email,cartList,ordersIds);
             }
         }
     }
@@ -1395,7 +1316,6 @@ public class ShopGUI extends JFrame {
         secondPanel.add(confirmPasswordField);
         secondPanel.add(backButton);
         secondPanel.add(registerButton);
-
 
         frame.setTitle("Shop App");
         frame.getContentPane().removeAll();
@@ -1864,14 +1784,15 @@ public class ShopGUI extends JFrame {
             if (!ProductWithSizeAndQtity.availableProductsWithSizesAndQtity.contains(p2Temp)){
                 throw new Exception("Product: " +  Product.allProducts.get(product.getIdProduct())+ "  is unavailable!");
             }
-            // dla kazdego produktu z koszyka:
-            // 1. pobieramy jego id
-            // 2. pobieramy rozmiar i ilosc
-            // tworzymy Obiekt ProductWithSizeAndQtity o takim id jak ten produkt z koszyka
-            // tworzymy mape DOSTEPNYCH NA MAGAZYNIE  rozmiar ilosc uzywajac tego obiektu z magazynu
-            // jesli ta mapa dostepnych zawiera klucz o danym SIZE to sprawdzam czy jest ilosc dostepna
-            // gdy wszystkie warunki sa spelnione dodajemy do LinkedHashMap obiekt klucz- ID PRODUKTU Z KOSZYKA, wartosc- DTO obiekt o Size i quantity
-            // na koniec przechodze przez ta liste i zmniejszam dostepne produkty o podanym rozmiarze i podanej ilosci
+            // for each product in cart:
+            // 1. get this product's id
+            // 2. get its size and quantity
+            // 3. create object ProductWithSizeAndQtity with id from 1.
+            // 4. create map of available products using object from 3.
+            // 5. if this map contains key SIZE then checks if the amount is available
+            // 6. if all conditions are true-> add to LinkedHashMap object with key id from 1. and value DTO with size and quantity
+            // 7. decreasing amount of products by sizes and quantities from cart
+            // 8. placing new Order and clearing cart
             ProductWithSizeAndQtity productFromWarehouse=p2Temp;
             Size size= product.getSize();
             int quantity= product.getQuantity();
@@ -1946,7 +1867,6 @@ public class ShopGUI extends JFrame {
             frame.getContentPane().add(secondPanel);
             frame.getContentPane().revalidate();
             frame.getContentPane().repaint();
-            //frame.pack();
             frame.setVisible(true);
         }
 }

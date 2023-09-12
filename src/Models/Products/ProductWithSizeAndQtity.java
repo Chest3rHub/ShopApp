@@ -24,6 +24,9 @@ public class ProductWithSizeAndQtity{
         availableProductsWithSizesAndQtity.add(this);
     }
     public static void seedData(){
+        /**
+         * This method seeds products with sizes and quantities in the beggining of the program
+         */
         List<Size> sizes= new ArrayList<>();
         sizes.add(Size.XS);
         sizes.add(Size.S);
@@ -31,20 +34,25 @@ public class ProductWithSizeAndQtity{
         sizes.add(Size.L);
         sizes.add(Size.XL);
         Random random= new Random();
+        String[] sizesStringArr = {"XS", "S", "M", "L", "XL"};
 
         for (Product product : Product.allProducts){
             int availableSizesNumber= random.nextInt(sizes.size());
             ProductWithSizeAndQtity productWithSizeAndQtity= new ProductWithSizeAndQtity(product);
+            HashMap<Size, Integer> tempSizesMap= new HashMap<>();
 
             for (int i=0; i < availableSizesNumber; i++){
                 int sizeIndex = random.nextInt(sizes.size());
                 Size size= sizes.get(sizeIndex);
                 int quantity = random.nextInt(20) + 1;
-                productWithSizeAndQtity.addSizeAndQuantity(size,quantity);
+                tempSizesMap.put(size,quantity);
             }
-//            if (productWithSizeAndQtity.getSizesAndQuantitiesMap().isEmpty()){
-//                ProductWithSizeAndQtity.availableProductsWithSizesAndQtity.remove(productWithSizeAndQtity);
-//            }
+            for (String sizeString : sizesStringArr) {
+                if (tempSizesMap.containsKey(Size.valueOf(sizeString))){
+                    productWithSizeAndQtity.addSizeAndQuantity(Size.valueOf(sizeString),tempSizesMap.get(Size.valueOf(sizeString)));
+                }
+            }
+
 
         }
     }

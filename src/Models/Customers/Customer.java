@@ -54,15 +54,21 @@ public class Customer implements IPersonInfo {
         this.email = email;
         this.ordersIds = ordersIds;
         this.currentCart = currentCart;
+        customers.put(login,this);
     }
     public static void addOrdersToCustomersStartUp(){
+        /**
+         * This method adds to customers their orders read from file in the beginning
+         */
         // na poczatku dodac odpowiednim klientom zamowienia o takich id jakie sa w ich liscie ordersIds
         for (Map.Entry<String, Customer> customerFromMap : customers.entrySet()) {
             String loginHash = customerFromMap.getKey();
+            System.out.println("POBRANY LOGIN: " + loginHash);
             Customer customer = customerFromMap.getValue();
             List<Integer> ordersIdsTemp=customer.getOrdersIds();
-            System.out.println("Dodawanie zamowien do klientow: "+ ordersIdsTemp);
+            System.out.println("POBRANE ID ZAMOWIEN: "+ ordersIdsTemp);
             if (ordersIdsTemp.isEmpty()){
+                System.out.println("JEST PUSTO");
                 continue;
             }
             for (int id : ordersIdsTemp){
@@ -74,6 +80,7 @@ public class Customer implements IPersonInfo {
                 }
                 Order orderToAdd= orderTemp.get();
                 customer.orders.add(orderToAdd);
+                System.out.println("KLIENCKIE ZAMOWIENIA: "+customer.orders);
             }
         }
     }

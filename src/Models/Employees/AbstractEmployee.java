@@ -53,14 +53,15 @@ public abstract class AbstractEmployee implements IPersonInfo {
         }
     }
     public static void readEmployeesFromFile (){
+        /**
+         * This method reads employees from file and adds them to static collection abstractEmployees
+         */
         try{
             int employeesCounter=0;
             BufferedReader fileReader= new BufferedReader(new FileReader(employeesFileName));
             Scanner scanner= new Scanner(fileReader);
 
-
             while(scanner.hasNextLine()){
-
 
                 String line= scanner.nextLine();
                 Scanner lineScanner= new Scanner(line);
@@ -87,7 +88,6 @@ public abstract class AbstractEmployee implements IPersonInfo {
                 }
             }
             idCounter+=employeesCounter;
-            // nowo dodawani pracownicy beda mieli id ktorego jeszcze nie ma w pliku
         } catch (Exception e){
             e.printStackTrace();
         }

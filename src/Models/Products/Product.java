@@ -92,6 +92,9 @@ public String toString(){
 
 
     public static void readProductsFromFile (){
+        /**
+         * This method reads all products from file in the beginning of the program
+         */
         try{
             int productsCounter=0;
             BufferedReader fileReader= new BufferedReader(new FileReader(productsFileName));
@@ -112,13 +115,10 @@ public String toString(){
                     String priceString=  lineScanner.next();
                     double price= Double.parseDouble(priceString);
                     String description= lineScanner.next();
-
-                //System.out.println(" CENA " + priceString);
-                //System.out.println(price);
                 allProducts.add(new Product(category,name,brand,price,description));
             }
             idCounter+=productsCounter;
-            // nowo dodawane produkty beda mialy id ktorego jeszcze nie ma w pliku
+
         } catch (Exception e){
             e.printStackTrace();
         }
