@@ -999,8 +999,52 @@ public class ShopGUI extends JFrame {
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
+        JTextField searchTextField= new JTextField();
+        searchTextField.setMinimumSize(new Dimension(30,10));
+
+        JButton searchButton= new JButton("Search");
 
 
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String typedText= searchTextField.getText();
+                String noSpaces= typedText.replace(" ","");
+
+                if (typedText.equals("")  || noSpaces.equals("")){
+                    orderByPriceAscendingBox.setSelected(false);
+                    orderByPriceDescendingBox.setSelected(false);
+                    productModel.removeAllElements();
+                    List<ProductWithSizeAndQtity> listTemp= new ArrayList<>();
+                    for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                        if (!product.getSizesAndQuantitiesMap().isEmpty()){
+                            listTemp.add(product);
+                        }
+                    }
+                    productModel.addAll(listTemp);
+                }else {
+                    List<ProductWithSizeAndQtity> previousList = Collections.list(productModel.elements());
+                    try {
+                        List<ProductWithSizeAndQtity> listTemp= ProductWithSizeAndQtity.getProductListByName(typedText,previousList);
+                        if (!listTemp.isEmpty()){
+                            productModel.removeAllElements();
+                            productModel.addAll(listTemp);
+                        }
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(frame,ex.getMessage(),"ERROR", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
+        JPanel searchPanel= new JPanel(new GridLayout(1,4,10,10));
+
+        searchPanel.add(new JLabel("Type product name here: "));
+        searchPanel.add(searchTextField);
+        searchPanel.add(searchButton);
+        searchPanel.add(new JLabel());
+
+
+        secondPanel.add(searchPanel,BorderLayout.NORTH);
         secondPanel.add(new JScrollPane(productList), BorderLayout.WEST);
         secondPanel.add(comboBoxPanel, BorderLayout.CENTER);
         secondPanel.add(buttonPanel, BorderLayout.SOUTH);

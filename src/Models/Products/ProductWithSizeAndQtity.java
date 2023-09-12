@@ -198,11 +198,6 @@ public class ProductWithSizeAndQtity{
                 .stream()
                 .filter(productWithSizeAndQtity -> productWithSizeAndQtity.getProduct().getName().toUpperCase().contains(nameUpper))
                 .toList();
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         if (availableProducts.isEmpty()){
             throw new UnavailableException("There are no available products with name " + name);
         }
