@@ -855,15 +855,24 @@ public class ShopGUI extends JFrame {
         JCheckBox xlCheckBox= new JCheckBox("XL");
         comboBoxPanel.add(xlCheckBox);
 
+        ButtonGroup sizeGroup= new ButtonGroup();
+        sizeGroup.add(anySizeCheckBox);
+        sizeGroup.add(xsCheckBox);
+        sizeGroup.add(sCheckBox);
+        sizeGroup.add(mCheckBox);
+        sizeGroup.add(lCheckBox);
+        sizeGroup.add(xlCheckBox);
+
+
         anySizeCheckBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (anySizeCheckBox.isSelected()){
-                    xsCheckBox.setSelected(false);
-                    sCheckBox.setSelected(false);
-                    mCheckBox.setSelected(false);
-                    lCheckBox.setSelected(false);
-                    xlCheckBox.setSelected(false);
+//                    xsCheckBox.setSelected(false);
+//                    sCheckBox.setSelected(false);
+//                    mCheckBox.setSelected(false);
+//                    lCheckBox.setSelected(false);
+//                    xlCheckBox.setSelected(false);
 
                     List<ProductWithSizeAndQtity> productsFromCategoryList= new ArrayList<>();
                     productModel.removeAllElements();
@@ -970,8 +979,71 @@ public class ShopGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (xsCheckBox.isSelected()){
                     anySizeCheckBox.setSelected(false);
+                    List<ProductWithSizeAndQtity> productsFromCategoryList= new ArrayList<>();
+                    productModel.removeAllElements();
+                    if (allRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty()){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (accessoriesRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.ACCESSORIES)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (pantsRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.PANTS)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (hoodieRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.HOODIE)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
 
+                    }else if (shirtRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.SHIRT)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (socksRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.SOCKS)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }
+                    List<ProductWithSizeAndQtity> correctOrderList= new ArrayList<>();
+                    if (orderByPriceAscendingBox.isSelected()){
+                        try {
+                            correctOrderList= ProductWithSizeAndQtity.getProductListOrderedByPriceAsc(productsFromCategoryList);
+                        } catch (UnavailableException ex) {
+                            ex.printStackTrace();
+                        }
 
+                    }else if (orderByPriceDescendingBox.isSelected()){
+                        try {
+                            correctOrderList=ProductWithSizeAndQtity.getProductListOrderedByPriceDesc(productsFromCategoryList);
+                        } catch (UnavailableException ex) {
+                            ex.printStackTrace();
+                        }
+
+                    } else if (!orderByPriceAscendingBox.isSelected() && !orderByPriceDescendingBox.isSelected()){
+                        correctOrderList=productsFromCategoryList;
+                    }
+                    List<ProductWithSizeAndQtity> resultList= new ArrayList<>();
+                    try {
+                        resultList= ProductWithSizeAndQtity.getProductListBySize(Size.XS,correctOrderList);
+                    } catch (UnavailableException ex) {
+                        ex.printStackTrace();
+                    }
+                    productModel.addAll(resultList);
                 }else {
                     // do nothing
                 }
@@ -980,6 +1052,305 @@ public class ShopGUI extends JFrame {
         });
 
 
+        sCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (sCheckBox.isSelected()){
+                    List<ProductWithSizeAndQtity> productsFromCategoryList= new ArrayList<>();
+                    productModel.removeAllElements();
+                    if (allRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty()){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (accessoriesRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.ACCESSORIES)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (pantsRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.PANTS)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (hoodieRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.HOODIE)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+
+                    }else if (shirtRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.SHIRT)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (socksRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.SOCKS)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }
+                    List<ProductWithSizeAndQtity> correctOrderList= new ArrayList<>();
+                    if (orderByPriceAscendingBox.isSelected()){
+                        try {
+                            correctOrderList= ProductWithSizeAndQtity.getProductListOrderedByPriceAsc(productsFromCategoryList);
+                        } catch (UnavailableException ex) {
+                            ex.printStackTrace();
+                        }
+
+                    }else if (orderByPriceDescendingBox.isSelected()){
+                        try {
+                            correctOrderList=ProductWithSizeAndQtity.getProductListOrderedByPriceDesc(productsFromCategoryList);
+                        } catch (UnavailableException ex) {
+                            ex.printStackTrace();
+                        }
+
+                    } else if (!orderByPriceAscendingBox.isSelected() && !orderByPriceDescendingBox.isSelected()){
+                        correctOrderList=productsFromCategoryList;
+                    }
+                    List<ProductWithSizeAndQtity> resultList= new ArrayList<>();
+                    try {
+                        resultList= ProductWithSizeAndQtity.getProductListBySize(Size.S,correctOrderList);
+                    } catch (UnavailableException ex) {
+                        ex.printStackTrace();
+                    }
+                    productModel.addAll(resultList);
+                }else {
+                    // do nothing
+                }
+            }
+        });
+
+        mCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (mCheckBox.isSelected()){
+                    List<ProductWithSizeAndQtity> productsFromCategoryList= new ArrayList<>();
+                    productModel.removeAllElements();
+                    if (allRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty()){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (accessoriesRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.ACCESSORIES)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (pantsRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.PANTS)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (hoodieRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.HOODIE)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+
+                    }else if (shirtRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.SHIRT)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (socksRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.SOCKS)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }
+                    List<ProductWithSizeAndQtity> correctOrderList= new ArrayList<>();
+                    if (orderByPriceAscendingBox.isSelected()){
+                        try {
+                            correctOrderList= ProductWithSizeAndQtity.getProductListOrderedByPriceAsc(productsFromCategoryList);
+                        } catch (UnavailableException ex) {
+                            ex.printStackTrace();
+                        }
+
+                    }else if (orderByPriceDescendingBox.isSelected()){
+                        try {
+                            correctOrderList=ProductWithSizeAndQtity.getProductListOrderedByPriceDesc(productsFromCategoryList);
+                        } catch (UnavailableException ex) {
+                            ex.printStackTrace();
+                        }
+
+                    } else if (!orderByPriceAscendingBox.isSelected() && !orderByPriceDescendingBox.isSelected()){
+                        correctOrderList=productsFromCategoryList;
+                    }
+                    List<ProductWithSizeAndQtity> resultList= new ArrayList<>();
+                    try {
+                        resultList= ProductWithSizeAndQtity.getProductListBySize(Size.M,correctOrderList);
+                    } catch (UnavailableException ex) {
+                        ex.printStackTrace();
+                    }
+                    productModel.addAll(resultList);
+                }else {
+                    // do nothing
+                }
+            }
+        });
+
+        lCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (lCheckBox.isSelected()){
+                    List<ProductWithSizeAndQtity> productsFromCategoryList= new ArrayList<>();
+                    productModel.removeAllElements();
+                    if (allRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty()){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (accessoriesRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.ACCESSORIES)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (pantsRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.PANTS)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (hoodieRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.HOODIE)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+
+                    }else if (shirtRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.SHIRT)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (socksRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.SOCKS)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }
+                    List<ProductWithSizeAndQtity> correctOrderList= new ArrayList<>();
+                    if (orderByPriceAscendingBox.isSelected()){
+                        try {
+                            correctOrderList= ProductWithSizeAndQtity.getProductListOrderedByPriceAsc(productsFromCategoryList);
+                        } catch (UnavailableException ex) {
+                            ex.printStackTrace();
+                        }
+
+                    }else if (orderByPriceDescendingBox.isSelected()){
+                        try {
+                            correctOrderList=ProductWithSizeAndQtity.getProductListOrderedByPriceDesc(productsFromCategoryList);
+                        } catch (UnavailableException ex) {
+                            ex.printStackTrace();
+                        }
+
+                    } else if (!orderByPriceAscendingBox.isSelected() && !orderByPriceDescendingBox.isSelected()){
+                        correctOrderList=productsFromCategoryList;
+                    }
+                    List<ProductWithSizeAndQtity> resultList= new ArrayList<>();
+                    try {
+                        resultList= ProductWithSizeAndQtity.getProductListBySize(Size.L,correctOrderList);
+                    } catch (UnavailableException ex) {
+                        ex.printStackTrace();
+                    }
+                    productModel.addAll(resultList);
+                }else {
+                    // do nothing
+                }
+            }
+        });
+
+        xlCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (xlCheckBox.isSelected()){
+                    List<ProductWithSizeAndQtity> productsFromCategoryList= new ArrayList<>();
+                    productModel.removeAllElements();
+                    if (allRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty()){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (accessoriesRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.ACCESSORIES)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (pantsRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.PANTS)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (hoodieRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.HOODIE)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+
+                    }else if (shirtRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.SHIRT)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (socksRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.SOCKS)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }
+                    List<ProductWithSizeAndQtity> correctOrderList= new ArrayList<>();
+                    if (orderByPriceAscendingBox.isSelected()){
+                        try {
+                            correctOrderList= ProductWithSizeAndQtity.getProductListOrderedByPriceAsc(productsFromCategoryList);
+                        } catch (UnavailableException ex) {
+                            ex.printStackTrace();
+                        }
+
+                    }else if (orderByPriceDescendingBox.isSelected()){
+                        try {
+                            correctOrderList=ProductWithSizeAndQtity.getProductListOrderedByPriceDesc(productsFromCategoryList);
+                        } catch (UnavailableException ex) {
+                            ex.printStackTrace();
+                        }
+
+                    } else if (!orderByPriceAscendingBox.isSelected() && !orderByPriceDescendingBox.isSelected()){
+                        correctOrderList=productsFromCategoryList;
+                    }
+                    List<ProductWithSizeAndQtity> resultList= new ArrayList<>();
+                    try {
+                        resultList= ProductWithSizeAndQtity.getProductListBySize(Size.XL,correctOrderList);
+                    } catch (UnavailableException ex) {
+                        ex.printStackTrace();
+                    }
+                    productModel.addAll(resultList);
+                }else {
+                    // do nothing
+                }
+            }
+        });
 
 
         sizeComboBox.addActionListener(new ActionListener() {
