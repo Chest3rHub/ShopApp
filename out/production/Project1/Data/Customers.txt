@@ -1,6 +1,0 @@
-loginHash;firstName;lastName;address;tel;credits;email;currentCart;orders
-3401!null!null!null!0!0.0!null![]![]
-2162502!asd!asd!asd!123123123!80.7!aaa![2;SOCKS;Skarpetki;Adidas;10.00;Cienkie;S;1]![10531, 10532]
-2030634502!null!null!null!0!0.0!null![]![]
-97!null!null!null!0!0.0!null![]![]
--1802365190!Szymon!Sawicki!Legionowo 05-120!123123123!510.69!email@www.pl![6;HOODIE;Bluza meduza;Hollister;149.99;Good look;XS;1, 9;SOCKS;Skarpetki;Vans;19.99;Wysokie i grube;M;5]![10533, 10534, 10535]

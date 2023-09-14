@@ -21,7 +21,6 @@ public class Shop {
    // List<Employee> employees= new ArrayList<>();
     List<Product> products= new ArrayList<>();
     List<Order> orders= new ArrayList<>();
-    Warehouse warehouse;
 
     public static void openShop(){
         Product.readProductsFromFile();
