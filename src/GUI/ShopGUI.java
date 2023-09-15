@@ -74,6 +74,7 @@ public class ShopGUI extends JFrame {
                     savePasswordChangesToFile();
                     saveCustomersChangesToFile();
                     Order.saveOrdersToFile();
+                    Consultant.saveConsultantFeedbackToFile();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
