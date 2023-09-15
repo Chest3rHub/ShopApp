@@ -4,7 +4,7 @@ GUI app with options ->
     -for clients: placing orders, setting personal data,                                      
 adding credits, viewing products, filtering available products by size, price, brand, product name,
 ordering by price ascending and descending, connecting to a consultant and giving feedback about him,
-changing password, viewing orders history,                                                                 
+changing password, displaying placed orders,                                                                 
     -for admin: adding and removing products, adding quantity and sizes available to existing products, 
 viewing all employees and their feedback left by customers, viewing all customers and their orders,
 cancelling orders, viewing revenue, changing password (self and everyone else's), hiring and firing every employee,

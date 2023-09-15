@@ -6,6 +6,7 @@ import Exceptions.NotEnoughProductsException;
 import Exceptions.UnavailableException;
 import Models.Customers.Customer;
 import Models.Employees.AbstractEmployee;
+import Models.Employees.Consultant;
 import Models.Employees.Role;
 import Models.Order;
 import Models.Products.Category;
@@ -14,6 +15,7 @@ import Models.Products.ProductWithSizeAndQtity;
 import Models.Products.Size;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -340,7 +342,7 @@ public class ShopGUI extends JFrame {
         helpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                helpMenuClient(customer,enteredLogin);
             }
         });
         ordersButton.addActionListener(new ActionListener() {
@@ -372,6 +374,123 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
     }
+    public static void helpMenuClient(Customer customer, String loginEntered){
+        secondPanel = new JPanel();
+        secondPanel.setLayout(new BorderLayout());
+        frame.setSize(450,350);
+
+        JButton backButton= backToMenuClient(customer,loginEntered);
+
+        JButton callButton= new JButton("Call");
+
+        callButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                callingConsultantScreen(customer,loginEntered);
+            }
+        });
+
+        JPanel buttonPanel= new JPanel(new FlowLayout());
+
+        JLabel contactLabel= new JLabel(" CONTACT: ");
+        contactLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,20));
+
+        JLabel emailLabel= new JLabel(" e-mail:  help@email.com    ");
+        emailLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,15));
+
+        JLabel telLabel= new JLabel(" tel:       +48 123 123 123    ");
+        telLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,15));
+
+        JPanel labelPanel= new JPanel(new GridLayout(3,1,10,10));
+
+        labelPanel.add(contactLabel);
+        labelPanel.add(emailLabel);
+        labelPanel.add(telLabel);
+
+        buttonPanel.add(backButton);
+        buttonPanel.add(callButton);
+
+        secondPanel.add(labelPanel,BorderLayout.CENTER);
+        secondPanel.add(buttonPanel,BorderLayout.SOUTH);
+
+        frame.setTitle("Help");
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(secondPanel);
+        frame.pack();
+        frame.getContentPane().revalidate();
+        frame.getContentPane().repaint();
+    }
+
+    public static void callingConsultantScreen(Customer customer, String loginEntered){
+        secondPanel = new JPanel();
+        secondPanel.setLayout(new BorderLayout());
+        frame.setSize(350,250);
+
+
+        JLabel callingLabel= new JLabel("Calling...");
+        callingLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,25));
+        callingLabel.setHorizontalAlignment(JLabel.CENTER);
+
+        secondPanel.add(callingLabel,BorderLayout.CENTER);
+        frame.setTitle("Help");
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(secondPanel);
+      //  frame.pack();
+        frame.getContentPane().revalidate();
+        frame.getContentPane().repaint();
+        Timer timer = new Timer(4000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                callFinishedScreen(customer,loginEntered);
+            }
+        });
+        timer.start();
+    }
+
+    public static void callFinishedScreen(Customer customer, String loginEntered){
+
+        secondPanel = new JPanel();
+        secondPanel.setLayout(new BorderLayout());
+        frame.setSize(350,250);
+
+        JButton backButton= backToMenuClient(customer,loginEntered);
+
+        JButton feedbackButton= new JButton("Feedback");
+
+        Consultant consultant= Consultant.getRandomConsultant();
+
+        JPanel buttonsPanel= new JPanel(new FlowLayout());
+
+        String text="Your Consultant: " + consultant.getFirstName() + " " + consultant.getLastName();
+        JLabel yourConsultantLabel= new JLabel(text);
+        yourConsultantLabel.setHorizontalAlignment(JLabel.CENTER);
+        yourConsultantLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,20));
+
+
+        buttonsPanel.add(backButton);
+        buttonsPanel.add(feedbackButton);
+        JPanel textPanel= new JPanel();
+
+        JLabel thankYouLabel= new JLabel("Thank You for calling!");
+        thankYouLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,20));
+
+        textPanel.add(thankYouLabel);
+        textPanel.add(yourConsultantLabel);
+
+        secondPanel.add(textPanel,BorderLayout.CENTER);
+
+        secondPanel.add(buttonsPanel,BorderLayout.SOUTH);
+
+        frame.setTitle("Help");
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(secondPanel);
+        //  frame.pack();
+        frame.getContentPane().revalidate();
+        frame.getContentPane().repaint();
+    }
+
+
+
     public static void productsMenuClient(Customer customer, String loginEntered){
         /**
          * This method changes frame to products Menu for client
