@@ -5,9 +5,7 @@ import DTOs.ProductInCartDTO;
 import Exceptions.NotEnoughProductsException;
 import Exceptions.UnavailableException;
 import Models.Customers.Customer;
-import Models.Employees.AbstractEmployee;
-import Models.Employees.Consultant;
-import Models.Employees.Role;
+import Models.Employees.*;
 import Models.Order;
 import Models.Products.Category;
 import Models.Products.Product;
@@ -26,6 +24,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -441,30 +440,41 @@ public class ShopGUI extends JFrame {
         Timer timer = new Timer(4000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                callFinishedScreen(customer,loginEntered);
+
+                Consultant consultant= Consultant.getRandomConsultant();
+                callFinishedScreen(customer,loginEntered, consultant);
             }
         });
+
+        timer.setRepeats(false);
         timer.start();
     }
 
-    public static void callFinishedScreen(Customer customer, String loginEntered){
+    public static void callFinishedScreen(Customer customer, String loginEntered, Consultant consultant){
 
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
-        frame.setSize(350,250);
+        frame.setSize(350,200);
 
         JButton backButton= backToMenuClient(customer,loginEntered);
 
         JButton feedbackButton= new JButton("Feedback");
 
-        Consultant consultant= Consultant.getRandomConsultant();
+        feedbackButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                leaveFeedbackToConsultantMenu(customer,loginEntered,consultant);
+            }
+        });
+
+
 
         JPanel buttonsPanel= new JPanel(new FlowLayout());
 
         String text="Your Consultant: " + consultant.getFirstName() + " " + consultant.getLastName();
         JLabel yourConsultantLabel= new JLabel(text);
         yourConsultantLabel.setHorizontalAlignment(JLabel.CENTER);
-        yourConsultantLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,20));
+        yourConsultantLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,16));
 
 
         buttonsPanel.add(backButton);
@@ -482,6 +492,104 @@ public class ShopGUI extends JFrame {
         secondPanel.add(buttonsPanel,BorderLayout.SOUTH);
 
         frame.setTitle("Help");
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(secondPanel);
+        //  frame.pack();
+        frame.getContentPane().revalidate();
+        frame.getContentPane().repaint();
+    }
+    public static void leaveFeedbackToConsultantMenu(Customer customer, String loginEntered, Consultant consultant){
+        secondPanel = new JPanel();
+        secondPanel.setLayout(new BorderLayout());
+        frame.setSize(350,200);
+
+        JPanel buttonsPanel= new JPanel(new FlowLayout());
+
+        JButton backButton= backToMenuClient(customer,loginEntered);
+
+        JPanel radioButtonsPanel= new JPanel();
+        ButtonGroup buttonGroup= new ButtonGroup();
+        JLabel commentLabel= new JLabel("Comment:");
+        commentLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,20));
+        JTextField commentTextField= new JTextField();
+        commentTextField.setMinimumSize(new Dimension(30,10));
+        commentTextField.setEnabled(true);
+
+
+        JPanel commentPanel= new JPanel(new GridLayout(1,2));
+        commentPanel.add(commentLabel);
+        commentPanel.add(commentTextField);
+
+        JRadioButton oneRadioButton= new JRadioButton("1");
+        JRadioButton twoRadioButton= new JRadioButton("2");
+        JRadioButton threeRadioButton= new JRadioButton("3");
+        JRadioButton fourRadioButton= new JRadioButton("4");
+        JRadioButton fiveRadioButton= new JRadioButton("5");
+
+        buttonGroup.add(oneRadioButton);
+        buttonGroup.add(twoRadioButton);
+        buttonGroup.add(threeRadioButton);
+        buttonGroup.add(fourRadioButton);
+        buttonGroup.add(fiveRadioButton);
+
+        radioButtonsPanel.add(oneRadioButton);
+        radioButtonsPanel.add(twoRadioButton);
+        radioButtonsPanel.add(threeRadioButton);
+        radioButtonsPanel.add(fourRadioButton);
+        radioButtonsPanel.add(fiveRadioButton);
+
+        JButton sendButton= new JButton("Send");
+
+        buttonsPanel.add(backButton);
+        buttonsPanel.add(sendButton);
+
+        sendButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    if (commentTextField.getText().isEmpty() || commentTextField.getText().equals("")){
+                         throw new Exception("Fill in comment section");
+                    }
+                    if (!(oneRadioButton.isSelected() || twoRadioButton.isSelected() || threeRadioButton.isSelected() || fourRadioButton.isSelected() || fiveRadioButton.isSelected())){
+                         throw new Exception("Choose a rating first!");
+                    }
+                    String comment= commentTextField.getText();
+                    Rating rating=null;
+                    if (oneRadioButton.isSelected()){
+                        rating=Rating.ONE;
+                    } else if ( twoRadioButton.isSelected()){
+                        rating= Rating.TWO;
+                    } else if (threeRadioButton.isSelected()){
+                        rating= Rating.THREE;
+                    } else if (fourRadioButton.isSelected()){
+                        rating= Rating.FOUR;
+                    } else if (fiveRadioButton.isSelected()){
+                        rating= Rating.FIVE;
+                    }
+                    LocalDate localDate= LocalDate.now();
+                    Feedback feedback= new Feedback(rating,comment,localDate);
+                    consultant.addFeedback(feedback);
+                    JOptionPane.showMessageDialog(frame,"Feedback successfully sent!","Feedback", JOptionPane.PLAIN_MESSAGE);
+                    clientLoggedIn(customer,loginEntered);
+                }catch(Exception exception){
+                    JOptionPane.showMessageDialog(frame,exception.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        JPanel allComponentsPanel= new JPanel(new GridLayout(4,1));
+
+        JLabel rateLabel= new JLabel("Rate: ");
+        rateLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,20));
+
+        allComponentsPanel.add(commentLabel);
+        allComponentsPanel.add(commentTextField);
+        allComponentsPanel.add(rateLabel);
+        allComponentsPanel.add(radioButtonsPanel);
+
+        secondPanel.add(allComponentsPanel,BorderLayout.CENTER);
+        secondPanel.add(buttonsPanel,BorderLayout.SOUTH);
+
+        frame.setTitle("Feedback");
         frame.getContentPane().removeAll();
         frame.getContentPane().add(secondPanel);
         //  frame.pack();
