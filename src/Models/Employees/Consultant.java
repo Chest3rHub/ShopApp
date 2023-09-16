@@ -5,6 +5,7 @@ import Models.Order;
 import Models.Products.Size;
 
 import java.io.*;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -14,6 +15,7 @@ public class Consultant extends AbstractEmployee {
     List<Feedback> feedbackFromManagerList;
     List<Feedback> feedbackFromCustomerList;
     public static List<Consultant> consultantList= new ArrayList<>();
+    public double averageRating;
 
 
     public Consultant(String firstName, String lastName, LocalDate hireDate, double salary, Role role){
@@ -55,7 +57,29 @@ public class Consultant extends AbstractEmployee {
 
     public void addFeedback(Feedback feedback){
         this.feedbackFromCustomerList.add(feedback);
+    }
+    public double calculateAverageRating(){
+        double sum=0;
+        for (Feedback feedback : feedbackFromCustomerList){
+            if (feedback.getRating().equals(Rating.ONE)){
+                sum+=1;
+            } else if (feedback.getRating().equals(Rating.TWO)){
+                sum+=2;
+            } else if (feedback.getRating().equals(Rating.THREE)){
+                sum+=3;
+            } else if (feedback.getRating().equals(Rating.FOUR)){
+                sum+=4;
+            } else if (feedback.getRating().equals(Rating.FIVE)){
+                sum+=5;
+            }
+        }
+        double average= sum/feedbackFromCustomerList.size();
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+        String formattedRating = decimalFormat.format(average);
+        String noCommaRating= formattedRating.replace(",",".");
 
+        this.averageRating=Double.parseDouble(noCommaRating);
+        return Double.parseDouble(noCommaRating);
     }
 
     public List<Feedback> getFeedbackFromCustomerList() {
