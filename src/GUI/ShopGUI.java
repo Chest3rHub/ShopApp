@@ -18,10 +18,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
@@ -34,6 +31,7 @@ public class ShopGUI extends JFrame {
 
     public static final Font _FONT = new JLabel().getFont();
     public static final int _minPasswordLength=7;
+    public static final int _minLoginLength=5;
 
     public static JFrame frame = new JFrame("Default");
     public static JPanel mainPanel;
@@ -102,6 +100,9 @@ public class ShopGUI extends JFrame {
         JPasswordField passwordField = new JPasswordField();
 
         JButton loginButton = new JButton("Sign in");
+
+        frame.getRootPane().setDefaultButton(loginButton);
+
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -2061,6 +2062,7 @@ public class ShopGUI extends JFrame {
         JPasswordField confirmPasswordField = new JPasswordField();
 
         JButton registerButton = new JButton("Register");
+        frame.getRootPane().setDefaultButton(registerButton);
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -2107,6 +2109,11 @@ public class ShopGUI extends JFrame {
          */
         int loginHashLong= loginEntered.hashCode();
         String loginHash= String.valueOf(loginHashLong);
+
+        if (loginEntered.toCharArray().length<_minLoginLength){
+            throw new Exception("Too short login! Minimum 5 characters!");
+        }
+
         if (accounts.containsKey(loginHash)){
             throw new Exception("This login is already taken!");
         }
