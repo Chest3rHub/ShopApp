@@ -228,55 +228,150 @@ public class ShopGUI extends JFrame {
          * This method changes frame to admin logged in
          */
         secondPanel = new JPanel();
-            secondPanel.setLayout(new BorderLayout());
+        secondPanel.setLayout(new BorderLayout());
 
-            JLabel welcomeLabel = new JLabel("Witaj");
-            welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            secondPanel.add(welcomeLabel, BorderLayout.NORTH);
+        JLabel welcomeLabel = new JLabel("ADMIN");
+        welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        secondPanel.add(welcomeLabel, BorderLayout.NORTH);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout());
 
-            JPanel buttonPanel = new JPanel();
-            buttonPanel.setLayout(new FlowLayout());
 
+        JButton button1 = new JButton("Wyswietl produkty");
+        JButton button2 = new JButton("Wyswietl produkty");
+        JButton button3 = new JButton("Dodaj produkt");
+        JButton consultansButton= new JButton("Consultants");
 
-            JButton button1 = new JButton("Wyswietl produkty");
-            JButton button2 = new JButton("Wyswietl produkty");
-            JButton button3 = new JButton("Dodaj produkt");
+        JButton logOutButton= logOutButton();
 
-            JButton logOutButton= logOutButton();
-
-            button1.addActionListener(new ActionListener() {
-                @Override
+        button1.addActionListener(new ActionListener() {
+            @Override
                 public void actionPerformed(ActionEvent e) {
                     AbstractEmployee.showEmployees();
                 }
             });
 
-            button2.addActionListener(new ActionListener() {
-                @Override
+        button2.addActionListener(new ActionListener() {
+            @Override
                 public void actionPerformed(ActionEvent e) {
                     Product.showProducts();
                 }
             });
-            button3.addActionListener(new ActionListener() {
-                @Override
+        button3.addActionListener(new ActionListener() {
+            @Override
                 public void actionPerformed(ActionEvent e) {
                     ProductWithSizeAndQtity.showAllAvailableProductsWithSizesAndQtity();
                 }
             });
+        consultansButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                changeScreenToConsultantsAdmin();
+            }
+        });
 
-            buttonPanel.add(button1);
-            buttonPanel.add(button2);
-            buttonPanel.add(button3);
-            buttonPanel.add(logOutButton);
+        buttonPanel.add(button1);
+        buttonPanel.add(button2);
+        buttonPanel.add(button3);
+        buttonPanel.add(logOutButton);
+        buttonPanel.add(consultansButton);
+        secondPanel.add(buttonPanel, BorderLayout.CENTER);
 
-            secondPanel.add(buttonPanel, BorderLayout.CENTER);
-
-        frame.setTitle("Shop App");
+        frame.setTitle("Menu: ADMIN");
         frame.getContentPane().removeAll();
         frame.getContentPane().add(secondPanel);
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
     }
+
+    public static void changeScreenToConsultantsAdmin(){
+        secondPanel = new JPanel();
+        secondPanel.setLayout(new BorderLayout());
+        frame.setSize(600, 500);
+
+        JLabel consultantsLabel = new JLabel("Consultants: ");
+        consultantsLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,16));
+        consultantsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        secondPanel.add(consultantsLabel, BorderLayout.NORTH);
+
+        DefaultListModel<Consultant> consultantModel = new DefaultListModel<>();
+        JList<Consultant> consultantJList = new JList<>(consultantModel);
+        for (Consultant consultant : Consultant.consultantList) {
+            consultantModel.addElement(consultant);
+        }
+        consultantJList.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(
+                    JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof Consultant) {
+                    value = "ID: " + ((Consultant) value).getId()
+                            + ", NAME: " + ((Consultant) value).getFirstName()
+                            + ", SURNAME: " + ((Consultant) value).getLastName()
+                            + ", HIRE DATE: " + ((Consultant) value).getHireDate();
+                }
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
+        JTextArea consultantInfoTextArea = new JTextArea();
+        consultantInfoTextArea.setEditable(false);
+        consultantInfoTextArea.setWrapStyleWord(true);
+        consultantInfoTextArea.setLineWrap(true);
+
+        consultantJList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                Consultant consultant = consultantJList.getSelectedValue();
+                String averageText="AVERAGE RATING: ";
+                String feedbackText="FEEDBACK: \n";
+                double rating=0;
+                for (Feedback feedback : consultant.getFeedbackFromCustomerList()){
+                    feedbackText+=feedback + "\n";
+                    if (feedback.getRating().equals(Rating.ONE)){
+                        rating+=1;
+                    } else if (feedback.getRating().equals(Rating.TWO)){
+                        rating+=2;
+                    } else if (feedback.getRating().equals(Rating.THREE)){
+                        rating+=3;
+                    } else if (feedback.getRating().equals(Rating.FOUR)){
+                        rating+=4;
+                    } else if (feedback.getRating().equals(Rating.FIVE)){
+                        rating+=5;
+                    }
+
+                }
+                if (!consultant.getFeedbackFromCustomerList().isEmpty()){
+                    rating/=consultant.getFeedbackFromCustomerList().size();
+                    DecimalFormat decimalFormat = new DecimalFormat("#.00");
+                    String formattedRating = decimalFormat.format(rating);
+                    String noCommaRating= formattedRating.replace(",",".");
+                    averageText+=noCommaRating;
+                } else {
+                    averageText+="no feedback yet :(";
+                }
+                averageText+="\n\n";
+                String finalText= averageText+ feedbackText;
+                consultantInfoTextArea.setText(finalText);
+            }
+        });
+        JPanel listAndInfoPanel = new JPanel(new BorderLayout());
+        listAndInfoPanel.add(new JScrollPane(consultantJList), BorderLayout.CENTER);
+
+        listAndInfoPanel.add(consultantInfoTextArea, BorderLayout.SOUTH);
+        JButton backButton = backToMenuAdmin();
+
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+        buttonPanel.add(backButton);
+
+        secondPanel.add(listAndInfoPanel, BorderLayout.CENTER);
+        secondPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        frame.setTitle("Consultants");
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(secondPanel);
+        frame.getContentPane().revalidate();
+        frame.getContentPane().repaint();
+    }
+
     public static void managerLoggedIn(){
 
     }
@@ -376,6 +471,11 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().repaint();
     }
     public static void helpMenuClient(Customer customer, String loginEntered){
+        /**
+         * This method displays help menu with option to call one of consultants
+         * @param customer Customer value attached to entered login
+         * @param loginEntered String value of entered login
+         */
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
         frame.setSize(450,350);
@@ -423,6 +523,11 @@ public class ShopGUI extends JFrame {
     }
 
     public static void callingConsultantScreen(Customer customer, String loginEntered){
+        /**
+         * This method displays calling to a random consultant
+         * @param customer Customer value attached to entered login
+         * @param loginEntered String value of entered login
+         */
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
         frame.setSize(350,250);
@@ -453,7 +558,12 @@ public class ShopGUI extends JFrame {
     }
 
     public static void callFinishedScreen(Customer customer, String loginEntered, Consultant consultant){
-
+        /**
+         * This method displays screen after the call with option to leave feedback
+         * @param customer Customer value attached to entered login
+         * @param loginEntered String value of entered login
+         * @param consultant Consultant who joined the call
+         */
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
         frame.setSize(350,200);
@@ -501,6 +611,12 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().repaint();
     }
     public static void leaveFeedbackToConsultantMenu(Customer customer, String loginEntered, Consultant consultant){
+        /**
+         * This method displays leaving feedback screen
+         * @param customer Customer value attached to entered login
+         * @param loginEntered String value of entered login
+         * @param consultant Consultant who joined the call
+         */
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
         frame.setSize(350,200);
@@ -2186,6 +2302,17 @@ public class ShopGUI extends JFrame {
                 }
             });
             return backToMenuButton;
+        }
+        public static JButton backToMenuAdmin(){
+        JButton backButton= new JButton("Back");
+
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                adminLoggedIn();
+            }
+        });
+        return backButton;
         }
 
         public static JButton addCreditsButton(){

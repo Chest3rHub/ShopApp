@@ -37,6 +37,6 @@ public class Feedback {
         this.date = date;
     }
     public String toString(){
-        return rating + ";" + date + ";" + comment;
+        return "DATE: "+date  +", RATING: " + rating  + ", COMMENT: " +comment;
     }
 }
