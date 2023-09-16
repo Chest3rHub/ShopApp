@@ -3,12 +3,14 @@ package Models;
 // import Models.Employees.Employee;
 import Exceptions.NoSuchProductException;
 import Models.Employees.AbstractEmployee;
+import Models.Employees.Consultant;
 import Models.Products.Category;
 import Models.Products.Product;
 import Models.Products.ProductWithSizeAndQtity;
 import Models.Products.Size;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,10 +24,11 @@ public class Shop {
     List<Product> products= new ArrayList<>();
     List<Order> orders= new ArrayList<>();
 
-    public static void openShop(){
+    public static void openShop() throws IOException {
         Product.readProductsFromFile();
         ProductWithSizeAndQtity.seedData();
         AbstractEmployee.readEmployeesFromFile();
+        Consultant.readFeedbackFromFileAndAddToConsultants();
     }
 
     public static void closeShop(){

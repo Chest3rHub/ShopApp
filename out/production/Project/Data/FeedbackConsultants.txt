@@ -1,1 +1,3 @@
-ConsultantId;Rating;LocaleDate;String comment
+ConsultantId;Rating;LocalDate;String comment
+11;FOUR;2023-09-15;Good
+13;FIVE;2023-09-15;OKAY!

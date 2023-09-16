@@ -1,13 +1,12 @@
 package Models.Employees;
 
+import DTOs.ProductInCartDTO;
 import Models.Order;
+import Models.Products.Size;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.io.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Consultant extends AbstractEmployee {
     public static final String _consultantFeedbackFileName="src/Data/FeedbackConsultants.txt";
@@ -22,6 +21,33 @@ public class Consultant extends AbstractEmployee {
         feedbackFromManagerList= new ArrayList<>();
         feedbackFromCustomerList= new ArrayList<>();
         consultantList.add(this);
+    }
+    public static void readFeedbackFromFileAndAddToConsultants() throws IOException {
+        /**
+         * This method reads feedback from file and adds it to consultants.
+         */
+        try (BufferedReader br = new BufferedReader(new FileReader(_consultantFeedbackFileName))) {
+            String line;
+            line=br.readLine();
+            while ((line = br.readLine()) != null) {
+                String[] values = line.split(";");
+                String idConsultantString = values[0];
+                int idConsultant = Integer.parseInt(idConsultantString);
+                String ratingString= values[1];
+                Rating rating= Rating.valueOf(ratingString);
+                String localDateString= values[2];
+                LocalDate localDate= LocalDate.parse(localDateString);
+                String comment=values[3];
+                Feedback feedback= new Feedback(rating,comment,localDate);
+
+                Optional<Consultant> optionalConsultant= consultantList.stream()
+                        .filter(consultant -> consultant.getId()==idConsultant).findFirst();
+                if (optionalConsultant.isPresent()){
+                    Consultant consultant= optionalConsultant.get();
+                    consultant.addFeedback(feedback);
+                }
+            }
+        }
     }
 
 
@@ -41,15 +67,22 @@ public class Consultant extends AbstractEmployee {
     }
 
     public static Consultant getRandomConsultant(){
+        /**
+         * This method gets random Consultant from static consultantList
+         * @return Random consultant
+         */
         Random rand = new Random();
         int randomIndex = rand.nextInt(consultantList.size());
 
         return consultantList.get(randomIndex);
     }
     public static void saveConsultantFeedbackToFile(){
+        /**
+         * This method saves feedback about consultants to file
+         */
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(_consultantFeedbackFileName));
-            bufferedWriter.write("ConsultantId;Rating;LocaleDate;String comment\n");
+            bufferedWriter.write("ConsultantId;Rating;LocalDate;String comment\n");
             for (Consultant consultant : consultantList) {
                 List<Feedback> tempList= consultant.getFeedbackFromCustomerList();
                 for (Feedback feedback : tempList){

@@ -36,4 +36,7 @@ public class Feedback {
     public void setDate(LocalDate date) {
         this.date = date;
     }
+    public String toString(){
+        return rating + ";" + date + ";" + comment;
+    }
 }
