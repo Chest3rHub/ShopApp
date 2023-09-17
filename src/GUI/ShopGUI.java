@@ -362,15 +362,87 @@ public class ShopGUI extends JFrame {
         JPanel buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.add(backButton);
 
-        JPanel orderByPanel= new JPanel(new GridLayout(5,1));
+        JPanel orderByPanel= new JPanel(new GridLayout(8,1));
         JLabel sortLabel= new JLabel("ORDER BY: ");
+
         JRadioButton noneButton= new JRadioButton("None");
+        noneButton.setSelected(true);
         JRadioButton averageRatingAsc= new JRadioButton("Average rating asc");
         JRadioButton averageRatingDesc= new JRadioButton("Average rating desc");
         JRadioButton hireDateAscButton= new JRadioButton("Hire date asc");
         JRadioButton hireDateDescButton= new JRadioButton("Hire date desc");
         JRadioButton lastNameAscButton= new JRadioButton("Last name asc");
         JRadioButton lastNameDescButton= new JRadioButton("Last name desc");
+
+        ButtonGroup buttonGroup= new ButtonGroup();
+
+        buttonGroup.add(noneButton);
+        buttonGroup.add(averageRatingAsc);
+        buttonGroup.add(averageRatingDesc);
+        buttonGroup.add(hireDateAscButton);
+        buttonGroup.add(hireDateDescButton);
+        buttonGroup.add(lastNameAscButton);
+        buttonGroup.add(lastNameDescButton);
+
+        noneButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        averageRatingAsc.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        averageRatingDesc.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        hireDateAscButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        hireDateDescButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        lastNameAscButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        lastNameDescButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        orderByPanel.add(sortLabel);
+        orderByPanel.add(noneButton);
+
+        orderByPanel.add(averageRatingAsc);
+        orderByPanel.add(averageRatingDesc);
+        orderByPanel.add(hireDateAscButton);
+        orderByPanel.add(hireDateDescButton);
+        orderByPanel.add(lastNameAscButton);
+        orderByPanel.add(lastNameDescButton);
+
+
         // na poczatku wyliczyc srednia ocen dla wszystkich pracownikow (jest metoda juz)
         // pozniej stworzyc metode ktora bedzie sortowac ta liste jak juz bedzie wyliczona srednia
         // i zmienic liczbe w gridlayout bo jest za malo wierszy
@@ -378,6 +450,7 @@ public class ShopGUI extends JFrame {
 
         secondPanel.add(listAndInfoPanel, BorderLayout.CENTER);
         secondPanel.add(buttonPanel, BorderLayout.SOUTH);
+        secondPanel.add(orderByPanel,BorderLayout.EAST);
 
         frame.setTitle("Consultants");
         frame.getContentPane().removeAll();
