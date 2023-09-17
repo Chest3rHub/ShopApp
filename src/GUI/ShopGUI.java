@@ -5,8 +5,7 @@ import DTOs.ProductInCartDTO;
 import Exceptions.NotEnoughProductsException;
 import Exceptions.UnavailableException;
 import Models.Customers.Customer;
-import Models.Employees.AbstractEmployee;
-import Models.Employees.Role;
+import Models.Employees.*;
 import Models.Order;
 import Models.Products.Category;
 import Models.Products.Product;
@@ -14,16 +13,15 @@ import Models.Products.ProductWithSizeAndQtity;
 import Models.Products.Size;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.*;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -33,6 +31,7 @@ public class ShopGUI extends JFrame {
 
     public static final Font _FONT = new JLabel().getFont();
     public static final int _minPasswordLength=7;
+    public static final int _minLoginLength=5;
 
     public static JFrame frame = new JFrame("Default");
     public static JPanel mainPanel;
@@ -73,6 +72,7 @@ public class ShopGUI extends JFrame {
                     savePasswordChangesToFile();
                     saveCustomersChangesToFile();
                     Order.saveOrdersToFile();
+                    Consultant.saveConsultantFeedbackToFile();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -100,6 +100,9 @@ public class ShopGUI extends JFrame {
         JPasswordField passwordField = new JPasswordField();
 
         JButton loginButton = new JButton("Sign in");
+
+        frame.getRootPane().setDefaultButton(loginButton);
+
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -225,55 +228,164 @@ public class ShopGUI extends JFrame {
          * This method changes frame to admin logged in
          */
         secondPanel = new JPanel();
-            secondPanel.setLayout(new BorderLayout());
+        secondPanel.setLayout(new BorderLayout());
 
-            JLabel welcomeLabel = new JLabel("Witaj");
-            welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            secondPanel.add(welcomeLabel, BorderLayout.NORTH);
+        JLabel welcomeLabel = new JLabel("ADMIN");
+        welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        secondPanel.add(welcomeLabel, BorderLayout.NORTH);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout());
 
-            JPanel buttonPanel = new JPanel();
-            buttonPanel.setLayout(new FlowLayout());
 
+        JButton button1 = new JButton("Wyswietl produkty");
+        JButton button2 = new JButton("Wyswietl produkty");
+        JButton button3 = new JButton("Dodaj produkt");
+        JButton consultansButton= new JButton("Consultants");
 
-            JButton button1 = new JButton("Wyswietl produkty");
-            JButton button2 = new JButton("Wyswietl produkty");
-            JButton button3 = new JButton("Dodaj produkt");
+        JButton logOutButton= logOutButton();
 
-            JButton logOutButton= logOutButton();
-
-            button1.addActionListener(new ActionListener() {
-                @Override
+        button1.addActionListener(new ActionListener() {
+            @Override
                 public void actionPerformed(ActionEvent e) {
                     AbstractEmployee.showEmployees();
                 }
             });
 
-            button2.addActionListener(new ActionListener() {
-                @Override
+        button2.addActionListener(new ActionListener() {
+            @Override
                 public void actionPerformed(ActionEvent e) {
                     Product.showProducts();
                 }
             });
-            button3.addActionListener(new ActionListener() {
-                @Override
+        button3.addActionListener(new ActionListener() {
+            @Override
                 public void actionPerformed(ActionEvent e) {
                     ProductWithSizeAndQtity.showAllAvailableProductsWithSizesAndQtity();
                 }
             });
+        consultansButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                changeScreenToConsultantsAdmin();
+            }
+        });
 
-            buttonPanel.add(button1);
-            buttonPanel.add(button2);
-            buttonPanel.add(button3);
-            buttonPanel.add(logOutButton);
+        buttonPanel.add(button1);
+        buttonPanel.add(button2);
+        buttonPanel.add(button3);
+        buttonPanel.add(logOutButton);
+        buttonPanel.add(consultansButton);
+        secondPanel.add(buttonPanel, BorderLayout.CENTER);
 
-            secondPanel.add(buttonPanel, BorderLayout.CENTER);
-
-        frame.setTitle("Shop App");
+        frame.setTitle("Menu: ADMIN");
         frame.getContentPane().removeAll();
         frame.getContentPane().add(secondPanel);
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
     }
+
+    public static void changeScreenToConsultantsAdmin(){
+        secondPanel = new JPanel();
+        secondPanel.setLayout(new BorderLayout());
+        frame.setSize(600, 500);
+
+        JLabel consultantsLabel = new JLabel("Consultants: ");
+        consultantsLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,16));
+        consultantsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        secondPanel.add(consultantsLabel, BorderLayout.NORTH);
+
+        DefaultListModel<Consultant> consultantModel = new DefaultListModel<>();
+        JList<Consultant> consultantJList = new JList<>(consultantModel);
+        for (Consultant consultant : Consultant.consultantList) {
+            consultantModel.addElement(consultant);
+        }
+        consultantJList.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(
+                    JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof Consultant) {
+                    value = "ID: " + ((Consultant) value).getId()
+                            + ", NAME: " + ((Consultant) value).getFirstName()
+                            + ", SURNAME: " + ((Consultant) value).getLastName()
+                            + ", HIRE DATE: " + ((Consultant) value).getHireDate();
+                }
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
+        JTextArea consultantInfoTextArea = new JTextArea();
+        consultantInfoTextArea.setEditable(false);
+        consultantInfoTextArea.setWrapStyleWord(true);
+        consultantInfoTextArea.setLineWrap(true);
+
+        consultantJList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                Consultant consultant = consultantJList.getSelectedValue();
+                String averageText="AVERAGE RATING: ";
+                String feedbackText="FEEDBACK: \n";
+                double rating=0;
+                for (Feedback feedback : consultant.getFeedbackFromCustomerList()){
+                    feedbackText+=feedback + "\n";
+                    if (feedback.getRating().equals(Rating.ONE)){
+                        rating+=1;
+                    } else if (feedback.getRating().equals(Rating.TWO)){
+                        rating+=2;
+                    } else if (feedback.getRating().equals(Rating.THREE)){
+                        rating+=3;
+                    } else if (feedback.getRating().equals(Rating.FOUR)){
+                        rating+=4;
+                    } else if (feedback.getRating().equals(Rating.FIVE)){
+                        rating+=5;
+                    }
+
+                }
+                if (!consultant.getFeedbackFromCustomerList().isEmpty()){
+                    rating/=consultant.getFeedbackFromCustomerList().size();
+                    DecimalFormat decimalFormat = new DecimalFormat("#.00");
+                    String formattedRating = decimalFormat.format(rating);
+                    String noCommaRating= formattedRating.replace(",",".");
+                    averageText+=noCommaRating;
+                } else {
+                    averageText+="no feedback yet :(";
+                }
+                averageText+="\n\n";
+                String finalText= averageText+ feedbackText;
+                consultantInfoTextArea.setText(finalText);
+            }
+        });
+        JPanel listAndInfoPanel = new JPanel(new BorderLayout());
+        listAndInfoPanel.add(new JScrollPane(consultantJList), BorderLayout.CENTER);
+
+        listAndInfoPanel.add(consultantInfoTextArea, BorderLayout.SOUTH);
+        JButton backButton = backToMenuAdmin();
+
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+        buttonPanel.add(backButton);
+
+        JPanel orderByPanel= new JPanel(new GridLayout(5,1));
+        JLabel sortLabel= new JLabel("ORDER BY: ");
+        JRadioButton noneButton= new JRadioButton("None");
+        JRadioButton averageRatingAsc= new JRadioButton("Average rating asc");
+        JRadioButton averageRatingDesc= new JRadioButton("Average rating desc");
+        JRadioButton hireDateAscButton= new JRadioButton("Hire date asc");
+        JRadioButton hireDateDescButton= new JRadioButton("Hire date desc");
+        JRadioButton lastNameAscButton= new JRadioButton("Last name asc");
+        JRadioButton lastNameDescButton= new JRadioButton("Last name desc");
+        // na poczatku wyliczyc srednia ocen dla wszystkich pracownikow (jest metoda juz)
+        // pozniej stworzyc metode ktora bedzie sortowac ta liste jak juz bedzie wyliczona srednia
+        // i zmienic liczbe w gridlayout bo jest za malo wierszy
+
+
+        secondPanel.add(listAndInfoPanel, BorderLayout.CENTER);
+        secondPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        frame.setTitle("Consultants");
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(secondPanel);
+        frame.getContentPane().revalidate();
+        frame.getContentPane().repaint();
+    }
+
     public static void managerLoggedIn(){
 
     }
@@ -340,7 +452,7 @@ public class ShopGUI extends JFrame {
         helpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                helpMenuClient(customer,enteredLogin);
             }
         });
         ordersButton.addActionListener(new ActionListener() {
@@ -372,6 +484,253 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
     }
+    public static void helpMenuClient(Customer customer, String loginEntered){
+        /**
+         * This method displays help menu with option to call one of consultants
+         * @param customer Customer value attached to entered login
+         * @param loginEntered String value of entered login
+         */
+        secondPanel = new JPanel();
+        secondPanel.setLayout(new BorderLayout());
+        frame.setSize(450,350);
+
+        JButton backButton= backToMenuClient(customer,loginEntered);
+
+        JButton callButton= new JButton("Call");
+
+        callButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                callingConsultantScreen(customer,loginEntered);
+            }
+        });
+
+        JPanel buttonPanel= new JPanel(new FlowLayout());
+
+        JLabel contactLabel= new JLabel(" CONTACT: ");
+        contactLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,20));
+
+        JLabel emailLabel= new JLabel(" e-mail:  help@email.com    ");
+        emailLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,15));
+
+        JLabel telLabel= new JLabel(" tel:       +48 123 123 123    ");
+        telLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,15));
+
+        JPanel labelPanel= new JPanel(new GridLayout(3,1,10,10));
+
+        labelPanel.add(contactLabel);
+        labelPanel.add(emailLabel);
+        labelPanel.add(telLabel);
+
+        buttonPanel.add(backButton);
+        buttonPanel.add(callButton);
+
+        secondPanel.add(labelPanel,BorderLayout.CENTER);
+        secondPanel.add(buttonPanel,BorderLayout.SOUTH);
+
+        frame.setTitle("Help");
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(secondPanel);
+        frame.pack();
+        frame.getContentPane().revalidate();
+        frame.getContentPane().repaint();
+    }
+
+    public static void callingConsultantScreen(Customer customer, String loginEntered){
+        /**
+         * This method displays calling to a random consultant
+         * @param customer Customer value attached to entered login
+         * @param loginEntered String value of entered login
+         */
+        secondPanel = new JPanel();
+        secondPanel.setLayout(new BorderLayout());
+        frame.setSize(350,250);
+
+
+        JLabel callingLabel= new JLabel("Calling...");
+        callingLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,25));
+        callingLabel.setHorizontalAlignment(JLabel.CENTER);
+
+        secondPanel.add(callingLabel,BorderLayout.CENTER);
+        frame.setTitle("Help");
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(secondPanel);
+      //  frame.pack();
+        frame.getContentPane().revalidate();
+        frame.getContentPane().repaint();
+        Timer timer = new Timer(4000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                Consultant consultant= Consultant.getRandomConsultant();
+                callFinishedScreen(customer,loginEntered, consultant);
+            }
+        });
+
+        timer.setRepeats(false);
+        timer.start();
+    }
+
+    public static void callFinishedScreen(Customer customer, String loginEntered, Consultant consultant){
+        /**
+         * This method displays screen after the call with option to leave feedback
+         * @param customer Customer value attached to entered login
+         * @param loginEntered String value of entered login
+         * @param consultant Consultant who joined the call
+         */
+        secondPanel = new JPanel();
+        secondPanel.setLayout(new BorderLayout());
+        frame.setSize(350,200);
+
+        JButton backButton= backToMenuClient(customer,loginEntered);
+
+        JButton feedbackButton= new JButton("Feedback");
+
+        feedbackButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                leaveFeedbackToConsultantMenu(customer,loginEntered,consultant);
+            }
+        });
+
+
+
+        JPanel buttonsPanel= new JPanel(new FlowLayout());
+
+        String text="Your Consultant: " + consultant.getFirstName() + " " + consultant.getLastName();
+        JLabel yourConsultantLabel= new JLabel(text);
+        yourConsultantLabel.setHorizontalAlignment(JLabel.CENTER);
+        yourConsultantLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,16));
+
+
+        buttonsPanel.add(backButton);
+        buttonsPanel.add(feedbackButton);
+        JPanel textPanel= new JPanel();
+
+        JLabel thankYouLabel= new JLabel("Thank You for calling!");
+        thankYouLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,20));
+
+        textPanel.add(thankYouLabel);
+        textPanel.add(yourConsultantLabel);
+
+        secondPanel.add(textPanel,BorderLayout.CENTER);
+
+        secondPanel.add(buttonsPanel,BorderLayout.SOUTH);
+
+        frame.setTitle("Help");
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(secondPanel);
+        //  frame.pack();
+        frame.getContentPane().revalidate();
+        frame.getContentPane().repaint();
+    }
+    public static void leaveFeedbackToConsultantMenu(Customer customer, String loginEntered, Consultant consultant){
+        /**
+         * This method displays leaving feedback screen
+         * @param customer Customer value attached to entered login
+         * @param loginEntered String value of entered login
+         * @param consultant Consultant who joined the call
+         */
+        secondPanel = new JPanel();
+        secondPanel.setLayout(new BorderLayout());
+        frame.setSize(350,200);
+
+        JPanel buttonsPanel= new JPanel(new FlowLayout());
+
+        JButton backButton= backToMenuClient(customer,loginEntered);
+
+        JPanel radioButtonsPanel= new JPanel();
+        ButtonGroup buttonGroup= new ButtonGroup();
+        JLabel commentLabel= new JLabel("Comment:");
+        commentLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,20));
+        JTextField commentTextField= new JTextField();
+        commentTextField.setMinimumSize(new Dimension(30,10));
+        commentTextField.setEnabled(true);
+
+
+        JPanel commentPanel= new JPanel(new GridLayout(1,2));
+        commentPanel.add(commentLabel);
+        commentPanel.add(commentTextField);
+
+        JRadioButton oneRadioButton= new JRadioButton("1");
+        JRadioButton twoRadioButton= new JRadioButton("2");
+        JRadioButton threeRadioButton= new JRadioButton("3");
+        JRadioButton fourRadioButton= new JRadioButton("4");
+        JRadioButton fiveRadioButton= new JRadioButton("5");
+
+        buttonGroup.add(oneRadioButton);
+        buttonGroup.add(twoRadioButton);
+        buttonGroup.add(threeRadioButton);
+        buttonGroup.add(fourRadioButton);
+        buttonGroup.add(fiveRadioButton);
+
+        radioButtonsPanel.add(oneRadioButton);
+        radioButtonsPanel.add(twoRadioButton);
+        radioButtonsPanel.add(threeRadioButton);
+        radioButtonsPanel.add(fourRadioButton);
+        radioButtonsPanel.add(fiveRadioButton);
+
+        JButton sendButton= new JButton("Send");
+
+        buttonsPanel.add(backButton);
+        buttonsPanel.add(sendButton);
+
+        sendButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    if (commentTextField.getText().isEmpty() || commentTextField.getText().equals("")){
+                         throw new Exception("Fill in comment section");
+                    }
+                    if (!(oneRadioButton.isSelected() || twoRadioButton.isSelected() || threeRadioButton.isSelected() || fourRadioButton.isSelected() || fiveRadioButton.isSelected())){
+                         throw new Exception("Choose a rating first!");
+                    }
+                    String comment= commentTextField.getText();
+                    Rating rating=null;
+                    if (oneRadioButton.isSelected()){
+                        rating=Rating.ONE;
+                    } else if ( twoRadioButton.isSelected()){
+                        rating= Rating.TWO;
+                    } else if (threeRadioButton.isSelected()){
+                        rating= Rating.THREE;
+                    } else if (fourRadioButton.isSelected()){
+                        rating= Rating.FOUR;
+                    } else if (fiveRadioButton.isSelected()){
+                        rating= Rating.FIVE;
+                    }
+                    LocalDate localDate= LocalDate.now();
+                    Feedback feedback= new Feedback(rating,comment,localDate);
+                    consultant.addFeedback(feedback);
+                    JOptionPane.showMessageDialog(frame,"Feedback successfully sent!","Feedback", JOptionPane.PLAIN_MESSAGE);
+                    clientLoggedIn(customer,loginEntered);
+                }catch(Exception exception){
+                    JOptionPane.showMessageDialog(frame,exception.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        JPanel allComponentsPanel= new JPanel(new GridLayout(4,1));
+
+        JLabel rateLabel= new JLabel("Rate: ");
+        rateLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,20));
+
+        allComponentsPanel.add(commentLabel);
+        allComponentsPanel.add(commentTextField);
+        allComponentsPanel.add(rateLabel);
+        allComponentsPanel.add(radioButtonsPanel);
+
+        secondPanel.add(allComponentsPanel,BorderLayout.CENTER);
+        secondPanel.add(buttonsPanel,BorderLayout.SOUTH);
+
+        frame.setTitle("Feedback");
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(secondPanel);
+        //  frame.pack();
+        frame.getContentPane().revalidate();
+        frame.getContentPane().repaint();
+    }
+
+
+
     public static void productsMenuClient(Customer customer, String loginEntered){
         /**
          * This method changes frame to products Menu for client
@@ -391,7 +750,7 @@ public class ShopGUI extends JFrame {
                 productModel.addElement(product);
             }
         }
-        JPanel comboBoxPanel= new JPanel(new GridLayout(22,1));
+        JPanel comboBoxPanel= new JPanel(new GridLayout(23,1));
 
         JComboBox<String> sizeComboBox = new JComboBox<>();
         sizeComboBox.setSize(100,100);
@@ -434,6 +793,7 @@ public class ShopGUI extends JFrame {
 
         JRadioButton allRadioButton= new JRadioButton("All");
         comboBoxPanel.add(allRadioButton);
+        allRadioButton.setSelected(true);
 
         JRadioButton accessoriesRadioButton= new JRadioButton("Accessories");
         comboBoxPanel.add(accessoriesRadioButton);
@@ -835,6 +1195,10 @@ public class ShopGUI extends JFrame {
         JLabel filterLabel= new JLabel("FILTER BY SIZE: ");
         comboBoxPanel.add(filterLabel);
 
+        JCheckBox anySizeCheckBox= new JCheckBox("ANY");
+        anySizeCheckBox.setSelected(true);
+        comboBoxPanel.add(anySizeCheckBox);
+
         JCheckBox xsCheckBox= new JCheckBox("XS");
         comboBoxPanel.add(xsCheckBox);
 
@@ -850,6 +1214,502 @@ public class ShopGUI extends JFrame {
         JCheckBox xlCheckBox= new JCheckBox("XL");
         comboBoxPanel.add(xlCheckBox);
 
+        ButtonGroup sizeGroup= new ButtonGroup();
+        sizeGroup.add(anySizeCheckBox);
+        sizeGroup.add(xsCheckBox);
+        sizeGroup.add(sCheckBox);
+        sizeGroup.add(mCheckBox);
+        sizeGroup.add(lCheckBox);
+        sizeGroup.add(xlCheckBox);
+
+
+        anySizeCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (anySizeCheckBox.isSelected()){
+//                    xsCheckBox.setSelected(false);
+//                    sCheckBox.setSelected(false);
+//                    mCheckBox.setSelected(false);
+//                    lCheckBox.setSelected(false);
+//                    xlCheckBox.setSelected(false);
+
+                    List<ProductWithSizeAndQtity> productsFromCategoryList= new ArrayList<>();
+                    productModel.removeAllElements();
+
+                    if (allRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty()){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (accessoriesRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.ACCESSORIES)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (pantsRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.PANTS)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (hoodieRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.HOODIE)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+
+                    }else if (shirtRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.SHIRT)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (socksRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.SOCKS)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }
+
+                    if (orderByPriceAscendingBox.isSelected()){
+
+                        List<ProductWithSizeAndQtity> listTemp= new ArrayList<>();
+                        for (ProductWithSizeAndQtity product : productsFromCategoryList){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty()){
+                                listTemp.add(product);
+                            }
+                        }
+
+                        if (orderByPriceAscendingBox.isSelected()){
+                            List<ProductWithSizeAndQtity> resultList= new ArrayList<>();
+                            try{
+                                resultList= ProductWithSizeAndQtity.getProductListOrderedByPriceAsc(listTemp);
+
+                            }catch(UnavailableException unavailableException){
+                                unavailableException.printStackTrace();
+                            }
+                            productModel.addAll(resultList);
+                        }else {
+                            productModel.addAll(listTemp);
+                        }
+                    }else if (orderByPriceDescendingBox.isSelected()){
+                        List<ProductWithSizeAndQtity> listTemp= new ArrayList<>();
+                        for (ProductWithSizeAndQtity product : productsFromCategoryList){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty()){
+                                listTemp.add(product);
+                            }
+                        }
+
+                        if (orderByPriceDescendingBox.isSelected()){
+                            List<ProductWithSizeAndQtity> resultList= new ArrayList<>();
+                            try{
+                                resultList= ProductWithSizeAndQtity.getProductListOrderedByPriceDesc(listTemp);
+
+                            }catch(UnavailableException unavailableException){
+                                unavailableException.printStackTrace();
+                            }
+                            productModel.addAll(resultList);
+                        }else {
+                            productModel.addAll(listTemp);
+                        }
+                    }else if (!orderByPriceAscendingBox.isSelected() && !orderByPriceDescendingBox.isSelected()){
+                        productModel.removeAllElements();
+                        List<ProductWithSizeAndQtity> listTemp= new ArrayList<>();
+                        for (ProductWithSizeAndQtity product : productsFromCategoryList){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty()){
+                                listTemp.add(product);
+                            }
+                        }
+                        productModel.addAll(listTemp);
+                    }
+
+                }else {
+                    // do nothing :)
+                }
+            }
+        });
+
+        xsCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (xsCheckBox.isSelected()){
+                    anySizeCheckBox.setSelected(false);
+                    List<ProductWithSizeAndQtity> productsFromCategoryList= new ArrayList<>();
+                    productModel.removeAllElements();
+                    if (allRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty()){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (accessoriesRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.ACCESSORIES)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (pantsRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.PANTS)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (hoodieRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.HOODIE)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+
+                    }else if (shirtRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.SHIRT)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (socksRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.SOCKS)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }
+                    List<ProductWithSizeAndQtity> correctOrderList= new ArrayList<>();
+                    if (orderByPriceAscendingBox.isSelected()){
+                        try {
+                            correctOrderList= ProductWithSizeAndQtity.getProductListOrderedByPriceAsc(productsFromCategoryList);
+                        } catch (UnavailableException ex) {
+                            ex.printStackTrace();
+                        }
+
+                    }else if (orderByPriceDescendingBox.isSelected()){
+                        try {
+                            correctOrderList=ProductWithSizeAndQtity.getProductListOrderedByPriceDesc(productsFromCategoryList);
+                        } catch (UnavailableException ex) {
+                            ex.printStackTrace();
+                        }
+
+                    } else if (!orderByPriceAscendingBox.isSelected() && !orderByPriceDescendingBox.isSelected()){
+                        correctOrderList=productsFromCategoryList;
+                    }
+                    List<ProductWithSizeAndQtity> resultList= new ArrayList<>();
+                    try {
+                        resultList= ProductWithSizeAndQtity.getProductListBySize(Size.XS,correctOrderList);
+                    } catch (UnavailableException ex) {
+                        ex.printStackTrace();
+                    }
+                    productModel.addAll(resultList);
+                }else {
+                    // do nothing
+                }
+
+            }
+        });
+
+
+        sCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (sCheckBox.isSelected()){
+                    List<ProductWithSizeAndQtity> productsFromCategoryList= new ArrayList<>();
+                    productModel.removeAllElements();
+                    if (allRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty()){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (accessoriesRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.ACCESSORIES)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (pantsRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.PANTS)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (hoodieRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.HOODIE)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+
+                    }else if (shirtRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.SHIRT)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (socksRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.SOCKS)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }
+                    List<ProductWithSizeAndQtity> correctOrderList= new ArrayList<>();
+                    if (orderByPriceAscendingBox.isSelected()){
+                        try {
+                            correctOrderList= ProductWithSizeAndQtity.getProductListOrderedByPriceAsc(productsFromCategoryList);
+                        } catch (UnavailableException ex) {
+                            ex.printStackTrace();
+                        }
+
+                    }else if (orderByPriceDescendingBox.isSelected()){
+                        try {
+                            correctOrderList=ProductWithSizeAndQtity.getProductListOrderedByPriceDesc(productsFromCategoryList);
+                        } catch (UnavailableException ex) {
+                            ex.printStackTrace();
+                        }
+
+                    } else if (!orderByPriceAscendingBox.isSelected() && !orderByPriceDescendingBox.isSelected()){
+                        correctOrderList=productsFromCategoryList;
+                    }
+                    List<ProductWithSizeAndQtity> resultList= new ArrayList<>();
+                    try {
+                        resultList= ProductWithSizeAndQtity.getProductListBySize(Size.S,correctOrderList);
+                    } catch (UnavailableException ex) {
+                        ex.printStackTrace();
+                    }
+                    productModel.addAll(resultList);
+                }else {
+                    // do nothing
+                }
+            }
+        });
+
+        mCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (mCheckBox.isSelected()){
+                    List<ProductWithSizeAndQtity> productsFromCategoryList= new ArrayList<>();
+                    productModel.removeAllElements();
+                    if (allRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty()){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (accessoriesRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.ACCESSORIES)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (pantsRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.PANTS)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (hoodieRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.HOODIE)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+
+                    }else if (shirtRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.SHIRT)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (socksRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.SOCKS)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }
+                    List<ProductWithSizeAndQtity> correctOrderList= new ArrayList<>();
+                    if (orderByPriceAscendingBox.isSelected()){
+                        try {
+                            correctOrderList= ProductWithSizeAndQtity.getProductListOrderedByPriceAsc(productsFromCategoryList);
+                        } catch (UnavailableException ex) {
+                            ex.printStackTrace();
+                        }
+
+                    }else if (orderByPriceDescendingBox.isSelected()){
+                        try {
+                            correctOrderList=ProductWithSizeAndQtity.getProductListOrderedByPriceDesc(productsFromCategoryList);
+                        } catch (UnavailableException ex) {
+                            ex.printStackTrace();
+                        }
+
+                    } else if (!orderByPriceAscendingBox.isSelected() && !orderByPriceDescendingBox.isSelected()){
+                        correctOrderList=productsFromCategoryList;
+                    }
+                    List<ProductWithSizeAndQtity> resultList= new ArrayList<>();
+                    try {
+                        resultList= ProductWithSizeAndQtity.getProductListBySize(Size.M,correctOrderList);
+                    } catch (UnavailableException ex) {
+                        ex.printStackTrace();
+                    }
+                    productModel.addAll(resultList);
+                }else {
+                    // do nothing
+                }
+            }
+        });
+
+        lCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (lCheckBox.isSelected()){
+                    List<ProductWithSizeAndQtity> productsFromCategoryList= new ArrayList<>();
+                    productModel.removeAllElements();
+                    if (allRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty()){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (accessoriesRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.ACCESSORIES)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (pantsRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.PANTS)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (hoodieRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.HOODIE)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+
+                    }else if (shirtRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.SHIRT)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (socksRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.SOCKS)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }
+                    List<ProductWithSizeAndQtity> correctOrderList= new ArrayList<>();
+                    if (orderByPriceAscendingBox.isSelected()){
+                        try {
+                            correctOrderList= ProductWithSizeAndQtity.getProductListOrderedByPriceAsc(productsFromCategoryList);
+                        } catch (UnavailableException ex) {
+                            ex.printStackTrace();
+                        }
+
+                    }else if (orderByPriceDescendingBox.isSelected()){
+                        try {
+                            correctOrderList=ProductWithSizeAndQtity.getProductListOrderedByPriceDesc(productsFromCategoryList);
+                        } catch (UnavailableException ex) {
+                            ex.printStackTrace();
+                        }
+
+                    } else if (!orderByPriceAscendingBox.isSelected() && !orderByPriceDescendingBox.isSelected()){
+                        correctOrderList=productsFromCategoryList;
+                    }
+                    List<ProductWithSizeAndQtity> resultList= new ArrayList<>();
+                    try {
+                        resultList= ProductWithSizeAndQtity.getProductListBySize(Size.L,correctOrderList);
+                    } catch (UnavailableException ex) {
+                        ex.printStackTrace();
+                    }
+                    productModel.addAll(resultList);
+                }else {
+                    // do nothing
+                }
+            }
+        });
+
+        xlCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (xlCheckBox.isSelected()){
+                    List<ProductWithSizeAndQtity> productsFromCategoryList= new ArrayList<>();
+                    productModel.removeAllElements();
+                    if (allRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty()){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (accessoriesRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.ACCESSORIES)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (pantsRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.PANTS)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (hoodieRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.HOODIE)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+
+                    }else if (shirtRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.SHIRT)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }else if (socksRadioButton.isSelected()){
+                        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                            if (!product.getSizesAndQuantitiesMap().isEmpty() && product.getProduct().getCategory().equals(Category.SOCKS)){
+                                productsFromCategoryList.add(product);
+                            }
+                        }
+                    }
+                    List<ProductWithSizeAndQtity> correctOrderList= new ArrayList<>();
+                    if (orderByPriceAscendingBox.isSelected()){
+                        try {
+                            correctOrderList= ProductWithSizeAndQtity.getProductListOrderedByPriceAsc(productsFromCategoryList);
+                        } catch (UnavailableException ex) {
+                            ex.printStackTrace();
+                        }
+
+                    }else if (orderByPriceDescendingBox.isSelected()){
+                        try {
+                            correctOrderList=ProductWithSizeAndQtity.getProductListOrderedByPriceDesc(productsFromCategoryList);
+                        } catch (UnavailableException ex) {
+                            ex.printStackTrace();
+                        }
+
+                    } else if (!orderByPriceAscendingBox.isSelected() && !orderByPriceDescendingBox.isSelected()){
+                        correctOrderList=productsFromCategoryList;
+                    }
+                    List<ProductWithSizeAndQtity> resultList= new ArrayList<>();
+                    try {
+                        resultList= ProductWithSizeAndQtity.getProductListBySize(Size.XL,correctOrderList);
+                    } catch (UnavailableException ex) {
+                        ex.printStackTrace();
+                    }
+                    productModel.addAll(resultList);
+                }else {
+                    // do nothing
+                }
+            }
+        });
 
 
         sizeComboBox.addActionListener(new ActionListener() {
@@ -1332,6 +2192,7 @@ public class ShopGUI extends JFrame {
         JPasswordField confirmPasswordField = new JPasswordField();
 
         JButton registerButton = new JButton("Register");
+        frame.getRootPane().setDefaultButton(registerButton);
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1378,6 +2239,11 @@ public class ShopGUI extends JFrame {
          */
         int loginHashLong= loginEntered.hashCode();
         String loginHash= String.valueOf(loginHashLong);
+
+        if (loginEntered.toCharArray().length<_minLoginLength){
+            throw new Exception("Too short login! Minimum 5 characters!");
+        }
+
         if (accounts.containsKey(loginHash)){
             throw new Exception("This login is already taken!");
         }
@@ -1450,6 +2316,17 @@ public class ShopGUI extends JFrame {
                 }
             });
             return backToMenuButton;
+        }
+        public static JButton backToMenuAdmin(){
+        JButton backButton= new JButton("Back");
+
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                adminLoggedIn();
+            }
+        });
+        return backButton;
         }
 
         public static JButton addCreditsButton(){

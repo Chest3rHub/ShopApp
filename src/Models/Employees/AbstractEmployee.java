@@ -37,6 +37,70 @@ public abstract class AbstractEmployee implements IPersonInfo {
 
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public LocalDate getHireDate() {
+        return hireDate;
+    }
+
+    public void setHireDate(LocalDate hireDate) {
+        this.hireDate = hireDate;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public List<Feedback> getFeedbackFromManagerList() {
+        return feedbackFromManagerList;
+    }
+
+    public void setFeedbackFromManagerList(List<Feedback> feedbackFromManagerList) {
+        this.feedbackFromManagerList = feedbackFromManagerList;
+    }
+
+    public static List<AbstractEmployee> getAbstractEmployees() {
+        return abstractEmployees;
+    }
+
+    public static void setAbstractEmployees(List<AbstractEmployee> abstractEmployees) {
+        AbstractEmployee.abstractEmployees = abstractEmployees;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     @Override
     public String getPersonalData() {
 

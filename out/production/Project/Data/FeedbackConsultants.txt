@@ -1,0 +1,5 @@
+ConsultantId;Rating;LocalDate;String comment
+11;FOUR;2023-09-15;Good
+13;FIVE;2023-09-15;OKAY!
+13;THREE;2023-09-16;Could be more polite but okay
+13;FIVE;2023-09-16;Excellent!

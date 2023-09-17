@@ -1,12 +1,14 @@
 import GUI.ShopGUI;
 import Models.Customers.Customer;
 import Models.Employees.AbstractEmployee;
+import Models.Employees.Consultant;
 import Models.Order;
 import Models.Products.Product;
 import Models.Shop;
 
 import javax.swing.*;
 import java.time.LocalDate;
+import java.util.ConcurrentModificationException;
 
 public class Main {
 
@@ -23,7 +25,11 @@ public class Main {
         // jedno konto dla admina, jedno dla managera, wiele dla klientow
 
         // produkty, pozniej seeduje ilosci i rozmiary a na kooniec pracownikow
-        Shop.openShop();
+        try{
+            Shop.openShop();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         Product.showProducts();
         System.out.println("======");
         AbstractEmployee.showEmployees();
@@ -38,6 +44,9 @@ public class Main {
            // e.getMessage();
         }
 
+        for (Consultant consultant : Consultant.consultantList){
+            System.out.println(consultant.getId() + consultant.getLastName()+ ""+consultant.getFeedbackFromCustomerList());
+        }
         // zeby sie zalogowac porownuje hash kombinacji hasla i loginu, poniewaz login jest unikalny dla kazdego
         // wiec mozna to potraktowac jak salt do zabezpieczenia
         // czyli osoby o roznych loginach ale tym samym hasle beda mialy rozne hashe jako "password hash"
