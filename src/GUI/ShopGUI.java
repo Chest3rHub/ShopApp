@@ -317,40 +317,31 @@ public class ShopGUI extends JFrame {
         consultantInfoTextArea.setWrapStyleWord(true);
         consultantInfoTextArea.setLineWrap(true);
 
+        Consultant.setAverageRatingForAllConsultants();
         consultantJList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                Consultant consultant = consultantJList.getSelectedValue();
-                String averageText="AVERAGE RATING: ";
-                String feedbackText="FEEDBACK: \n";
-                double rating=0;
-                for (Feedback feedback : consultant.getFeedbackFromCustomerList()){
-                    feedbackText+=feedback + "\n";
-                    if (feedback.getRating().equals(Rating.ONE)){
-                        rating+=1;
-                    } else if (feedback.getRating().equals(Rating.TWO)){
-                        rating+=2;
-                    } else if (feedback.getRating().equals(Rating.THREE)){
-                        rating+=3;
-                    } else if (feedback.getRating().equals(Rating.FOUR)){
-                        rating+=4;
-                    } else if (feedback.getRating().equals(Rating.FIVE)){
-                        rating+=5;
+                if (!consultantJList.isSelectionEmpty()){
+                    Consultant consultant = consultantJList.getSelectedValue();
+                    String averageText="AVERAGE RATING: ";
+                    String ratingText="";
+                    String feedbackText="FEEDBACK: \n";
+                    if (consultant.getFeedbackFromCustomerList().isEmpty()){
+                        ratingText="No feedback yet :(";
+                    } else {
+                        ratingText+=consultant.getAverageRating();
                     }
+                    averageText+=ratingText;
+                    for (Feedback feedback : consultant.getFeedbackFromCustomerList()){
+                        feedbackText+=feedback + "\n";
+                    }
+                    averageText+="\n\n";
+                    String finalText= averageText+ feedbackText;
+                    consultantInfoTextArea.setText(finalText);
+                }else {
+                    consultantInfoTextArea.setText("");
+                }
 
-                }
-                if (!consultant.getFeedbackFromCustomerList().isEmpty()){
-                    rating/=consultant.getFeedbackFromCustomerList().size();
-                    DecimalFormat decimalFormat = new DecimalFormat("#.00");
-                    String formattedRating = decimalFormat.format(rating);
-                    String noCommaRating= formattedRating.replace(",",".");
-                    averageText+=noCommaRating;
-                } else {
-                    averageText+="no feedback yet :(";
-                }
-                averageText+="\n\n";
-                String finalText= averageText+ feedbackText;
-                consultantInfoTextArea.setText(finalText);
             }
         });
         JPanel listAndInfoPanel = new JPanel(new BorderLayout());
@@ -371,8 +362,8 @@ public class ShopGUI extends JFrame {
         JRadioButton averageRatingDesc= new JRadioButton("Average rating desc");
         JRadioButton hireDateAscButton= new JRadioButton("Hire date asc");
         JRadioButton hireDateDescButton= new JRadioButton("Hire date desc");
-        JRadioButton lastNameAscButton= new JRadioButton("Last name asc");
-        JRadioButton lastNameDescButton= new JRadioButton("Last name desc");
+        JRadioButton lastNameAscButton= new JRadioButton("Last name A -> Z");
+        JRadioButton lastNameDescButton= new JRadioButton("Last name Z -> A");
 
         ButtonGroup buttonGroup= new ButtonGroup();
 
@@ -387,49 +378,75 @@ public class ShopGUI extends JFrame {
         noneButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                consultantJList.clearSelection();
+                consultantModel.removeAllElements();
+                for (Consultant consultant : Consultant.consultantList){
+                    consultantModel.addElement(consultant);
+                }
             }
         });
 
         averageRatingAsc.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                consultantJList.clearSelection();
 
+              //  consultantModel.removeAllElements();
+              //  List<Consultant> orderedBy= Consultant.getConsultantsOrderedByAverageRatingAsc(Consultant.consultantList);
+              //  consultantModel.addAll(orderedBy);
             }
         });
 
         averageRatingDesc.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                consultantJList.clearSelection();
 
+              //  consultantModel.removeAllElements();
+              //  List<Consultant> orderedBy= Consultant.getConsultantsOrderedByHireDateDesc(Consultant.consultantList);
+              //  consultantModel.addAll(orderedBy);
             }
         });
 
         hireDateAscButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                consultantJList.clearSelection();
+                consultantModel.removeAllElements();
+                List<Consultant> orderedBy= Consultant.getConsultantsOrderedByHireDateAsc(Consultant.consultantList);
+                consultantModel.addAll(orderedBy);
             }
         });
 
         hireDateDescButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                consultantJList.clearSelection();
+                consultantModel.removeAllElements();
+                List<Consultant> orderedBy= Consultant.getConsultantsOrderedByHireDateDesc(Consultant.consultantList);
+                consultantModel.addAll(orderedBy);
             }
         });
 
         lastNameAscButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                consultantJList.clearSelection();
 
+                consultantModel.removeAllElements();
+                List<Consultant> orderedBy= Consultant.getConsultantsOrderedByLastNameAsc(Consultant.consultantList);
+                consultantModel.addAll(orderedBy);
             }
         });
 
         lastNameDescButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                consultantJList.clearSelection();
 
+                consultantModel.removeAllElements();
+                List<Consultant> orderedBy= Consultant.getConsultantsOrderedByLastNameDesc(Consultant.consultantList);
+                consultantModel.addAll(orderedBy);
             }
         });
         orderByPanel.add(sortLabel);

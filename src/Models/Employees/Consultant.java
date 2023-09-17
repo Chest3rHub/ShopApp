@@ -8,6 +8,7 @@ import java.io.*;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Consultant extends AbstractEmployee {
     public static final String _consultantFeedbackFileName="src/Data/FeedbackConsultants.txt";
@@ -23,6 +24,7 @@ public class Consultant extends AbstractEmployee {
         feedbackFromManagerList= new ArrayList<>();
         feedbackFromCustomerList= new ArrayList<>();
         consultantList.add(this);
+        averageRating=0;
     }
     public static void readFeedbackFromFileAndAddToConsultants() throws IOException {
         /**
@@ -52,13 +54,47 @@ public class Consultant extends AbstractEmployee {
         }
     }
 
+    public static List<Consultant> getConsultantsOrderedByHireDateAsc(List<Consultant> parameterList){
+        return parameterList.stream()
+                .sorted((c1, c2) -> c1.getHireDate().compareTo(c2.getHireDate()))
+                .collect(Collectors.toList());
+
+    }
+    public static List<Consultant> getConsultantsOrderedByHireDateDesc(List< Consultant> parameterList){
+        return parameterList.stream()
+                .sorted((c1, c2) -> c2.getHireDate().compareTo(c1.getHireDate()))
+                .collect(Collectors.toList());
+    }
+    public static List<Consultant> getConsultantsOrderedByLastNameAsc(List<Consultant> parameterList){
+        return parameterList.stream()
+                .sorted((c1, c2) -> c1.getLastName().compareTo(c2.getLastName()))
+                .collect(Collectors.toList());
+    }
+    public static List<Consultant> getConsultantsOrderedByLastNameDesc(List<Consultant> parameterList){
+        return parameterList.stream()
+                .sorted((c1, c2) -> c2.getLastName().compareTo(c1.getLastName()))
+                .collect(Collectors.toList());
+    }
+
+    public static List<Consultant> getConsultantsOrderedByAverageRatingAsc(List<Consultant> parameterList){
+        return parameterList.stream()
+                .sorted(Comparator.comparingDouble(Consultant::getAverageRating))
+                .collect(Collectors.toList());
+    }
+
+    public static List<Consultant> getConsultantsOrderedByAverageRatingDesc(List<Consultant> parameterList){
+        return parameterList.stream()
+                .sorted(Comparator.comparingDouble(Consultant::getAverageRating).reversed())
+                .collect(Collectors.toList());
+    }
+
 
 
 
     public void addFeedback(Feedback feedback){
         this.feedbackFromCustomerList.add(feedback);
     }
-    public double calculateAverageRating(){
+    public void setAverageRating(){
         double sum=0;
         for (Feedback feedback : feedbackFromCustomerList){
             if (feedback.getRating().equals(Rating.ONE)){
@@ -79,7 +115,11 @@ public class Consultant extends AbstractEmployee {
         String noCommaRating= formattedRating.replace(",",".");
 
         this.averageRating=Double.parseDouble(noCommaRating);
-        return Double.parseDouble(noCommaRating);
+    }
+    public static void setAverageRatingForAllConsultants(){
+        for (Consultant consultant : consultantList){
+            consultant.setAverageRating();
+        }
     }
 
     public List<Feedback> getFeedbackFromCustomerList() {
@@ -88,6 +128,14 @@ public class Consultant extends AbstractEmployee {
 
     public void setFeedbackFromCustomerList(List<Feedback> feedbackFromCustomerList) {
         this.feedbackFromCustomerList = feedbackFromCustomerList;
+    }
+
+    public double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
     }
 
     public static Consultant getRandomConsultant(){
