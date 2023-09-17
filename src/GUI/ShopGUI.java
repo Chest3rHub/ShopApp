@@ -237,32 +237,12 @@ public class ShopGUI extends JFrame {
         buttonPanel.setLayout(new FlowLayout());
 
 
-        JButton button1 = new JButton("Wyswietl produkty");
-        JButton button2 = new JButton("Wyswietl produkty");
-        JButton button3 = new JButton("Dodaj produkt");
+
         JButton consultansButton= new JButton("Consultants");
 
         JButton logOutButton= logOutButton();
 
-        button1.addActionListener(new ActionListener() {
-            @Override
-                public void actionPerformed(ActionEvent e) {
-                    AbstractEmployee.showEmployees();
-                }
-            });
 
-        button2.addActionListener(new ActionListener() {
-            @Override
-                public void actionPerformed(ActionEvent e) {
-                    Product.showProducts();
-                }
-            });
-        button3.addActionListener(new ActionListener() {
-            @Override
-                public void actionPerformed(ActionEvent e) {
-                    ProductWithSizeAndQtity.showAllAvailableProductsWithSizesAndQtity();
-                }
-            });
         consultansButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -270,9 +250,7 @@ public class ShopGUI extends JFrame {
             }
         });
 
-        buttonPanel.add(button1);
-        buttonPanel.add(button2);
-        buttonPanel.add(button3);
+
         buttonPanel.add(logOutButton);
         buttonPanel.add(consultansButton);
         secondPanel.add(buttonPanel, BorderLayout.CENTER);
@@ -458,11 +436,6 @@ public class ShopGUI extends JFrame {
         orderByPanel.add(hireDateDescButton);
         orderByPanel.add(lastNameAscButton);
         orderByPanel.add(lastNameDescButton);
-
-
-        // na poczatku wyliczyc srednia ocen dla wszystkich pracownikow (jest metoda juz)
-        // pozniej stworzyc metode ktora bedzie sortowac ta liste jak juz bedzie wyliczona srednia
-        // i zmienic liczbe w gridlayout bo jest za malo wierszy
 
 
         secondPanel.add(listAndInfoPanel, BorderLayout.CENTER);
