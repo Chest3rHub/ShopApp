@@ -1,6 +1,12 @@
 ConsultantId;Rating;LocalDate;String comment
+6;FOUR;2023-09-19;Alright
+6;THREE;2023-09-19;Fine
+8;ONE;2023-09-19;Tragic! No help at all!
 11;FOUR;2023-09-15;Good
+11;TWO;2023-09-19;Not very nice...
+12;THREE;2023-09-19;Helped a bit
 13;FIVE;2023-09-15;OKAY!
 13;THREE;2023-09-16;Could be more polite but okay
 13;FIVE;2023-09-16;Excellent!
 14;FIVE;2023-09-18;Great help!
+15;FIVE;2023-09-19;Brilliant!

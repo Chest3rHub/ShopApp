@@ -1,7 +1,7 @@
 loginHash;firstName;lastName;address;tel;credits;email;currentCart;orders
 3401!null!null!null!0!0.0!null![]![]
 -2050287700!Lebioda!Junior!Krakow -0123-!123123123!550.04!awsdkja@awd.pl![]![10537]
-2162502!asd!asd!asd!123123123!80.7!aaa![2;SOCKS;Skarpetki;Adidas;10.00;Cienkie;S;1]![10531, 10532]
+2162502!asd!asd!asd!123123123!70.71!aaa![]![10531, 10532, 10540]
 2030634502!null!null!null!0!0.0!null![]![]
 97!null!null!null!0!0.0!null![]![]
--1802365190!Szymon!Sawicki!Legionowo 05-120!123123123!110.76!email@www.pl![1;HOODIE;Bluza rozpinana;Nike;199.99;Wygodna;M;17]![10533, 10534, 10535, 10536]
+-1802365190!Szymon!Sawicki!Legionowo 05-120!123123123!350.88!email@www.pl![]![10533, 10534, 10535, 10536, 10538, 10539]
