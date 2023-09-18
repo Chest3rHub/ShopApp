@@ -368,10 +368,10 @@ public class ShopGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 consultantJList.clearSelection();
-
-              //  consultantModel.removeAllElements();
-              //  List<Consultant> orderedBy= Consultant.getConsultantsOrderedByAverageRatingAsc(Consultant.consultantList);
-              //  consultantModel.addAll(orderedBy);
+                Consultant.setAverageRatingForAllConsultants();
+                consultantModel.removeAllElements();
+                List<Consultant> orderedBy= Consultant.getConsultantsOrderedByAverageRatingAsc(Consultant.consultantList);
+                consultantModel.addAll(orderedBy);
             }
         });
 
@@ -380,9 +380,10 @@ public class ShopGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 consultantJList.clearSelection();
 
-              //  consultantModel.removeAllElements();
-              //  List<Consultant> orderedBy= Consultant.getConsultantsOrderedByHireDateDesc(Consultant.consultantList);
-              //  consultantModel.addAll(orderedBy);
+                Consultant.setAverageRatingForAllConsultants();
+                consultantModel.removeAllElements();
+                List<Consultant> orderedBy= Consultant.getConsultantsOrderedByAverageRatingDesc(Consultant.consultantList);
+                consultantModel.addAll(orderedBy);
             }
         });
 
