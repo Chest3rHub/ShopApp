@@ -263,6 +263,9 @@ public class ShopGUI extends JFrame {
     }
 
     public static void changeScreenToConsultantsAdmin(){
+        /**
+         * This method changes frame to consultants screen for admin with options to display their feedback and order them by few factors
+         */
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
         frame.setSize(600, 500);
