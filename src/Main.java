@@ -30,10 +30,10 @@ public class Main {
         }catch (Exception e){
             e.printStackTrace();
         }
-        Product.showProducts();
-        System.out.println("======");
-        AbstractEmployee.showEmployees();
-        System.out.println("======");
+//        Product.showProducts();
+//        System.out.println("======");
+//        AbstractEmployee.showEmployees();
+//        System.out.println("======");
         try {
           //  Shop.seedProductData();
 
@@ -44,9 +44,9 @@ public class Main {
            // e.getMessage();
         }
 
-        for (Consultant consultant : Consultant.consultantList){
-            System.out.println(consultant.getId() + consultant.getLastName()+ ""+consultant.getFeedbackFromCustomerList());
-        }
+//        for (Consultant consultant : Consultant.consultantList){
+//            System.out.println(consultant.getId() + consultant.getLastName()+ ""+consultant.getFeedbackFromCustomerList());
+//        }
         // zeby sie zalogowac porownuje hash kombinacji hasla i loginu, poniewaz login jest unikalny dla kazdego
         // wiec mozna to potraktowac jak salt do zabezpieczenia
         // czyli osoby o roznych loginach ale tym samym hasle beda mialy rozne hashe jako "password hash"

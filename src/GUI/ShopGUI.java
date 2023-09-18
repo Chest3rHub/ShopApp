@@ -2137,7 +2137,6 @@ public class ShopGUI extends JFrame {
         try (BufferedReader br = new BufferedReader(new FileReader(customersFileName))) {
             String line;
             line=br.readLine();
-            System.out.println("METODA READCUSTOMERSFROMFILE:");
             while ((line = br.readLine()) != null) {
                 String[] values = line.split("!");
                 String loginHashed = values[0];
@@ -2151,9 +2150,6 @@ public class ShopGUI extends JFrame {
                 String email=values[6];
                 String currentCart=values[7];
                 String orders=values[8];
-
-                System.out.println("Pobrany koszyk : " + currentCart);
-                System.out.println("Pobrane id zamowien: " + orders);
 
                 List<ProductInCartDTO> cartList= new ArrayList<>();
 
