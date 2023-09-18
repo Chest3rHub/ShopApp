@@ -173,6 +173,9 @@ public String toString(){
     }
 
     public static void saveProductsToFile(){
+        /**
+         * This method saves products to file
+         */
         try{
             BufferedWriter fileWriter = new BufferedWriter(new FileWriter(productsFileName));
             for (Product product : allProducts){
@@ -184,7 +187,6 @@ public String toString(){
                 fileWriter.flush();
             }
             fileWriter.close();
-          //  System.out.println("Zapisano do pliku!");
         } catch (Exception e){
             e.printStackTrace();
         }

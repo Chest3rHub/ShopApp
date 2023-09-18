@@ -73,6 +73,7 @@ public class ShopGUI extends JFrame {
                     saveCustomersChangesToFile();
                     Order.saveOrdersToFile();
                     Consultant.saveConsultantFeedbackToFile();
+                    Product.saveProductsToFile();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -229,6 +230,7 @@ public class ShopGUI extends JFrame {
          */
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
+        frame.setSize(300, 200);
 
         JLabel welcomeLabel = new JLabel("ADMIN");
         welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -242,6 +244,15 @@ public class ShopGUI extends JFrame {
 
         JButton logOutButton= logOutButton();
 
+        JButton revenueButton= new JButton("Revenue");
+
+        revenueButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                revenueScreenAdmin();
+            }
+        });
+
 
         consultansButton.addActionListener(new ActionListener() {
             @Override
@@ -253,9 +264,42 @@ public class ShopGUI extends JFrame {
 
         buttonPanel.add(logOutButton);
         buttonPanel.add(consultansButton);
+        buttonPanel.add(revenueButton);
         secondPanel.add(buttonPanel, BorderLayout.CENTER);
 
         frame.setTitle("Menu: ADMIN");
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(secondPanel);
+        frame.getContentPane().revalidate();
+        frame.getContentPane().repaint();
+    }
+    public static void revenueScreenAdmin(){
+        /**
+         * This method opens frame which displays total revenue to Admin
+         */
+
+        secondPanel = new JPanel();
+        secondPanel.setLayout(new GridLayout(4,1));
+        frame.setSize(250, 150);
+
+        JLabel revenueLabel= new JLabel("TOTAL REVENUE: ");
+        revenueLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,20));
+        revenueLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+        JLabel revenueValueLabel= new JLabel(Order.totalRevenue + "PLN");
+        revenueValueLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,16));
+        revenueValueLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+        JButton backButton= backToMenuAdmin();
+        JPanel backButtonPanel= new JPanel(new FlowLayout());
+
+        backButtonPanel.add(backButton);
+
+        secondPanel.add(revenueLabel);
+        secondPanel.add(revenueValueLabel);
+        secondPanel.add(backButtonPanel);
+
+        frame.setTitle("Revenue");
         frame.getContentPane().removeAll();
         frame.getContentPane().add(secondPanel);
         frame.getContentPane().revalidate();
