@@ -150,6 +150,16 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
         frame.setVisible(true);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+        int windowWidth = frame.getWidth();
+        int windowHeight = frame.getHeight();
+        int x = (screenWidth - windowWidth) / 2;
+        int y = (screenHeight - windowHeight) / 2;
+
+        frame.setLocation(x, y);
     }
     public static void loggedOutScreen(){
         /**
@@ -221,6 +231,7 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().repaint();
 
         frame.setVisible(true);
+
     }
 
 
@@ -272,6 +283,15 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().add(secondPanel);
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+        int windowWidth = frame.getWidth();
+        int windowHeight = frame.getHeight();
+        int x = (screenWidth - windowWidth) / 2;
+        int y = (screenHeight - windowHeight) / 2;
+
+        frame.setLocation(x, y);
     }
     public static void revenueScreenAdmin(){
         /**
@@ -304,6 +324,16 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().add(secondPanel);
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+        int windowWidth = frame.getWidth();
+        int windowHeight = frame.getHeight();
+        int x = (screenWidth - windowWidth) / 2;
+        int y = (screenHeight - windowHeight) / 2;
+
+        frame.setLocation(x, y);
     }
 
     public static void changeScreenToConsultantsAdmin(){
@@ -495,6 +525,16 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().add(secondPanel);
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+        int windowWidth = frame.getWidth();
+        int windowHeight = frame.getHeight();
+        int x = (screenWidth - windowWidth) / 2;
+        int y = (screenHeight - windowHeight) / 2;
+
+        frame.setLocation(x, y);
     }
 
     public static void managerLoggedIn(){
@@ -594,6 +634,16 @@ public class ShopGUI extends JFrame {
         frame.pack();
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+        int windowWidth = frame.getWidth();
+        int windowHeight = frame.getHeight();
+        int x = (screenWidth - windowWidth) / 2;
+        int y = (screenHeight - windowHeight) / 2;
+
+        frame.setLocation(x, y);
     }
     public static void helpMenuClient(Customer customer, String loginEntered){
         /**
@@ -645,6 +695,16 @@ public class ShopGUI extends JFrame {
         frame.pack();
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+        int windowWidth = frame.getWidth();
+        int windowHeight = frame.getHeight();
+        int x = (screenWidth - windowWidth) / 2;
+        int y = (screenHeight - windowHeight) / 2;
+
+        frame.setLocation(x, y);
     }
 
     public static void callingConsultantScreen(Customer customer, String loginEntered){
@@ -680,6 +740,16 @@ public class ShopGUI extends JFrame {
 
         timer.setRepeats(false);
         timer.start();
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+        int windowWidth = frame.getWidth();
+        int windowHeight = frame.getHeight();
+        int x = (screenWidth - windowWidth) / 2;
+        int y = (screenHeight - windowHeight) / 2;
+
+        frame.setLocation(x, y);
     }
 
     public static void callFinishedScreen(Customer customer, String loginEntered, Consultant consultant){
@@ -734,6 +804,16 @@ public class ShopGUI extends JFrame {
         //  frame.pack();
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+        int windowWidth = frame.getWidth();
+        int windowHeight = frame.getHeight();
+        int x = (screenWidth - windowWidth) / 2;
+        int y = (screenHeight - windowHeight) / 2;
+
+        frame.setLocation(x, y);
     }
     public static void leaveFeedbackToConsultantMenu(Customer customer, String loginEntered, Consultant consultant){
         /**
@@ -838,6 +918,16 @@ public class ShopGUI extends JFrame {
         //  frame.pack();
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+        int windowWidth = frame.getWidth();
+        int windowHeight = frame.getHeight();
+        int x = (screenWidth - windowWidth) / 2;
+        int y = (screenHeight - windowHeight) / 2;
+
+        frame.setLocation(x, y);
     }
 
 
@@ -2099,6 +2189,16 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().add(secondPanel);
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+        int windowWidth = frame.getWidth();
+        int windowHeight = frame.getHeight();
+        int x = (screenWidth - windowWidth) / 2;
+        int y = (screenHeight - windowHeight) / 2;
+
+        frame.setLocation(x, y);
     }
 
     public static Role login(String loginEntered, String passwordEntered) throws Exception {
@@ -2335,6 +2435,16 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
         frame.setVisible(true);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+        int windowWidth = frame.getWidth();
+        int windowHeight = frame.getHeight();
+        int x = (screenWidth - windowWidth) / 2;
+        int y = (screenHeight - windowHeight) / 2;
+
+        frame.setLocation(x, y);
     }
     public static void register(String loginEntered, String passwordEntered, String confirmedPasswordEntered) throws Exception{
         /**
@@ -2524,6 +2634,16 @@ public class ShopGUI extends JFrame {
             frame.getContentPane().revalidate();
             frame.getContentPane().repaint();
             frame.setVisible(true);
+
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            int screenWidth = screenSize.width;
+            int screenHeight = screenSize.height;
+            int windowWidth = frame.getWidth();
+            int windowHeight = frame.getHeight();
+            int x = (screenWidth - windowWidth) / 2;
+            int y = (screenHeight - windowHeight) / 2;
+
+            frame.setLocation(x, y);
         }
         public static void accountScreenCustomer(Customer customer, String loginEntered){
             /**
@@ -2661,6 +2781,16 @@ public class ShopGUI extends JFrame {
             frame.getContentPane().revalidate();
             frame.getContentPane().repaint();
             frame.setVisible(true);
+
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            int screenWidth = screenSize.width;
+            int screenHeight = screenSize.height;
+            int windowWidth = frame.getWidth();
+            int windowHeight = frame.getHeight();
+            int x = (screenWidth - windowWidth) / 2;
+            int y = (screenHeight - windowHeight) / 2;
+
+            frame.setLocation(x, y);
         }
         public static void cartScreen(Customer customer, String loginEntered){
             /**
@@ -2747,6 +2877,16 @@ public class ShopGUI extends JFrame {
             frame.getContentPane().revalidate();
             frame.getContentPane().repaint();
             frame.setVisible(true);
+
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            int screenWidth = screenSize.width;
+            int screenHeight = screenSize.height;
+            int windowWidth = frame.getWidth();
+            int windowHeight = frame.getHeight();
+            int x = (screenWidth - windowWidth) / 2;
+            int y = (screenHeight - windowHeight) / 2;
+
+            frame.setLocation(x, y);
         }
         public static double calculateCartCost(List<ProductInCartDTO> productInCartDTOS){
             /**
@@ -2896,5 +3036,15 @@ public class ShopGUI extends JFrame {
             frame.getContentPane().revalidate();
             frame.getContentPane().repaint();
             frame.setVisible(true);
+
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            int screenWidth = screenSize.width;
+            int screenHeight = screenSize.height;
+            int windowWidth = frame.getWidth();
+            int windowHeight = frame.getHeight();
+            int x = (screenWidth - windowWidth) / 2;
+            int y = (screenHeight - windowHeight) / 2;
+
+            frame.setLocation(x, y);
         }
 }
