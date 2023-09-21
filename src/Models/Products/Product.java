@@ -29,7 +29,7 @@ public class Product {
         this.brand=brand;
         this.price=price;
         this.description=description;
-
+        allProducts.add(this);
     }
 
     public static void addProduct(){
@@ -115,7 +115,7 @@ public String toString(){
                     String priceString=  lineScanner.next();
                     double price= Double.parseDouble(priceString);
                     String description= lineScanner.next();
-                allProducts.add(new Product(category,name,brand,price,description));
+                    Product product= new Product(category,name,brand,price,description);
             }
             idCounter+=productsCounter;
 

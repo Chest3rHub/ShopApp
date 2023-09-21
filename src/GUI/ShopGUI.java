@@ -608,6 +608,32 @@ public class ShopGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                try {
+                    if (!Objects.equals(categoryJComboBox.getSelectedItem(), Category.ACCESSORIES)
+                            && !Objects.equals(categoryJComboBox.getSelectedItem(), Category.HOODIE)
+                            && !Objects.equals(categoryJComboBox.getSelectedItem(), Category.PANTS)
+                            && !Objects.equals(categoryJComboBox.getSelectedItem(), Category.SHIRT)
+                            && !Objects.equals(categoryJComboBox.getSelectedItem(), Category.SOCKS)){
+                        throw new Exception("Select a category first!");
+                    }
+                    Category category= (Category)categoryJComboBox.getSelectedItem();
+                    String productName= productNameTextField.getText();
+                    String brandName= brandTextField.getText();
+                    String price= priceTextField.getText();
+                    String description= descriptionTextField.getText();
+                    addNewProduct(category,productName, brandName,price,description);
+
+                    productNameTextField.setText("");
+                    brandTextField.setText("");
+                    priceTextField.setText("");
+                    descriptionTextField.setText("");
+
+                    JOptionPane.showMessageDialog(frame,"Added new product!", "Congrats!", JOptionPane.PLAIN_MESSAGE);
+
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(frame,ex.getMessage(),"Error", JOptionPane.ERROR_MESSAGE);
+                }
+
             }
         });
         JPanel buttonsPanel= new JPanel(new GridLayout(1,2));
@@ -639,6 +665,27 @@ public class ShopGUI extends JFrame {
         int y = (screenHeight - windowHeight) / 2;
 
         frame.setLocation(x, y);
+    }
+    public static void addNewProduct(Category category, String productNameString, String brandString, String priceString, String descriptionString) throws Exception {
+        if (productNameString.isBlank()){
+            throw new Exception("Product name field is empty!");
+        }
+        if (brandString.isBlank()){
+            throw new Exception("Brand field is empty!");
+        }
+        if (priceString.isBlank()){
+            throw new Exception("Price field is empty!");
+        }
+        double price;
+        try{
+            price= Double.parseDouble(priceString);
+        } catch(Exception e){
+            throw new Exception("Type a number!");
+        }
+        if (descriptionString.isBlank()){
+            throw new Exception("Description field is empty!");
+        }
+        Product product= new Product(category,productNameString,brandString,price,descriptionString);
     }
     public static void managerLoggedIn(){
 
