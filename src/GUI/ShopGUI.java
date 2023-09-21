@@ -257,6 +257,8 @@ public class ShopGUI extends JFrame {
 
         JButton revenueButton= new JButton("Revenue");
 
+        JButton addProductButton= new JButton("Add Product");
+
         revenueButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -271,8 +273,15 @@ public class ShopGUI extends JFrame {
                 changeScreenToConsultantsAdmin();
             }
         });
+        addProductButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addNewProductScreenAdmin();
+            }
+        });
 
 
+        buttonPanel.add(addProductButton);
         buttonPanel.add(logOutButton);
         buttonPanel.add(consultansButton);
         buttonPanel.add(revenueButton);
@@ -537,6 +546,64 @@ public class ShopGUI extends JFrame {
         frame.setLocation(x, y);
     }
 
+    public static void addNewProductScreenAdmin(){
+        secondPanel = new JPanel();
+        secondPanel.setLayout(new GridLayout(10,2));
+        frame.setSize(400, 300);
+
+        JLabel categoryLabel= new JLabel("CATEGORY:");
+
+        JRadioButton shirtRadioButton= new JRadioButton("Shirt");
+        JRadioButton hoodieRadioButton= new JRadioButton("Hoodie");
+        JRadioButton socksRadioButton= new JRadioButton("Socks");
+        JRadioButton pantsRadioButton= new JRadioButton("Pants");
+        JRadioButton accessoriesRadioButton= new JRadioButton("Accessories");
+
+        ButtonGroup buttonGroup= new ButtonGroup();
+        buttonGroup.add(shirtRadioButton);
+        buttonGroup.add(hoodieRadioButton);
+        buttonGroup.add(socksRadioButton);
+        buttonGroup.add(pantsRadioButton);
+        buttonGroup.add(accessoriesRadioButton);
+
+        JPanel buttonPanel= new JPanel(new FlowLayout());
+
+        buttonPanel.add(shirtRadioButton);
+        buttonPanel.add(hoodieRadioButton);
+        buttonGroup.add(socksRadioButton);
+        buttonGroup.add(pantsRadioButton);
+        buttonGroup.add(accessoriesRadioButton);
+
+        JComboBox<Category> categoryJComboBox= new JComboBox<>();
+        categoryJComboBox.addItem(Category.ACCESSORIES);
+        categoryJComboBox.addItem(Category.HOODIE);
+        categoryJComboBox.addItem(Category.PANTS);
+        categoryJComboBox.addItem(Category.SHIRT);
+        categoryJComboBox.addItem(Category.SOCKS);
+
+
+        secondPanel.add(categoryLabel);
+        secondPanel.add(categoryJComboBox);
+
+
+        secondPanel.add(buttonPanel);
+
+        frame.setTitle("Add Product");
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(secondPanel);
+        frame.getContentPane().revalidate();
+        frame.getContentPane().repaint();
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+        int windowWidth = frame.getWidth();
+        int windowHeight = frame.getHeight();
+        int x = (screenWidth - windowWidth) / 2;
+        int y = (screenHeight - windowHeight) / 2;
+
+        frame.setLocation(x, y);
+    }
     public static void managerLoggedIn(){
 
     }
