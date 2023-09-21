@@ -258,7 +258,16 @@ public class ShopGUI extends JFrame {
 
         JButton revenueButton= new JButton("Revenue");
 
-        JButton addProductButton= new JButton("Add Product");
+        JButton addProductButton= new JButton("New Product");
+
+        JButton addSizesAndQuantitiesButton= new JButton("Edit Products");
+
+        addSizesAndQuantitiesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addQuantitiesAndSizesToProductScreenAdmin();
+            }
+        });
 
         revenueButton.addActionListener(new ActionListener() {
             @Override
@@ -651,6 +660,54 @@ public class ShopGUI extends JFrame {
        // secondPanel.add(buttonPanel);
 
         frame.setTitle("Add Product");
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(secondPanel);
+        frame.getContentPane().revalidate();
+        frame.getContentPane().repaint();
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+        int windowWidth = frame.getWidth();
+        int windowHeight = frame.getHeight();
+        int x = (screenWidth - windowWidth) / 2;
+        int y = (screenHeight - windowHeight) / 2;
+
+        frame.setLocation(x, y);
+    }
+    public static void addQuantitiesAndSizesToProductScreenAdmin(){
+        secondPanel = new JPanel();
+        secondPanel.setLayout(new GridLayout(6,1,10,10));
+        frame.setSize(500, 400);
+
+        DefaultListModel<Product> productDefaultListModel = new DefaultListModel<>();
+        JList<Product> productJList = new JList<>(productDefaultListModel);
+        for (Product product : Product.allProducts) {
+            productDefaultListModel.addElement(product);
+        }
+        productJList.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(
+                    JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof Product) {
+                    value = "ID: " + ((Product) value).getId()
+                            + ", CATEGORY: " + ((Product) value).getCategory()
+                            + ", PRODUCT: " + ((Product) value).getName()
+                            + ", BRAND: " + ((Product) value).getBrand()
+                            + ", PRICE: " + ((Product) value).getPrice();
+
+                }
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
+
+        // dodac to do panelu bo nic nie jest jeszcze pododawane
+        //JList z produktami dodac
+        // tylko zastanowic sie czy product with size and quantity czy zwykle produkty
+        // i opcje zmiany ceny
+
+
+        frame.setTitle("Edit Products");
         frame.getContentPane().removeAll();
         frame.getContentPane().add(secondPanel);
         frame.getContentPane().revalidate();
