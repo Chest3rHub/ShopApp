@@ -17,6 +17,7 @@ import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.basic.BasicGraphicsUtils;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -548,31 +549,12 @@ public class ShopGUI extends JFrame {
 
     public static void addNewProductScreenAdmin(){
         secondPanel = new JPanel();
-        secondPanel.setLayout(new GridLayout(10,2));
+        secondPanel.setLayout(new GridLayout(6,1,10,10));
         frame.setSize(400, 300);
 
         JLabel categoryLabel= new JLabel("CATEGORY:");
+        categoryLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,16));
 
-        JRadioButton shirtRadioButton= new JRadioButton("Shirt");
-        JRadioButton hoodieRadioButton= new JRadioButton("Hoodie");
-        JRadioButton socksRadioButton= new JRadioButton("Socks");
-        JRadioButton pantsRadioButton= new JRadioButton("Pants");
-        JRadioButton accessoriesRadioButton= new JRadioButton("Accessories");
-
-        ButtonGroup buttonGroup= new ButtonGroup();
-        buttonGroup.add(shirtRadioButton);
-        buttonGroup.add(hoodieRadioButton);
-        buttonGroup.add(socksRadioButton);
-        buttonGroup.add(pantsRadioButton);
-        buttonGroup.add(accessoriesRadioButton);
-
-        JPanel buttonPanel= new JPanel(new FlowLayout());
-
-        buttonPanel.add(shirtRadioButton);
-        buttonPanel.add(hoodieRadioButton);
-        buttonGroup.add(socksRadioButton);
-        buttonGroup.add(pantsRadioButton);
-        buttonGroup.add(accessoriesRadioButton);
 
         JComboBox<Category> categoryJComboBox= new JComboBox<>();
         categoryJComboBox.addItem(Category.ACCESSORIES);
@@ -581,12 +563,66 @@ public class ShopGUI extends JFrame {
         categoryJComboBox.addItem(Category.SHIRT);
         categoryJComboBox.addItem(Category.SOCKS);
 
+        JPanel categoryPanel= new JPanel(new GridLayout(1,2));
+        categoryPanel.add(categoryLabel);
+        categoryPanel.add(categoryJComboBox);
 
-        secondPanel.add(categoryLabel);
-        secondPanel.add(categoryJComboBox);
+        JLabel productNameLabel= new JLabel("PRODUCT NAME: ");
+        productNameLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,16));
 
+        JTextField productNameTextField= new JTextField();
 
-        secondPanel.add(buttonPanel);
+        JPanel productNamePanel= new JPanel(new GridLayout(1,2));
+
+        productNamePanel.add(productNameLabel);
+        productNamePanel.add(productNameTextField);
+
+        JLabel brandLabel= new JLabel("BRAND: ");
+        brandLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,16));
+        JTextField brandTextField= new JTextField();
+
+        JPanel brandPanel= new JPanel(new GridLayout(1,2));
+        brandPanel.add(brandLabel);
+        brandPanel.add(brandTextField);
+
+        JLabel priceLabel= new JLabel("PRICE: ");
+        priceLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,16));
+        JTextField priceTextField= new JTextField();
+
+        JPanel pricePanel= new JPanel(new GridLayout(1,2));
+        pricePanel.add(priceLabel);
+        pricePanel.add(priceTextField);
+
+        JLabel descriptionLabel= new JLabel("DESCRIPTION: ");
+        descriptionLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,16));
+        JTextField descriptionTextField= new JTextField();
+
+        JPanel descriptionPanel= new JPanel(new GridLayout(1,2));
+        descriptionPanel.add(descriptionLabel);
+        descriptionPanel.add(descriptionTextField);
+
+        JButton backButton= backToMenuAdmin();
+        JButton addProductButton= new JButton("Add");
+
+        addProductButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        JPanel buttonsPanel= new JPanel(new GridLayout(1,2));
+        buttonsPanel.add(backButton);
+        buttonsPanel.add(addProductButton);
+
+        secondPanel.add(categoryPanel);
+        secondPanel.add(productNamePanel);
+
+        secondPanel.add(brandPanel);
+        secondPanel.add(pricePanel);
+        secondPanel.add(descriptionPanel);
+        secondPanel.add(buttonsPanel);
+
+       // secondPanel.add(buttonPanel);
 
         frame.setTitle("Add Product");
         frame.getContentPane().removeAll();
