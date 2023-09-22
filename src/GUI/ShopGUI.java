@@ -723,6 +723,10 @@ public class ShopGUI extends JFrame {
         sizesAndQuantitiesTextArea.setEditable(false);
         sizesAndQuantitiesTextArea.setWrapStyleWord(true);
         sizesAndQuantitiesTextArea.setLineWrap(true);
+
+        JComboBox<String> removeSizeComboBox= new JComboBox<>();
+        JComboBox<Integer> removeQuantitiesComboBox= new JComboBox<>();
+
         productJList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -742,9 +746,71 @@ public class ShopGUI extends JFrame {
                     }
                     String finalText= sizesText + sizesAndQuantitesText;
                     sizesAndQuantitiesTextArea.setText(finalText);
+
+
+                    String [] partsEmpty= new String[0];
+                    removeSizeComboBox.setModel(new DefaultComboBoxModel<>(partsEmpty));
+                    List<String> sizesToArrayList= new ArrayList<>();
+                    // Rozdzielamy napis, aby uzyskać dostępne rozmiary
+                    LinkedHashMap<Size,Integer> sizes= productWithSizeAndQtity.getSizesAndQuantitiesMap();
+                    // mozna usunac ta liste pod spodem
+                    List<Integer> quantitiesToArrayList= new ArrayList<>();
+                    if (sizes.containsKey(Size.XS)){
+                        sizesToArrayList.add("XS");
+                        quantitiesToArrayList.add(sizes.get(Size.XS));
+                    }
+                    if (sizes.containsKey(Size.S)){
+                        sizesToArrayList.add("S");
+                        quantitiesToArrayList.add(sizes.get(Size.S));
+                    }
+                    if (sizes.containsKey(Size.M)){
+                        sizesToArrayList.add("M");
+                        quantitiesToArrayList.add(sizes.get(Size.M));
+                    }
+                    if (sizes.containsKey(Size.L)){
+                        sizesToArrayList.add("L");
+                        quantitiesToArrayList.add(sizes.get(Size.L));
+                    }
+                    if (sizes.containsKey(Size.XL)){
+                        sizesToArrayList.add("XL");
+                        quantitiesToArrayList.add(sizes.get(Size.L));
+                    }
+                    if (sizes.containsKey(Size.ONESIZE)){
+                        sizesToArrayList.add("ONESIZE");
+                        quantitiesToArrayList.add(sizes.get(Size.ONESIZE));
+                    }
+                    String[] parts= sizesToArrayList.toArray(new String[0]);
+
+
+                    removeSizeComboBox.setModel(new DefaultComboBoxModel<>(parts));
+                    if (sizes.isEmpty()){
+                        removeSizeComboBox.setEnabled(false);
+                        removeQuantitiesComboBox.setModel(new DefaultComboBoxModel(partsEmpty));
+                        removeQuantitiesComboBox.setEnabled(false);
+                    } else {
+                        removeSizeComboBox.setEnabled(true);
+                    }
                 }else {
                     saveChangesButton.setEnabled(false);
                 }
+            }
+        });
+
+        removeSizeComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    Object sizeObject= removeSizeComboBox.getSelectedItem();
+                    String sizeString= String.valueOf(sizeObject);
+                    Size size= Size.valueOf(sizeString);
+                    ProductWithSizeAndQtity selectedProduct = productJList.getSelectedValue();
+                    int quantity= selectedProduct.getSizesAndQuantitiesMap().get(size);
+                    String[] parts= new String[quantity];
+                    for (int i=0; i <quantity; i++){
+                        parts[i]=String.valueOf(i+1);
+                    }
+                    removeQuantitiesComboBox.setModel(new DefaultComboBoxModel(parts));
+                    removeQuantitiesComboBox.setEnabled(true);
+
             }
         });
 
@@ -789,6 +855,8 @@ public class ShopGUI extends JFrame {
         sizeJComboBox.addItem(Size.L);
         sizeJComboBox.addItem(Size.XL);
 
+
+
         optionsPanel.add(sizeLabel);
         optionsPanel.add(sizeJComboBox);
         optionsPanel.add(quantityLabel);
@@ -796,6 +864,8 @@ public class ShopGUI extends JFrame {
         optionsPanel.add(changePricePanel);
         optionsPanel.add(changePriceField);
         optionsPanel.add(removeLabel);
+        optionsPanel.add(removeSizeComboBox);
+        optionsPanel.add(removeQuantitiesComboBox);
 
 
         buttonPanel.add(backButton);
