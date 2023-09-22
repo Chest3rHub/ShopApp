@@ -725,7 +725,9 @@ public class ShopGUI extends JFrame {
         sizesAndQuantitiesTextArea.setLineWrap(true);
 
         JComboBox<String> removeSizeComboBox= new JComboBox<>();
+        removeSizeComboBox.setEnabled(false);
         JComboBox<Integer> removeQuantitiesComboBox= new JComboBox<>();
+        removeQuantitiesComboBox.setEnabled(false);
 
         productJList.addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -733,6 +735,7 @@ public class ShopGUI extends JFrame {
                 sizesAndQuantitiesTextArea.setText("");
 
                 if (!productJList.isSelectionEmpty()){
+                    removeQuantitiesComboBox.setEnabled(false);
                     saveChangesButton.setEnabled(true);
                     optionsPanel.setEnabled(true);
 
@@ -849,12 +852,188 @@ public class ShopGUI extends JFrame {
         JLabel removeLabel= new JLabel("REMOVE: ");
 
         JComboBox<Size> sizeJComboBox= new JComboBox<>();
+        sizeJComboBox.addItem(Size.CHOOSE);
         sizeJComboBox.addItem(Size.XS);
         sizeJComboBox.addItem(Size.S);
         sizeJComboBox.addItem(Size.M);
         sizeJComboBox.addItem(Size.L);
         sizeJComboBox.addItem(Size.XL);
 
+
+        saveChangesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    if (productJList.isSelectionEmpty()){
+                        throw new Exception("Select a product first!");
+                    }
+                    if (sizeJComboBox.getSelectedItem().equals(Size.CHOOSE)){
+                        if (!quantityTextField.getText().isEmpty()){
+                            throw new Exception("Choose a size first!");
+                        }
+                    } else if (sizeJComboBox.getSelectedItem().equals(Size.XS)){
+                        if (quantityTextField.getText().isBlank()){
+                            throw new Exception("Type a quantity to add!");
+                        }
+                        try{
+                            String quantityString= quantityTextField.getText();
+                            int quantity=Integer.parseInt(quantityString);
+                            Object sizeObject= sizeJComboBox.getSelectedItem();
+                            String sizeString= String.valueOf(sizeObject);
+                            Size size= Size.valueOf(sizeString);
+
+                            ProductWithSizeAndQtity productWithSizeAndQtity= productJList.getSelectedValue();
+                            if (productWithSizeAndQtity.getSizesAndQuantitiesMap().get(size) != null){
+                                int currentQuantity= productWithSizeAndQtity.getSizesAndQuantitiesMap().get(size);
+                                int finalQuantity= quantity+currentQuantity;
+                                productWithSizeAndQtity.getSizesAndQuantitiesMap().put(size,finalQuantity);
+                            }else {
+                                productWithSizeAndQtity.getSizesAndQuantitiesMap().put(size,quantity);
+                            }
+                        }catch (Exception exception){
+                            throw new Exception("Type an integer!");
+                        }
+
+                    } else if (sizeJComboBox.getSelectedItem().equals(Size.S)){
+                        if (quantityTextField.getText().isBlank()){
+                            throw new Exception("Type a quantity to add!");
+                        }
+                        try{
+                            String quantityString= quantityTextField.getText();
+                            int quantity=Integer.parseInt(quantityString);
+                            Object sizeObject= sizeJComboBox.getSelectedItem();
+                            String sizeString= String.valueOf(sizeObject);
+                            Size size= Size.valueOf(sizeString);
+
+                            ProductWithSizeAndQtity productWithSizeAndQtity= productJList.getSelectedValue();
+                            if (productWithSizeAndQtity.getSizesAndQuantitiesMap().get(size) != null){
+                                int currentQuantity= productWithSizeAndQtity.getSizesAndQuantitiesMap().get(size);
+                                int finalQuantity= quantity+currentQuantity;
+                                productWithSizeAndQtity.getSizesAndQuantitiesMap().put(size,finalQuantity);
+                            }else {
+                                productWithSizeAndQtity.getSizesAndQuantitiesMap().put(size,quantity);
+                            }
+                        }catch (Exception exception){
+                            throw new Exception("Type an integer!");
+                        }
+
+                    } else if (sizeJComboBox.getSelectedItem().equals(Size.M)){
+                        if (quantityTextField.getText().isBlank()){
+                            throw new Exception("Type a quantity to add!");
+                        }
+                        try{
+                            String quantityString= quantityTextField.getText();
+                            int quantity=Integer.parseInt(quantityString);
+                            Object sizeObject= sizeJComboBox.getSelectedItem();
+                            String sizeString= String.valueOf(sizeObject);
+                            Size size= Size.valueOf(sizeString);
+
+                            ProductWithSizeAndQtity productWithSizeAndQtity= productJList.getSelectedValue();
+                            if (productWithSizeAndQtity.getSizesAndQuantitiesMap().get(size) != null){
+                                int currentQuantity= productWithSizeAndQtity.getSizesAndQuantitiesMap().get(size);
+                                int finalQuantity= quantity+currentQuantity;
+                                productWithSizeAndQtity.getSizesAndQuantitiesMap().put(size,finalQuantity);
+                            }else {
+                                productWithSizeAndQtity.getSizesAndQuantitiesMap().put(size,quantity);
+                            }
+                        }catch (Exception exception){
+                            throw new Exception("Type an integer!");
+                        }
+
+                    } else if (sizeJComboBox.getSelectedItem().equals(Size.L)){
+                        if (quantityTextField.getText().isBlank()){
+                            throw new Exception("Type a quantity to add!");
+                        }
+                        try{
+                            String quantityString= quantityTextField.getText();
+                            int quantity=Integer.parseInt(quantityString);
+                            Object sizeObject= sizeJComboBox.getSelectedItem();
+                            String sizeString= String.valueOf(sizeObject);
+                            Size size= Size.valueOf(sizeString);
+
+                            ProductWithSizeAndQtity productWithSizeAndQtity= productJList.getSelectedValue();
+                            if (productWithSizeAndQtity.getSizesAndQuantitiesMap().get(size) != null){
+                                int currentQuantity= productWithSizeAndQtity.getSizesAndQuantitiesMap().get(size);
+                                int finalQuantity= quantity+currentQuantity;
+                                productWithSizeAndQtity.getSizesAndQuantitiesMap().put(size,finalQuantity);
+                            }else {
+                                productWithSizeAndQtity.getSizesAndQuantitiesMap().put(size,quantity);
+                            }
+                        }catch (Exception exception){
+                            throw new Exception("Type an integer!");
+                        }
+
+                    } else if (sizeJComboBox.getSelectedItem().equals(Size.XL)){
+                        if (quantityTextField.getText().isBlank()){
+                            throw new Exception("Type a quantity to add!");
+                        }
+                        try{
+                            String quantityString= quantityTextField.getText();
+                            int quantity=Integer.parseInt(quantityString);
+                            Object sizeObject= sizeJComboBox.getSelectedItem();
+                            String sizeString= String.valueOf(sizeObject);
+                            Size size= Size.valueOf(sizeString);
+
+                            ProductWithSizeAndQtity productWithSizeAndQtity= productJList.getSelectedValue();
+                            if (productWithSizeAndQtity.getSizesAndQuantitiesMap().get(size) != null){
+                                int currentQuantity= productWithSizeAndQtity.getSizesAndQuantitiesMap().get(size);
+                                int finalQuantity= quantity+currentQuantity;
+                                productWithSizeAndQtity.getSizesAndQuantitiesMap().put(size,finalQuantity);
+                            }else {
+                                productWithSizeAndQtity.getSizesAndQuantitiesMap().put(size,quantity);
+                            }
+                        }catch (Exception exception){
+                            throw new Exception("Type an integer!");
+                        }
+
+                    }
+
+                    if (!changePriceField.getText().isEmpty()){
+                        try{
+                            String priceString= changePriceField.getText();
+                            double price= Double.parseDouble(priceString);
+                            ProductWithSizeAndQtity productWithSizeAndQtity= productJList.getSelectedValue();
+                            productWithSizeAndQtity.getProduct().setPrice(price);
+                        } catch (Exception exception){
+                            throw new Exception("Type a number!");
+                        }
+                    }
+
+                    if (removeSizeComboBox.getSelectedItem().equals(Size.XS)
+                            || removeSizeComboBox.getSelectedItem().equals(Size.S)
+                    || removeSizeComboBox.getSelectedItem().equals(Size.M)
+                    || removeSizeComboBox.getSelectedItem().equals(Size.L)
+                    || removeSizeComboBox.getSelectedItem().equals(Size.XL)){
+                        if (removeQuantitiesComboBox.getSelectedItem() == null){
+                            throw new Exception("Select a quantity to remove!");
+                        }
+                        Object sizeObject= removeSizeComboBox.getSelectedItem();
+                        String sizeString= String.valueOf(sizeObject);
+                        Size size= Size.valueOf(sizeString);
+
+                        Object quantityObject= removeQuantitiesComboBox.getSelectedItem();
+                        String quantityString= String.valueOf(quantityObject);
+                        int quantity= Integer.parseInt(quantityString);
+
+                        ProductWithSizeAndQtity productWithSizeAndQtity= productJList.getSelectedValue();
+                        productWithSizeAndQtity.decreaseProductQuantity(size,quantity);
+                    }
+
+                    quantityTextField.setText("");
+                    changePriceField.setText("");
+
+
+                    JOptionPane.showMessageDialog(frame,"Saved changes!", "Changes", JOptionPane.PLAIN_MESSAGE);
+
+                    // zrobic zeby sie odswiezyl jlabel
+                    // oprocz tego ustawic zeby sie jakos "zerowal" wybor jcombobox
+                    // na koniec wyswietlic komunikat ze zapisano zmiany i wyczyscic pola
+
+                }catch (Exception exception){
+                    JOptionPane.showMessageDialog(frame,exception.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
 
 
         optionsPanel.add(sizeLabel);
