@@ -679,7 +679,7 @@ public class ShopGUI extends JFrame {
     public static void addQuantitiesAndSizesToProductScreenAdmin(){
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
-        frame.setSize(500, 400);
+        frame.setSize(675, 450);
 
 //        DefaultListModel<Product> productDefaultListModel = new DefaultListModel<>();
 //        JList<Product> productJList = new JList<>(productDefaultListModel);
@@ -703,12 +703,20 @@ public class ShopGUI extends JFrame {
                             + ", CATEGORY: " + ((ProductWithSizeAndQtity) value).getProduct().getCategory()
                             + ", PRODUCT: " + ((ProductWithSizeAndQtity) value).getProduct().getName()
                             + ", BRAND: " + ((ProductWithSizeAndQtity) value).getProduct().getBrand()
-                            + ", PRICE: " + ((ProductWithSizeAndQtity) value).getProduct().getPrice();
+                            + ", PRICE: " + ((ProductWithSizeAndQtity) value).getProduct().getPrice()
+                    +"PLN";
 
                 }
                 return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             }
         });
+
+
+        JButton saveChangesButton= new JButton("Save changes");
+        saveChangesButton.setEnabled(false);
+
+        JPanel optionsPanel= new JPanel(new GridLayout(10,1,10,10));
+        optionsPanel.setEnabled(false);
 
 
         JTextArea sizesAndQuantitiesTextArea = new JTextArea();
@@ -721,6 +729,9 @@ public class ShopGUI extends JFrame {
                 sizesAndQuantitiesTextArea.setText("");
 
                 if (!productJList.isSelectionEmpty()){
+                    saveChangesButton.setEnabled(true);
+                    optionsPanel.setEnabled(true);
+
                     ProductWithSizeAndQtity productWithSizeAndQtity = productJList.getSelectedValue();
                     String sizesText="SIZES: \n";
                     String sizesAndQuantitesText="";
@@ -732,7 +743,7 @@ public class ShopGUI extends JFrame {
                     String finalText= sizesText + sizesAndQuantitesText;
                     sizesAndQuantitiesTextArea.setText(finalText);
                 }else {
-
+                    saveChangesButton.setEnabled(false);
                 }
             }
         });
@@ -742,6 +753,7 @@ public class ShopGUI extends JFrame {
         // tylko zastanowic sie czy product with size and quantity czy zwykle produkty
         // i opcje zmiany ceny
         JButton backButton= backToMenuAdmin();
+
         JPanel listAndInfoPanel= new JPanel(new BorderLayout());
 
         listAndInfoPanel.add(new JScrollPane(productJList), BorderLayout.CENTER);
@@ -751,9 +763,47 @@ public class ShopGUI extends JFrame {
       //  secondPanel.add(new JScrollPane(productJList), BorderLayout.WEST);
         JPanel buttonPanel= new JPanel(new FlowLayout());
 
+
+        JLabel sizeLabel= new JLabel("ADD SIZE: ");
+        JLabel quantityLabel= new JLabel("ADD QUANTITY: ");
+        JTextField quantityTextField= new JTextField();
+        // dopiero po wybraniu produktu bedzie enabled
+
+
+
+
+
+
+        JPanel changePricePanel= new JPanel(new GridLayout(2,1));
+        changePricePanel.add(new JLabel("CHANGE PRICE: "));
+        changePricePanel.add(new JLabel("(optional)"));
+
+        JTextField changePriceField= new JTextField();
+
+        JLabel removeLabel= new JLabel("REMOVE: ");
+
+        JComboBox<Size> sizeJComboBox= new JComboBox<>();
+        sizeJComboBox.addItem(Size.XS);
+        sizeJComboBox.addItem(Size.S);
+        sizeJComboBox.addItem(Size.M);
+        sizeJComboBox.addItem(Size.L);
+        sizeJComboBox.addItem(Size.XL);
+
+        optionsPanel.add(sizeLabel);
+        optionsPanel.add(sizeJComboBox);
+        optionsPanel.add(quantityLabel);
+        optionsPanel.add(quantityTextField);
+        optionsPanel.add(changePricePanel);
+        optionsPanel.add(changePriceField);
+        optionsPanel.add(removeLabel);
+
+
         buttonPanel.add(backButton);
+        buttonPanel.add(saveChangesButton);
+
         secondPanel.add(listAndInfoPanel, BorderLayout.CENTER);
         secondPanel.add(buttonPanel,BorderLayout.SOUTH);
+        secondPanel.add(optionsPanel,BorderLayout.EAST);
 
         frame.setTitle("Edit Products");
         frame.getContentPane().removeAll();
