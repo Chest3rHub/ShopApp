@@ -36,9 +36,8 @@ public class ProductWithSizeAndQtity{
         Random random= new Random();
         String[] sizesStringArr = {"XS", "S", "M", "L", "XL"};
 
-        for (Product product : Product.allProducts){
+        for (ProductWithSizeAndQtity productWithSizeAndQtity : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
             int availableSizesNumber= random.nextInt(sizes.size());
-            ProductWithSizeAndQtity productWithSizeAndQtity= new ProductWithSizeAndQtity(product);
             HashMap<Size, Integer> tempSizesMap= new HashMap<>();
 
             for (int i=0; i < availableSizesNumber; i++){

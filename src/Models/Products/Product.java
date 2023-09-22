@@ -30,6 +30,9 @@ public class Product {
         this.price=price;
         this.description=description;
         allProducts.add(this);
+
+        // ta linia dodaje tez do kolekcji productwithsizeandqtity ten nowy obiekt
+        ProductWithSizeAndQtity productWithSizeAndQtity= new ProductWithSizeAndQtity(this);
     }
 
     public static void addProduct(){

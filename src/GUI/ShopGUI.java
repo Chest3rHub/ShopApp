@@ -295,6 +295,7 @@ public class ShopGUI extends JFrame {
         buttonPanel.add(logOutButton);
         buttonPanel.add(consultansButton);
         buttonPanel.add(revenueButton);
+        buttonPanel.add(addSizesAndQuantitiesButton);
         secondPanel.add(buttonPanel, BorderLayout.CENTER);
 
         frame.setTitle("Menu: ADMIN");
@@ -677,27 +678,62 @@ public class ShopGUI extends JFrame {
     }
     public static void addQuantitiesAndSizesToProductScreenAdmin(){
         secondPanel = new JPanel();
-        secondPanel.setLayout(new GridLayout(6,1,10,10));
+        secondPanel.setLayout(new BorderLayout());
         frame.setSize(500, 400);
 
-        DefaultListModel<Product> productDefaultListModel = new DefaultListModel<>();
-        JList<Product> productJList = new JList<>(productDefaultListModel);
-        for (Product product : Product.allProducts) {
-            productDefaultListModel.addElement(product);
+//        DefaultListModel<Product> productDefaultListModel = new DefaultListModel<>();
+//        JList<Product> productJList = new JList<>(productDefaultListModel);
+//        for (Product product : Product.allProducts) {
+//            productDefaultListModel.addElement(product);
+//        }
+
+        DefaultListModel<ProductWithSizeAndQtity> productModel = new DefaultListModel<>();
+        JList<ProductWithSizeAndQtity> productJList = new JList<>(productModel);
+
+        for (ProductWithSizeAndQtity product : ProductWithSizeAndQtity.availableProductsWithSizesAndQtity){
+                productModel.addElement(product);
+
         }
         productJList.setCellRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(
                     JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                if (value instanceof Product) {
-                    value = "ID: " + ((Product) value).getId()
-                            + ", CATEGORY: " + ((Product) value).getCategory()
-                            + ", PRODUCT: " + ((Product) value).getName()
-                            + ", BRAND: " + ((Product) value).getBrand()
-                            + ", PRICE: " + ((Product) value).getPrice();
+                if (value instanceof ProductWithSizeAndQtity) {
+                    value = "ID: " + ((ProductWithSizeAndQtity) value).getProduct().getId()
+                            + ", CATEGORY: " + ((ProductWithSizeAndQtity) value).getProduct().getCategory()
+                            + ", PRODUCT: " + ((ProductWithSizeAndQtity) value).getProduct().getName()
+                            + ", BRAND: " + ((ProductWithSizeAndQtity) value).getProduct().getBrand()
+                            + ", PRICE: " + ((ProductWithSizeAndQtity) value).getProduct().getPrice();
 
                 }
                 return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
+
+
+        JTextArea sizesAndQuantitiesTextArea = new JTextArea();
+        sizesAndQuantitiesTextArea.setEditable(false);
+        sizesAndQuantitiesTextArea.setWrapStyleWord(true);
+        sizesAndQuantitiesTextArea.setLineWrap(true);
+        productJList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                sizesAndQuantitiesTextArea.setText("");
+
+                if (!productJList.isSelectionEmpty()){
+                    ProductWithSizeAndQtity productWithSizeAndQtity = productJList.getSelectedValue();
+                    String sizesText="SIZES: \n";
+                    String sizesAndQuantitesText="";
+                    if (productWithSizeAndQtity.getSizesAndQuantitiesMap().isEmpty()){
+                        sizesAndQuantitesText="Empty";
+                    } else {
+                        sizesAndQuantitesText+=productWithSizeAndQtity.getSizesAndQuantitiesMap();
+                    }
+                    String finalText= sizesText + sizesAndQuantitesText;
+                    sizesAndQuantitiesTextArea.setText(finalText);
+                }else {
+
+                }
             }
         });
 
@@ -705,7 +741,19 @@ public class ShopGUI extends JFrame {
         //JList z produktami dodac
         // tylko zastanowic sie czy product with size and quantity czy zwykle produkty
         // i opcje zmiany ceny
+        JButton backButton= backToMenuAdmin();
+        JPanel listAndInfoPanel= new JPanel(new BorderLayout());
 
+        listAndInfoPanel.add(new JScrollPane(productJList), BorderLayout.CENTER);
+
+        listAndInfoPanel.add(sizesAndQuantitiesTextArea, BorderLayout.SOUTH);
+
+      //  secondPanel.add(new JScrollPane(productJList), BorderLayout.WEST);
+        JPanel buttonPanel= new JPanel(new FlowLayout());
+
+        buttonPanel.add(backButton);
+        secondPanel.add(listAndInfoPanel, BorderLayout.CENTER);
+        secondPanel.add(buttonPanel,BorderLayout.SOUTH);
 
         frame.setTitle("Edit Products");
         frame.getContentPane().removeAll();
