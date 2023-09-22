@@ -5,7 +5,7 @@ idOrder;orderDate;totalCost;orderedProducts
 10534!2023-09-08!169.49![14;HOODIE;Bluza;Lego;119.49;Z klockow lego;XS;1, 2;SOCKS;Skarpetki;Adidas;10.00;Cienkie;XL;5]
 10535!2023-09-08!399.92![9;SOCKS;Skarpetki;Vans;19.99;Wysokie i grube;L;5, 8;PANTS;Spodenki z dziurami;Pepe Jeans;99.99;Miekkie;S;3]
 10536!2023-09-08!1399.93![1;HOODIE;Bluza rozpinana;Nike;199.99;Wygodna;XS;7]
-10537!2023-09-09!649.96![1;HOODIE;Bluza rozpinana;Nike;199.99;Wygodna;M;1, 6;HOODIE;Bluza meduza;Hollister;149.99;Good look;M;3]
+10537!2023-09-09!649.96![1;HOODIE;Bluza rozpinana;Nike;199.99;Wygodna;M;1, 6;HOODIE;Bluza meduza;Hollister;100.50;Good look;M;3]
 10538!2023-09-19!459.9![12;ACCESSORIES;Case;Apple;49.99;Pancerny;S;6, 9;SOCKS;Skarpetki;Vans;19.99;Wysokie i grube;M;3, 8;PANTS;Spodenki z dziurami;Pepe Jeans;99.99;Miekkie;XL;1]
 10539!2023-09-19!699.98![7;HOODIE;Hoodie Ye;Gap;349.99;Wspiera Kanye West;M;2]
 10540!2023-09-19!109.99![8;PANTS;Spodenki z dziurami;Pepe Jeans;99.99;Miekkie;M;1, 2;SOCKS;Skarpetki;Adidas;10.00;Cienkie;XS;1]

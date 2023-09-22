@@ -15,6 +15,8 @@ import Models.Products.Size;
 import javax.swing.*;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.BasicGraphicsUtils;
@@ -726,6 +728,7 @@ public class ShopGUI extends JFrame {
 
         JComboBox<String> removeSizeComboBox= new JComboBox<>();
         removeSizeComboBox.setEnabled(false);
+        removeSizeComboBox.setSelectedItem(Size.CHOOSE);
         JComboBox<Integer> removeQuantitiesComboBox= new JComboBox<>();
         removeQuantitiesComboBox.setEnabled(false);
 
@@ -733,10 +736,10 @@ public class ShopGUI extends JFrame {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 sizesAndQuantitiesTextArea.setText("");
+                saveChangesButton.setEnabled(false);
 
                 if (!productJList.isSelectionEmpty()){
                     removeQuantitiesComboBox.setEnabled(false);
-                    saveChangesButton.setEnabled(true);
                     optionsPanel.setEnabled(true);
 
                     ProductWithSizeAndQtity productWithSizeAndQtity = productJList.getSelectedValue();
@@ -758,6 +761,7 @@ public class ShopGUI extends JFrame {
                     LinkedHashMap<Size,Integer> sizes= productWithSizeAndQtity.getSizesAndQuantitiesMap();
                     // mozna usunac ta liste pod spodem
                     List<Integer> quantitiesToArrayList= new ArrayList<>();
+                    sizesToArrayList.add("CHOOSE");
                     if (sizes.containsKey(Size.XS)){
                         sizesToArrayList.add("XS");
                         quantitiesToArrayList.add(sizes.get(Size.XS));
@@ -802,17 +806,22 @@ public class ShopGUI extends JFrame {
         removeSizeComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                    saveChangesButton.setEnabled(true);
                     Object sizeObject= removeSizeComboBox.getSelectedItem();
                     String sizeString= String.valueOf(sizeObject);
                     Size size= Size.valueOf(sizeString);
-                    ProductWithSizeAndQtity selectedProduct = productJList.getSelectedValue();
-                    int quantity= selectedProduct.getSizesAndQuantitiesMap().get(size);
-                    String[] parts= new String[quantity];
-                    for (int i=0; i <quantity; i++){
-                        parts[i]=String.valueOf(i+1);
-                    }
-                    removeQuantitiesComboBox.setModel(new DefaultComboBoxModel(parts));
-                    removeQuantitiesComboBox.setEnabled(true);
+                    if (!size.equals(Size.CHOOSE)){
+                        ProductWithSizeAndQtity selectedProduct = productJList.getSelectedValue();
+                        int quantity= selectedProduct.getSizesAndQuantitiesMap().get(size);
+                        String[] parts= new String[quantity];
+                        for (int i=0; i <quantity; i++){
+                            parts[i]=String.valueOf(i+1);
+                        }
+                        removeQuantitiesComboBox.setModel(new DefaultComboBoxModel(parts));
+                        removeQuantitiesComboBox.setEnabled(true);
+                }
+
 
             }
         });
@@ -839,6 +848,22 @@ public class ShopGUI extends JFrame {
         // dopiero po wybraniu produktu bedzie enabled
 
 
+        quantityTextField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                saveChangesButton.setEnabled(true);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+
+            }
+        });
 
 
 
@@ -848,6 +873,22 @@ public class ShopGUI extends JFrame {
         changePricePanel.add(new JLabel("(optional)"));
 
         JTextField changePriceField= new JTextField();
+        changePriceField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                saveChangesButton.setEnabled(true);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+
+            }
+        });
 
         JLabel removeLabel= new JLabel("REMOVE: ");
 
@@ -858,6 +899,13 @@ public class ShopGUI extends JFrame {
         sizeJComboBox.addItem(Size.M);
         sizeJComboBox.addItem(Size.L);
         sizeJComboBox.addItem(Size.XL);
+        sizeJComboBox.setSelectedItem(Size.CHOOSE);
+        sizeJComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveChangesButton.setEnabled(true);
+            }
+        });
 
 
         saveChangesButton.addActionListener(new ActionListener() {
@@ -890,6 +938,7 @@ public class ShopGUI extends JFrame {
                             }else {
                                 productWithSizeAndQtity.getSizesAndQuantitiesMap().put(size,quantity);
                             }
+                            refreshSizesJLabelAfterEditingProduct(sizesAndQuantitiesTextArea,productJList);
                         }catch (Exception exception){
                             throw new Exception("Type an integer!");
                         }
@@ -913,6 +962,7 @@ public class ShopGUI extends JFrame {
                             }else {
                                 productWithSizeAndQtity.getSizesAndQuantitiesMap().put(size,quantity);
                             }
+                            refreshSizesJLabelAfterEditingProduct(sizesAndQuantitiesTextArea,productJList);
                         }catch (Exception exception){
                             throw new Exception("Type an integer!");
                         }
@@ -936,6 +986,7 @@ public class ShopGUI extends JFrame {
                             }else {
                                 productWithSizeAndQtity.getSizesAndQuantitiesMap().put(size,quantity);
                             }
+                            refreshSizesJLabelAfterEditingProduct(sizesAndQuantitiesTextArea,productJList);
                         }catch (Exception exception){
                             throw new Exception("Type an integer!");
                         }
@@ -959,6 +1010,7 @@ public class ShopGUI extends JFrame {
                             }else {
                                 productWithSizeAndQtity.getSizesAndQuantitiesMap().put(size,quantity);
                             }
+                            refreshSizesJLabelAfterEditingProduct(sizesAndQuantitiesTextArea,productJList);
                         }catch (Exception exception){
                             throw new Exception("Type an integer!");
                         }
@@ -982,6 +1034,7 @@ public class ShopGUI extends JFrame {
                             }else {
                                 productWithSizeAndQtity.getSizesAndQuantitiesMap().put(size,quantity);
                             }
+                            refreshSizesJLabelAfterEditingProduct(sizesAndQuantitiesTextArea,productJList);
                         }catch (Exception exception){
                             throw new Exception("Type an integer!");
                         }
@@ -999,11 +1052,11 @@ public class ShopGUI extends JFrame {
                         }
                     }
 
-                    if (removeSizeComboBox.getSelectedItem().equals(Size.XS)
-                            || removeSizeComboBox.getSelectedItem().equals(Size.S)
-                    || removeSizeComboBox.getSelectedItem().equals(Size.M)
-                    || removeSizeComboBox.getSelectedItem().equals(Size.L)
-                    || removeSizeComboBox.getSelectedItem().equals(Size.XL)){
+                    Object selectedSizeObject= removeSizeComboBox.getSelectedItem();
+                    String selectedSizeString= String.valueOf(selectedSizeObject);
+                    Size sizeSelected= Size.valueOf(selectedSizeString);
+                    if (!sizeSelected.equals(Size.CHOOSE)){
+
                         if (removeQuantitiesComboBox.getSelectedItem() == null){
                             throw new Exception("Select a quantity to remove!");
                         }
@@ -1017,17 +1070,19 @@ public class ShopGUI extends JFrame {
 
                         ProductWithSizeAndQtity productWithSizeAndQtity= productJList.getSelectedValue();
                         productWithSizeAndQtity.decreaseProductQuantity(size,quantity);
+                        refreshSizesJLabelAfterEditingProduct(sizesAndQuantitiesTextArea,productJList);
                     }
 
                     quantityTextField.setText("");
                     changePriceField.setText("");
-
+                    sizeJComboBox.setSelectedItem(Size.CHOOSE);
+                    removeSizeComboBox.setSelectedItem(Size.CHOOSE);
+                    saveChangesButton.setEnabled(false);
 
                     JOptionPane.showMessageDialog(frame,"Saved changes!", "Changes", JOptionPane.PLAIN_MESSAGE);
 
-                    // zrobic zeby sie odswiezyl jlabel
-                    // oprocz tego ustawic zeby sie jakos "zerowal" wybor jcombobox
-                    // na koniec wyswietlic komunikat ze zapisano zmiany i wyczyscic pola
+
+
 
                 }catch (Exception exception){
                     JOptionPane.showMessageDialog(frame,exception.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
@@ -1070,6 +1125,22 @@ public class ShopGUI extends JFrame {
 
         frame.setLocation(x, y);
     }
+    public static void refreshSizesJLabelAfterEditingProduct(JTextArea parameterTextArea, JList<ProductWithSizeAndQtity> parameterJList){
+        ProductWithSizeAndQtity productWithSizeAndQtity = parameterJList.getSelectedValue();
+        String sizesText="SIZES: \n";
+        String sizesAndQuantitesText="";
+        if (productWithSizeAndQtity.getSizesAndQuantitiesMap().isEmpty()){
+            sizesAndQuantitesText="Empty";
+        } else {
+            sizesAndQuantitesText+=productWithSizeAndQtity.getSizesAndQuantitiesMap();
+        }
+        String finalText= sizesText + sizesAndQuantitesText;
+        parameterTextArea.setText(finalText);
+
+
+}
+
+
     public static void addNewProduct(Category category, String productNameString, String brandString, String priceString, String descriptionString) throws Exception {
         if (productNameString.isBlank()){
             throw new Exception("Product name field is empty!");

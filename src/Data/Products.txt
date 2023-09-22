@@ -3,7 +3,7 @@
 3;SHIRT;Jordan 1 Print Logo;Nike;799.99;Modne
 4;ACCESSORIES;Bransoletka;Apart;1000.0;Piekna
 5;HOODIE;Bluza polar;Nike;249.99;Przewiewna
-6;HOODIE;Bluza meduza;Hollister;149.99;Good look
+6;HOODIE;Bluza meduza;Hollister;100.5;Good look
 7;HOODIE;Hoodie Ye;Gap;349.99;Wspiera Kanye West
 8;PANTS;Spodenki z dziurami;Pepe Jeans;99.99;Miekkie
 9;SOCKS;Skarpetki;Vans;19.99;Wysokie i grube
