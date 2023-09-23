@@ -255,6 +255,8 @@ public class ShopGUI extends JFrame {
 
         JButton addSizesAndQuantitiesButton= new JButton("Edit Products");
 
+        JButton customerButton= new JButton("Customers");
+
         addSizesAndQuantitiesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -283,12 +285,20 @@ public class ShopGUI extends JFrame {
             }
         });
 
+        customerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                customersAndTheirOrdersMenuAdmin();
+            }
+        });
+
 
         buttonPanel.add(addProductButton);
         buttonPanel.add(logOutButton);
         buttonPanel.add(consultansButton);
         buttonPanel.add(revenueButton);
         buttonPanel.add(addSizesAndQuantitiesButton);
+        buttonPanel.add(customerButton);
         secondPanel.add(buttonPanel, BorderLayout.CENTER);
 
         frame.setTitle("Menu: ADMIN");
@@ -535,6 +545,101 @@ public class ShopGUI extends JFrame {
         setFrameLocation(frame);
 
         frame.setVisible(true);
+    }
+    public static void customersAndTheirOrdersMenuAdmin(){
+
+        secondPanel = new JPanel();
+        secondPanel.setLayout(new BorderLayout());
+        frame.setVisible(false);
+        frame.setSize(300, 200);
+
+
+        JLabel customersLabel = new JLabel("Customers: ");
+        customersLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,16));
+        customersLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        secondPanel.add(customersLabel, BorderLayout.NORTH);
+
+        DefaultListModel<Customer> customerDefaultListModel = new DefaultListModel<>();
+        JList<Customer> customerJList = new JList<>(customerDefaultListModel);
+
+        DefaultListModel<Order> orderModel = new DefaultListModel<>();
+        JList<Order> ordersList = new JList<>(orderModel);
+
+        JLabel orderLabel= new JLabel("");
+
+
+        for (Map.Entry<String, Customer> entry : Customer.customers.entrySet()) {
+            String key = entry.getKey();
+            Customer customer = entry.getValue();
+            customerDefaultListModel.addElement(customer);
+        }
+
+        customerJList.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(
+                    JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof Customer) {
+                    value = "ID: " + ((Customer) value).getId()
+                            + ", NAME: " + ((Customer) value).getFirstName()
+                            + ", SURNAME: " + ((Customer) value).getLastName();
+                }
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
+        customerJList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (customerJList.getSelectedValue()!=null){
+                    orderLabel.setText("ORDERS: ");
+                    Customer customer= customerJList.getSelectedValue();
+                    for (Order order : customer.getOrders()) {
+                        orderModel.addElement(order);
+                    }
+                }else {
+                    orderLabel.setText("");
+                }
+
+            }
+        });
+
+        ordersList.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(
+                    JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof Order) {
+                    value = "ID: " + ((Order) value).getIdOrder()
+                            + ", DATE: " + ((Order) value).getOrderedAt()
+                            + ", COST: " + ((Order) value).getTotalCost() + "PLN";
+                }
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
+
+        JPanel twoListsPanel= new JPanel(new GridLayout(3,1));
+        twoListsPanel.add(customerJList);
+        twoListsPanel.add(orderLabel);
+        twoListsPanel.add(ordersList);
+
+        JPanel buttonsPanel= new JPanel(new FlowLayout());
+        JButton backButton= backToMenuAdmin();
+        JButton removeButton= new JButton("Remove");
+
+        buttonsPanel.add(backButton);
+        buttonsPanel.add(removeButton);
+
+        secondPanel.add(twoListsPanel,BorderLayout.CENTER);
+        secondPanel.add(buttonsPanel,BorderLayout.SOUTH);
+
+
+        frame.setTitle("Customers");
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(secondPanel);
+        frame.getContentPane().revalidate();
+        frame.getContentPane().repaint();
+        setFrameLocation(frame);
+
+        frame.setVisible(true);
+
     }
 
     public static void addNewProductScreenAdmin(){

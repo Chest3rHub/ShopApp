@@ -13,5 +13,3 @@ rating employees, changing product price
 ordering employees by salary, hire date, name and surname, hiring and firing employees like Consultant,
 changing password, viewing revenue, adding and removing products, changing product price
 adding quantity and sizes available to existing products,
-
-
