@@ -720,6 +720,10 @@ public class ShopGUI extends JFrame {
         JPanel optionsPanel= new JPanel(new GridLayout(10,1,10,10));
         optionsPanel.setEnabled(false);
 
+        JButton removeProductButton= new JButton("Delete");
+        removeProductButton.setEnabled(false);
+
+
 
         JTextArea sizesAndQuantitiesTextArea = new JTextArea();
         sizesAndQuantitiesTextArea.setEditable(false);
@@ -739,6 +743,7 @@ public class ShopGUI extends JFrame {
                 saveChangesButton.setEnabled(false);
 
                 if (!productJList.isSelectionEmpty()){
+                    removeProductButton.setEnabled(true);
                     removeQuantitiesComboBox.setEnabled(false);
                     optionsPanel.setEnabled(true);
 
@@ -799,6 +804,7 @@ public class ShopGUI extends JFrame {
                     }
                 }else {
                     saveChangesButton.setEnabled(false);
+                    removeProductButton.setEnabled(false);
                 }
             }
         });
@@ -1089,6 +1095,26 @@ public class ShopGUI extends JFrame {
                 }
             }
         });
+        removeProductButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                if (productJList.isSelectionEmpty()){
+                    try {
+                        throw new Exception("Choose a product first!");
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(frame,ex.getMessage(),"Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }else {
+                    ProductWithSizeAndQtity chosenProduct= productJList.getSelectedValue();
+                    Product product= chosenProduct.getProduct();
+                    Product.allProducts.remove(product);
+                    ProductWithSizeAndQtity.availableProductsWithSizesAndQtity.remove(chosenProduct);
+                    productModel.removeElement(chosenProduct);
+                    JOptionPane.showMessageDialog(frame,"Deleted a product!","Info", JOptionPane.PLAIN_MESSAGE);
+                }
+            }
+        });
 
 
         optionsPanel.add(sizeLabel);
@@ -1104,6 +1130,7 @@ public class ShopGUI extends JFrame {
 
         buttonPanel.add(backButton);
         buttonPanel.add(saveChangesButton);
+        buttonPanel.add(removeProductButton);
 
         secondPanel.add(listAndInfoPanel, BorderLayout.CENTER);
         secondPanel.add(buttonPanel,BorderLayout.SOUTH);
