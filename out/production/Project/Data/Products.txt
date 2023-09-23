@@ -13,4 +13,3 @@
 13;SOCKS;Stopki;Yonex;89.99;Wygodne
 14;HOODIE;Bluza;Lego;119.49;Z klockow lego
 15;SHIRT;Koszulka;Vans;49.99;Na deske i rolki
-16;HOODIE;Nazwa;markowy;200.0;opis

@@ -154,15 +154,7 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().repaint();
         frame.setVisible(true);
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int screenWidth = screenSize.width;
-        int screenHeight = screenSize.height;
-        int windowWidth = frame.getWidth();
-        int windowHeight = frame.getHeight();
-        int x = (screenWidth - windowWidth) / 2;
-        int y = (screenHeight - windowHeight) / 2;
-
-        frame.setLocation(x, y);
+        setFrameLocation(frame);
     }
     public static void loggedOutScreen(){
         /**
@@ -217,15 +209,7 @@ public class ShopGUI extends JFrame {
             }
         });
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int screenWidth = screenSize.width;
-        int screenHeight = screenSize.height;
-        int windowWidth = frame.getWidth();
-        int windowHeight = frame.getHeight();
-        int x = (screenWidth - windowWidth) / 2;
-        int y = (screenHeight - windowHeight) / 2;
 
-        frame.setLocation(x, y);
 
         frame.getContentPane().removeAll();
         frame.getContentPane().add(mainPanel);
@@ -234,6 +218,8 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().repaint();
 
         frame.setVisible(true);
+
+        setFrameLocation(frame);
 
     }
 
@@ -305,15 +291,7 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().add(secondPanel);
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int screenWidth = screenSize.width;
-        int screenHeight = screenSize.height;
-        int windowWidth = frame.getWidth();
-        int windowHeight = frame.getHeight();
-        int x = (screenWidth - windowWidth) / 2;
-        int y = (screenHeight - windowHeight) / 2;
-
-        frame.setLocation(x, y);
+        setFrameLocation(frame);
     }
     public static void revenueScreenAdmin(){
         /**
@@ -347,15 +325,7 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int screenWidth = screenSize.width;
-        int screenHeight = screenSize.height;
-        int windowWidth = frame.getWidth();
-        int windowHeight = frame.getHeight();
-        int x = (screenWidth - windowWidth) / 2;
-        int y = (screenHeight - windowHeight) / 2;
-
-        frame.setLocation(x, y);
+        setFrameLocation(frame);
     }
 
     public static void changeScreenToConsultantsAdmin(){
@@ -548,15 +518,7 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int screenWidth = screenSize.width;
-        int screenHeight = screenSize.height;
-        int windowWidth = frame.getWidth();
-        int windowHeight = frame.getHeight();
-        int x = (screenWidth - windowWidth) / 2;
-        int y = (screenHeight - windowHeight) / 2;
-
-        frame.setLocation(x, y);
+        setFrameLocation(frame);
     }
 
     public static void addNewProductScreenAdmin(){
@@ -668,15 +630,7 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int screenWidth = screenSize.width;
-        int screenHeight = screenSize.height;
-        int windowWidth = frame.getWidth();
-        int windowHeight = frame.getHeight();
-        int x = (screenWidth - windowWidth) / 2;
-        int y = (screenHeight - windowHeight) / 2;
-
-        frame.setLocation(x, y);
+        setFrameLocation(frame);
     }
     public static void addQuantitiesAndSizesToProductScreenAdmin(){
         secondPanel = new JPanel();
@@ -1142,15 +1096,7 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int screenWidth = screenSize.width;
-        int screenHeight = screenSize.height;
-        int windowWidth = frame.getWidth();
-        int windowHeight = frame.getHeight();
-        int x = (screenWidth - windowWidth) / 2;
-        int y = (screenHeight - windowHeight) / 2;
-
-        frame.setLocation(x, y);
+        setFrameLocation(frame);
     }
     public static void refreshSizesJLabelAfterEditingProduct(JTextArea parameterTextArea, JList<ProductWithSizeAndQtity> parameterJList){
         ProductWithSizeAndQtity productWithSizeAndQtity = parameterJList.getSelectedValue();
@@ -1287,15 +1233,7 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int screenWidth = screenSize.width;
-        int screenHeight = screenSize.height;
-        int windowWidth = frame.getWidth();
-        int windowHeight = frame.getHeight();
-        int x = (screenWidth - windowWidth) / 2;
-        int y = (screenHeight - windowHeight) / 2;
-
-        frame.setLocation(x, y);
+        setFrameLocation(frame);
     }
     public static void helpMenuClient(Customer customer, String loginEntered){
         /**
@@ -1348,15 +1286,7 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int screenWidth = screenSize.width;
-        int screenHeight = screenSize.height;
-        int windowWidth = frame.getWidth();
-        int windowHeight = frame.getHeight();
-        int x = (screenWidth - windowWidth) / 2;
-        int y = (screenHeight - windowHeight) / 2;
-
-        frame.setLocation(x, y);
+        setFrameLocation(frame);
     }
 
     public static void callingConsultantScreen(Customer customer, String loginEntered){
@@ -1393,15 +1323,7 @@ public class ShopGUI extends JFrame {
         timer.setRepeats(false);
         timer.start();
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int screenWidth = screenSize.width;
-        int screenHeight = screenSize.height;
-        int windowWidth = frame.getWidth();
-        int windowHeight = frame.getHeight();
-        int x = (screenWidth - windowWidth) / 2;
-        int y = (screenHeight - windowHeight) / 2;
-
-        frame.setLocation(x, y);
+        setFrameLocation(frame);
     }
 
     public static void callFinishedScreen(Customer customer, String loginEntered, Consultant consultant){
@@ -1457,15 +1379,7 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int screenWidth = screenSize.width;
-        int screenHeight = screenSize.height;
-        int windowWidth = frame.getWidth();
-        int windowHeight = frame.getHeight();
-        int x = (screenWidth - windowWidth) / 2;
-        int y = (screenHeight - windowHeight) / 2;
-
-        frame.setLocation(x, y);
+        setFrameLocation(frame);
     }
     public static void leaveFeedbackToConsultantMenu(Customer customer, String loginEntered, Consultant consultant){
         /**
@@ -1571,15 +1485,7 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int screenWidth = screenSize.width;
-        int screenHeight = screenSize.height;
-        int windowWidth = frame.getWidth();
-        int windowHeight = frame.getHeight();
-        int x = (screenWidth - windowWidth) / 2;
-        int y = (screenHeight - windowHeight) / 2;
-
-        frame.setLocation(x, y);
+        setFrameLocation(frame);
     }
 
 
@@ -2709,9 +2615,6 @@ public class ShopGUI extends JFrame {
         buttonPanel.add(backButton);
         buttonPanel.add(addToCartButton);
 
-
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
         JTextField searchTextField= new JTextField();
         searchTextField.setMinimumSize(new Dimension(30,10));
 
@@ -2768,14 +2671,7 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
 
-        int screenWidth = screenSize.width;
-        int screenHeight = screenSize.height;
-        int windowWidth = frame.getWidth();
-        int windowHeight = frame.getHeight();
-        int x = (screenWidth - windowWidth) / 2;
-        int y = (screenHeight - windowHeight) / 2;
-
-        frame.setLocation(x, y);
+        setFrameLocation(frame);
     }
 
     public static void ordersMenuClient(Customer customer, String loginEntered) {
@@ -2842,15 +2738,7 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int screenWidth = screenSize.width;
-        int screenHeight = screenSize.height;
-        int windowWidth = frame.getWidth();
-        int windowHeight = frame.getHeight();
-        int x = (screenWidth - windowWidth) / 2;
-        int y = (screenHeight - windowHeight) / 2;
-
-        frame.setLocation(x, y);
+        setFrameLocation(frame);
     }
 
     public static Role login(String loginEntered, String passwordEntered) throws Exception {
@@ -3088,15 +2976,7 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().repaint();
         frame.setVisible(true);
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int screenWidth = screenSize.width;
-        int screenHeight = screenSize.height;
-        int windowWidth = frame.getWidth();
-        int windowHeight = frame.getHeight();
-        int x = (screenWidth - windowWidth) / 2;
-        int y = (screenHeight - windowHeight) / 2;
-
-        frame.setLocation(x, y);
+        setFrameLocation(frame);
     }
     public static void register(String loginEntered, String passwordEntered, String confirmedPasswordEntered) throws Exception{
         /**
@@ -3287,15 +3167,7 @@ public class ShopGUI extends JFrame {
             frame.getContentPane().repaint();
             frame.setVisible(true);
 
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            int screenWidth = screenSize.width;
-            int screenHeight = screenSize.height;
-            int windowWidth = frame.getWidth();
-            int windowHeight = frame.getHeight();
-            int x = (screenWidth - windowWidth) / 2;
-            int y = (screenHeight - windowHeight) / 2;
-
-            frame.setLocation(x, y);
+            setFrameLocation(frame);
         }
         public static void accountScreenCustomer(Customer customer, String loginEntered){
             /**
@@ -3434,15 +3306,7 @@ public class ShopGUI extends JFrame {
             frame.getContentPane().repaint();
             frame.setVisible(true);
 
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            int screenWidth = screenSize.width;
-            int screenHeight = screenSize.height;
-            int windowWidth = frame.getWidth();
-            int windowHeight = frame.getHeight();
-            int x = (screenWidth - windowWidth) / 2;
-            int y = (screenHeight - windowHeight) / 2;
-
-            frame.setLocation(x, y);
+            setFrameLocation(frame);
         }
         public static void cartScreen(Customer customer, String loginEntered){
             /**
@@ -3530,15 +3394,7 @@ public class ShopGUI extends JFrame {
             frame.getContentPane().repaint();
             frame.setVisible(true);
 
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            int screenWidth = screenSize.width;
-            int screenHeight = screenSize.height;
-            int windowWidth = frame.getWidth();
-            int windowHeight = frame.getHeight();
-            int x = (screenWidth - windowWidth) / 2;
-            int y = (screenHeight - windowHeight) / 2;
-
-            frame.setLocation(x, y);
+            setFrameLocation(frame);
         }
         public static double calculateCartCost(List<ProductInCartDTO> productInCartDTOS){
             /**
@@ -3689,6 +3545,12 @@ public class ShopGUI extends JFrame {
             frame.getContentPane().repaint();
             frame.setVisible(true);
 
+            setFrameLocation(frame);
+        }
+        public static void setFrameLocation(JFrame frame){
+            /**
+             * This method sets current frame location to center
+             */
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             int screenWidth = screenSize.width;
             int screenHeight = screenSize.height;
