@@ -91,6 +91,7 @@ public class ShopGUI extends JFrame {
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
 
+        frame.setVisible(false);
         frame.setTitle("Login to Shop App");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(300, 200);
@@ -152,9 +153,10 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().add(secondPanel);
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
-        frame.setVisible(true);
 
         setFrameLocation(frame);
+
+        frame.setVisible(true);
     }
     public static void loggedOutScreen(){
         /**
@@ -163,6 +165,7 @@ public class ShopGUI extends JFrame {
         BorderLayout borderLayout= new BorderLayout();
         JPanel mainPanel = new JPanel(borderLayout);
 
+        frame.setVisible(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(300, 200);
         frame.setTitle("Shop App");
@@ -217,9 +220,10 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
 
+        setFrameLocation(frame);
+
         frame.setVisible(true);
 
-        setFrameLocation(frame);
 
     }
 
@@ -230,6 +234,7 @@ public class ShopGUI extends JFrame {
          */
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
+        frame.setVisible(false);
         frame.setSize(300, 200);
 
         JLabel welcomeLabel = new JLabel("ADMIN");
@@ -292,6 +297,8 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
         setFrameLocation(frame);
+
+        frame.setVisible(true);
     }
     public static void revenueScreenAdmin(){
         /**
@@ -300,13 +307,19 @@ public class ShopGUI extends JFrame {
 
         secondPanel = new JPanel();
         secondPanel.setLayout(new GridLayout(4,1));
+        frame.setVisible(false);
         frame.setSize(250, 150);
 
         JLabel revenueLabel= new JLabel("TOTAL REVENUE: ");
         revenueLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,20));
         revenueLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-        JLabel revenueValueLabel= new JLabel(Order.totalRevenue + "PLN");
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+        String formattedPrice = decimalFormat.format(Order.totalRevenue);
+        String noCommaPrice= formattedPrice.replace(",",".");
+        double finalCost= Double.parseDouble(noCommaPrice);
+
+        JLabel revenueValueLabel= new JLabel(finalCost + "PLN");
         revenueValueLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,16));
         revenueValueLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -324,14 +337,15 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().add(secondPanel);
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
-
         setFrameLocation(frame);
+        frame.setVisible(true);
     }
 
     public static void changeScreenToConsultantsAdmin(){
         /**
          * This method changes frame to consultants screen for admin with options to display their feedback and order them by few factors
          */
+        frame.setVisible(false);
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
         frame.setSize(600, 500);
@@ -519,11 +533,14 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().repaint();
 
         setFrameLocation(frame);
+
+        frame.setVisible(true);
     }
 
     public static void addNewProductScreenAdmin(){
         secondPanel = new JPanel();
         secondPanel.setLayout(new GridLayout(6,1,10,10));
+        frame.setVisible(false);
         frame.setSize(400, 300);
 
         JLabel categoryLabel= new JLabel("CATEGORY:");
@@ -631,10 +648,13 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().repaint();
 
         setFrameLocation(frame);
+
+        frame.setVisible(true);
     }
     public static void addQuantitiesAndSizesToProductScreenAdmin(){
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
+        frame.setVisible(false);
         frame.setSize(675, 450);
 
 //        DefaultListModel<Product> productDefaultListModel = new DefaultListModel<>();
@@ -1097,6 +1117,8 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().repaint();
 
         setFrameLocation(frame);
+
+        frame.setVisible(true);
     }
     public static void refreshSizesJLabelAfterEditingProduct(JTextArea parameterTextArea, JList<ProductWithSizeAndQtity> parameterJList){
         ProductWithSizeAndQtity productWithSizeAndQtity = parameterJList.getSelectedValue();
@@ -1146,6 +1168,7 @@ public class ShopGUI extends JFrame {
          */
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
+        frame.setVisible(false);
         frame.setSize(450,350);
         
         JLabel welcomeLabel= new JLabel("Welcome " + enteredLogin + "!");
@@ -1234,6 +1257,8 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().repaint();
 
         setFrameLocation(frame);
+
+        frame.setVisible(true);
     }
     public static void helpMenuClient(Customer customer, String loginEntered){
         /**
@@ -1243,6 +1268,7 @@ public class ShopGUI extends JFrame {
          */
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
+        frame.setVisible(false);
         frame.setSize(450,350);
 
         JButton backButton= backToMenuClient(customer,loginEntered);
@@ -1287,6 +1313,9 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().repaint();
 
         setFrameLocation(frame);
+
+        frame.setVisible(true);
+
     }
 
     public static void callingConsultantScreen(Customer customer, String loginEntered){
@@ -1297,6 +1326,8 @@ public class ShopGUI extends JFrame {
          */
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
+        frame.setVisible(false);
+
         frame.setSize(350,250);
 
 
@@ -1324,6 +1355,8 @@ public class ShopGUI extends JFrame {
         timer.start();
 
         setFrameLocation(frame);
+
+        frame.setVisible(true);
     }
 
     public static void callFinishedScreen(Customer customer, String loginEntered, Consultant consultant){
@@ -1335,6 +1368,8 @@ public class ShopGUI extends JFrame {
          */
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
+
+        frame.setVisible(false);
         frame.setSize(350,200);
 
         JButton backButton= backToMenuClient(customer,loginEntered);
@@ -1380,6 +1415,8 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().repaint();
 
         setFrameLocation(frame);
+
+        frame.setVisible(true);
     }
     public static void leaveFeedbackToConsultantMenu(Customer customer, String loginEntered, Consultant consultant){
         /**
@@ -1390,6 +1427,9 @@ public class ShopGUI extends JFrame {
          */
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
+
+        frame.setVisible(false);
+
         frame.setSize(350,200);
 
         JPanel buttonsPanel= new JPanel(new FlowLayout());
@@ -1486,6 +1526,9 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().repaint();
 
         setFrameLocation(frame);
+
+        frame.setVisible(true);
+
     }
 
 
@@ -1496,6 +1539,7 @@ public class ShopGUI extends JFrame {
          * @param customer Customer value attached to entered login
          * @param loginEntered String login value entered while logging in
          */
+        frame.setVisible(false);
         frame.setSize(575,400);
         secondPanel = new JPanel(new BorderLayout());
 
@@ -2672,6 +2716,9 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().repaint();
 
         setFrameLocation(frame);
+
+        frame.setVisible(true);
+
     }
 
     public static void ordersMenuClient(Customer customer, String loginEntered) {
@@ -2682,6 +2729,9 @@ public class ShopGUI extends JFrame {
          */
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
+
+        frame.setVisible(false);
+
         frame.setSize(600, 500);
 
         JLabel ordersHistoryLabel = new JLabel("History: ");
@@ -2739,6 +2789,9 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().repaint();
 
         setFrameLocation(frame);
+
+        frame.setVisible(true);
+
     }
 
     public static Role login(String loginEntered, String passwordEntered) throws Exception {
@@ -2923,6 +2976,9 @@ public class ShopGUI extends JFrame {
          */
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
+
+        frame.setVisible(false);
+
         frame.setTitle("Login to Shop App");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(300, 200);
@@ -2974,9 +3030,10 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().add(secondPanel);
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
-        frame.setVisible(true);
 
         setFrameLocation(frame);
+
+        frame.setVisible(true);
     }
     public static void register(String loginEntered, String passwordEntered, String confirmedPasswordEntered) throws Exception{
         /**
@@ -3107,6 +3164,8 @@ public class ShopGUI extends JFrame {
             secondPanel = new JPanel();
             secondPanel.setLayout(new BorderLayout());
 
+            frame.setVisible(false);
+
             frame.setTitle("Add Credits");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(300, 200);
@@ -3165,9 +3224,10 @@ public class ShopGUI extends JFrame {
             frame.getContentPane().add(secondPanel);
             frame.getContentPane().revalidate();
             frame.getContentPane().repaint();
-            frame.setVisible(true);
 
             setFrameLocation(frame);
+
+            frame.setVisible(true);
         }
         public static void accountScreenCustomer(Customer customer, String loginEntered){
             /**
@@ -3177,6 +3237,8 @@ public class ShopGUI extends JFrame {
              */
             secondPanel = new JPanel();
             secondPanel.setLayout(new GridLayout(8, 2, 10, 10));
+
+            frame.setVisible(false);
 
             frame.setTitle("Account");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -3304,9 +3366,10 @@ public class ShopGUI extends JFrame {
             frame.getContentPane().add(secondPanel);
             frame.getContentPane().revalidate();
             frame.getContentPane().repaint();
-            frame.setVisible(true);
 
             setFrameLocation(frame);
+
+            frame.setVisible(true);
         }
         public static void cartScreen(Customer customer, String loginEntered){
             /**
@@ -3316,6 +3379,8 @@ public class ShopGUI extends JFrame {
              */
             secondPanel = new JPanel();
             secondPanel.setLayout(new BorderLayout());
+
+            frame.setVisible(false);
 
             frame.setTitle("Cart");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -3392,9 +3457,10 @@ public class ShopGUI extends JFrame {
             frame.getContentPane().add(secondPanel);
             frame.getContentPane().revalidate();
             frame.getContentPane().repaint();
-            frame.setVisible(true);
 
             setFrameLocation(frame);
+
+            frame.setVisible(true);
         }
         public static double calculateCartCost(List<ProductInCartDTO> productInCartDTOS){
             /**
@@ -3514,6 +3580,9 @@ public class ShopGUI extends JFrame {
              */
             secondPanel = new JPanel();
             secondPanel.setLayout(new BorderLayout());
+
+            frame.setVisible(false);
+
             frame.setTitle("WELCOME!");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(300, 200);
@@ -3543,9 +3612,10 @@ public class ShopGUI extends JFrame {
             frame.getContentPane().add(secondPanel);
             frame.getContentPane().revalidate();
             frame.getContentPane().repaint();
-            frame.setVisible(true);
 
             setFrameLocation(frame);
+
+            frame.setVisible(true);
         }
         public static void setFrameLocation(JFrame frame){
             /**
