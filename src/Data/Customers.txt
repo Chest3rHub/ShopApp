@@ -4,4 +4,4 @@ loginHash;firstName;lastName;address;tel;credits;email;currentCart;orders
 2162502!Anna!Radomirska!asd!123123123!70.71!aaa![]![10531, 10532, 10540]
 2030634502!Marcjanna!Czitoz!null!0!0.0!null![]![]
 97!Arnold!Boczny!null!0!0.0!null![]![]
--1802365190!Szymon!Sawicki!Legionowo 05-120!123123123!350.88!email@www.pl![]![10533, 10534, 10535, 10536, 10538, 10539]
+-1802365190!Szymon!Sawicki!Legionowo 05-120!123123123!110.91!email@www.pl![]![10533, 10534, 10535, 10536, 10538, 10539]

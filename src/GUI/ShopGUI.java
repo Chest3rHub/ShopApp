@@ -644,6 +644,25 @@ public class ShopGUI extends JFrame {
         twoListsPanel.add(new JScrollPane(ordersList));
         twoListsPanel.add(orderInfoTextArea);
 
+        removeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Customer customer= customerJList.getSelectedValue();
+                Order order= ordersList.getSelectedValue();
+                int idOrder=order.getIdOrder();
+
+                int index=customer.getOrdersIds().indexOf(idOrder);
+
+                // removing orders from everywhere
+                orderModel.removeElement(order);
+                Order.allOrders.remove(order);
+                // trzeba inde
+                customer.getOrdersIds().remove(index);
+                customer.getOrders().remove(order);
+                removeButton.setEnabled(false);
+            }
+        });
+
 
 
         buttonsPanel.add(backButton);
