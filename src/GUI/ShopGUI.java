@@ -551,7 +551,7 @@ public class ShopGUI extends JFrame {
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
         frame.setVisible(false);
-        frame.setSize(300, 200);
+        frame.setSize(550, 500);
 
 
         JLabel customersLabel = new JLabel("Customers: ");
@@ -565,8 +565,20 @@ public class ShopGUI extends JFrame {
         DefaultListModel<Order> orderModel = new DefaultListModel<>();
         JList<Order> ordersList = new JList<>(orderModel);
 
-        JLabel orderLabel= new JLabel("");
+        JLabel orderLabel= new JLabel("ORDERS: ");
+        orderLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,16));
+        orderLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        orderLabel.setMaximumSize(new Dimension(10,10));
 
+        JPanel buttonsPanel= new JPanel(new FlowLayout());
+        JButton backButton= backToMenuAdmin();
+        JButton removeButton= new JButton("Remove");
+        removeButton.setEnabled(false);
+
+        JTextArea orderInfoTextArea= new JTextArea();
+        orderInfoTextArea.setEditable(false);
+        orderInfoTextArea.setWrapStyleWord(true);
+        orderInfoTextArea.setLineWrap(true);
 
         for (Map.Entry<String, Customer> entry : Customer.customers.entrySet()) {
             String key = entry.getKey();
@@ -589,14 +601,14 @@ public class ShopGUI extends JFrame {
         customerJList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                if (customerJList.getSelectedValue()!=null){
-                    orderLabel.setText("ORDERS: ");
+                if (!customerJList.isSelectionEmpty()){
+                    orderInfoTextArea.setText("");
+                    removeButton.setEnabled(false);
+                    orderModel.removeAllElements();
                     Customer customer= customerJList.getSelectedValue();
                     for (Order order : customer.getOrders()) {
                         orderModel.addElement(order);
                     }
-                }else {
-                    orderLabel.setText("");
                 }
 
             }
@@ -614,15 +626,25 @@ public class ShopGUI extends JFrame {
                 return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             }
         });
+        ordersList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!ordersList.isSelectionEmpty()){
+                    removeButton.setEnabled(true);
+                    Order order=ordersList.getSelectedValue();
+                    String text= order.getSelectedOrderInfo();
+                    orderInfoTextArea.setText(text);
+                }
+            }
+        });
 
-        JPanel twoListsPanel= new JPanel(new GridLayout(3,1));
-        twoListsPanel.add(customerJList);
+        JPanel twoListsPanel= new JPanel(new GridLayout(4,1));
+        twoListsPanel.add(new JScrollPane(customerJList));
         twoListsPanel.add(orderLabel);
-        twoListsPanel.add(ordersList);
+        twoListsPanel.add(new JScrollPane(ordersList));
+        twoListsPanel.add(orderInfoTextArea);
 
-        JPanel buttonsPanel= new JPanel(new FlowLayout());
-        JButton backButton= backToMenuAdmin();
-        JButton removeButton= new JButton("Remove");
+
 
         buttonsPanel.add(backButton);
         buttonsPanel.add(removeButton);

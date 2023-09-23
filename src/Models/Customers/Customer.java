@@ -37,6 +37,8 @@ public class Customer implements IPersonInfo {
     // password dodac, metody register, login, hashowanie hasel itd;
 
     public Customer(String login, String password){
+//        this.id=idCounter;
+//        idCounter++;
         this.login=login;
         this.password=password;
         this.role=Role.CLIENT;
@@ -46,6 +48,8 @@ public class Customer implements IPersonInfo {
 
     public Customer(String login, String firstName, String lastName, String address, int tel, double credits, String email, List<ProductInCartDTO> currentCart, List<Integer> ordersIds) {
         this.login = login;
+        this.id=idCounter;
+        idCounter++;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
