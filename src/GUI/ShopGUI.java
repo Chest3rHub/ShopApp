@@ -257,6 +257,8 @@ public class ShopGUI extends JFrame {
 
         JButton customerButton= new JButton("Customers");
 
+        JButton employeesButton= new JButton("Employees");
+
         addSizesAndQuantitiesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -291,7 +293,12 @@ public class ShopGUI extends JFrame {
                 customersAndTheirOrdersMenuAdmin();
             }
         });
-
+        employeesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                employeesScreenAdmin();
+            }
+        });
 
         buttonPanel.add(addProductButton);
         buttonPanel.add(logOutButton);
@@ -299,9 +306,58 @@ public class ShopGUI extends JFrame {
         buttonPanel.add(revenueButton);
         buttonPanel.add(addSizesAndQuantitiesButton);
         buttonPanel.add(customerButton);
+        buttonPanel.add(employeesButton);
         secondPanel.add(buttonPanel, BorderLayout.CENTER);
 
         frame.setTitle("Menu: ADMIN");
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(secondPanel);
+        frame.getContentPane().revalidate();
+        frame.getContentPane().repaint();
+        setFrameLocation(frame);
+
+        frame.setVisible(true);
+    }
+
+    public static void employeesScreenAdmin(){
+        secondPanel = new JPanel();
+        secondPanel.setLayout(new BorderLayout());
+        frame.setVisible(false);
+        frame.setSize(300, 200);
+
+        JLabel employeesLabel = new JLabel("Employees: ");
+        employeesLabel.setFont(new Font(_FONT.getFontName(),Font.PLAIN,16));
+        employeesLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        secondPanel.add(employeesLabel, BorderLayout.NORTH);
+
+        DefaultListModel<AbstractEmployee> employeeDefaultListModel = new DefaultListModel<>();
+        JList<AbstractEmployee> employeeJList = new JList<>(employeeDefaultListModel);
+        for (AbstractEmployee employee : AbstractEmployee.abstractEmployees) {
+            employeeDefaultListModel.addElement(employee);
+        }
+
+        employeeJList.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(
+                    JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof AbstractEmployee) {
+                    value = "ID: " + ((AbstractEmployee) value).getId()
+                            + ", NAME: " + ((AbstractEmployee) value).getFirstName()
+                        + ", SURNAME: " + ((AbstractEmployee) value).getLastName()
+                            + ", ROLE: " + ((AbstractEmployee) value).getRole();
+                }
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
+
+        JPanel listAndInfoPanel = new JPanel(new BorderLayout());
+        listAndInfoPanel.add(new JScrollPane(employeeJList), BorderLayout.CENTER);
+
+        secondPanel.add(listAndInfoPanel, BorderLayout.CENTER);
+
+        JPanel buttonPanel= new JPanel(new FlowLayout());
+
+        frame.setTitle("Employees");
         frame.getContentPane().removeAll();
         frame.getContentPane().add(secondPanel);
         frame.getContentPane().revalidate();
@@ -547,6 +603,9 @@ public class ShopGUI extends JFrame {
         frame.setVisible(true);
     }
     public static void customersAndTheirOrdersMenuAdmin(){
+        /**
+         * This method displays customers and their orders menu for admin with option to remove any order.
+         */
 
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
@@ -656,7 +715,7 @@ public class ShopGUI extends JFrame {
                 // removing orders from everywhere
                 orderModel.removeElement(order);
                 Order.allOrders.remove(order);
-                // trzeba inde
+
                 customer.getOrdersIds().remove(index);
                 customer.getOrders().remove(order);
                 removeButton.setEnabled(false);
