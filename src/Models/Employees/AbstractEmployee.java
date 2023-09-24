@@ -3,7 +3,9 @@ package Models.Employees;
 import Interfaces.IPersonInfo;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -152,6 +154,24 @@ public abstract class AbstractEmployee implements IPersonInfo {
                 }
             }
             idCounter+=employeesCounter;
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public static void saveEmployeesChangesToFile(){
+        try {
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(employeesFileName));
+            for (AbstractEmployee employee : abstractEmployees) {
+                    bufferedWriter.write(employee.getId() + ";"
+                            + employee.getFirstName() + ";"
+                            + employee.getLastName() + ";"
+                            + employee.getHireDate() + ";"
+                            + employee.getSalary() + ";"
+                    + employee.getRole());
+                    bufferedWriter.write("\n");
+
+            }
+            bufferedWriter.close();
         } catch (Exception e){
             e.printStackTrace();
         }

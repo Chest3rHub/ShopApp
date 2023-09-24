@@ -77,6 +77,7 @@ public class ShopGUI extends JFrame {
                     Order.saveOrdersToFile();
                     Consultant.saveConsultantFeedbackToFile();
                     Product.saveProductsToFile();
+                    AbstractEmployee.saveEmployeesChangesToFile();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -377,12 +378,18 @@ public class ShopGUI extends JFrame {
                     } else if (role.equals(Role.MANAGER)){
                         throw new Exception("MANAGER can't be fired!");
                     } else if (role.equals(Role.WORKER)){
-
+                        employeeDefaultListModel.removeElement(employee);
+                        Admin.fireEmployee(employee);
                     } else if (role.equals(Role.CONSULTANT)){
+                        // 15;Agnes;Ratchet;2023-03-12;3500;CONSULTANT
+                        // 15;FIVE;2023-09-19;Brilliant!
+                        int index= Consultant.consultantList.indexOf(employee);
+                        Consultant.consultantList.get(index).getFeedbackFromCustomerList().clear();
                         employeeDefaultListModel.removeElement(employee);
                         Consultant.consultantList.remove(employee);
                         Admin.fireEmployee(employee);
                         // dodac jeszcze usuwanie ich feedbackow ktore maja
+                        // dodac aktualizacje pliku pracownikow na koniec dzialania programu
                         JOptionPane.showMessageDialog(frame,"Fired an employee: " + employee,"Info", JOptionPane.PLAIN_MESSAGE);
                     }
                 } catch (Exception exception){
