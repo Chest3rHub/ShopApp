@@ -2,6 +2,7 @@ package Models.Employees;
 
 import Exceptions.InteractingWithYourselfException;
 
+import javax.swing.*;
 import java.time.LocalDate;
 
 public class Admin extends AbstractEmployee{
@@ -10,7 +11,7 @@ public class Admin extends AbstractEmployee{
         super(firstName,lastName,hireDate,salary,role);
     }
 
-    public void hireNewEmployee(AbstractEmployee abstractEmployee){
+    public static void hireNewEmployee(AbstractEmployee abstractEmployee){
         if (AbstractEmployee.abstractEmployees.contains(abstractEmployee)){
             System.out.println("This employee is already hired!");
             return;
@@ -27,13 +28,13 @@ public class Admin extends AbstractEmployee{
         abstractEmployee.feedbackFromManagerList.add(feedback);
         System.out.println("Employee has received your feedback.");
     }
-    public void fireEmployee(AbstractEmployee abstractEmployee){
+    public static void fireEmployee(AbstractEmployee abstractEmployee){
         if (!AbstractEmployee.abstractEmployees.contains(abstractEmployee)){
             System.out.println("There is no such employee to fire.");
             return;
         }
         AbstractEmployee.abstractEmployees.remove(abstractEmployee);
-        System.out.println("Fired an employee: " + abstractEmployee);
+     //   System.out.println("Fired an employee: " + abstractEmployee);
     }
     public static void getEmployeesOfRole(Role role){
         // dokonczyc metode..

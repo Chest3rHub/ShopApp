@@ -336,6 +336,11 @@ public class ShopGUI extends JFrame {
             employeeDefaultListModel.addElement(employee);
         }
 
+
+        JButton backButton= backToMenuAdmin();
+        JButton removeButton= new JButton("Fire");
+        removeButton.setEnabled(false);
+
         employeeJList.setCellRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(
@@ -349,19 +354,61 @@ public class ShopGUI extends JFrame {
                 return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             }
         });
+        employeeJList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!employeeJList.isSelectionEmpty()){
+                    removeButton.setEnabled(true);
+                }else {
+                    removeButton.setEnabled(false);
+                }
+            }
+        });
+
+        removeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AbstractEmployee employee= employeeJList.getSelectedValue();
+                Role role= employee.getRole();
+
+                try{
+                    if (role.equals(Role.ADMIN)){
+                        throw new Exception("ADMIN can't be fired!");
+                    } else if (role.equals(Role.MANAGER)){
+                        throw new Exception("MANAGER can't be fired!");
+                    } else if (role.equals(Role.WORKER)){
+
+                    } else if (role.equals(Role.CONSULTANT)){
+                        employeeDefaultListModel.removeElement(employee);
+                        Consultant.consultantList.remove(employee);
+                        Admin.fireEmployee(employee);
+                        // dodac jeszcze usuwanie ich feedbackow ktore maja
+                        JOptionPane.showMessageDialog(frame,"Fired an employee: " + employee,"Info", JOptionPane.PLAIN_MESSAGE);
+                    }
+                } catch (Exception exception){
+                    JOptionPane.showMessageDialog(frame,exception.getMessage(),"Error", JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
+        });
 
         JPanel listAndInfoPanel = new JPanel(new BorderLayout());
         listAndInfoPanel.add(new JScrollPane(employeeJList), BorderLayout.CENTER);
 
-        secondPanel.add(listAndInfoPanel, BorderLayout.CENTER);
-
         JPanel buttonPanel= new JPanel(new FlowLayout());
+        buttonPanel.add(backButton);
+        buttonPanel.add(removeButton);
+
+        secondPanel.add(listAndInfoPanel, BorderLayout.CENTER);
+        secondPanel.add(buttonPanel,BorderLayout.SOUTH);
+
 
         frame.setTitle("Employees");
         frame.getContentPane().removeAll();
         frame.getContentPane().add(secondPanel);
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
+        frame.pack();
         setFrameLocation(frame);
 
         frame.setVisible(true);
