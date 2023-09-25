@@ -446,8 +446,10 @@ public class ShopGUI extends JFrame {
 
         JLabel roleLabel= new JLabel("Role: ");
         JComboBox<Role> roleComboBox= new JComboBox();
+        roleComboBox.addItem(Role.CHOOSE);
         roleComboBox.addItem(Role.CONSULTANT);
         roleComboBox.addItem(Role.WORKER);
+        roleComboBox.setSelectedItem(Role.CHOOSE);
 
         JButton backButton= backToMenuAdmin();
 
@@ -456,10 +458,46 @@ public class ShopGUI extends JFrame {
         hireButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // edytowac liste abstract emploeyes czytanie z pliku zeby przy tworzeniu obiekt byl dodawany do listy a nie
-                // specjalnie trzeba dodawac
-                // pushing commits issue
-                // changed network
+                try{
+                    if (firstNameTextField.getText().isBlank()){
+                        throw new Exception("Fill in first name field!");
+                    }
+                    if (lastNameTextField.getText().isBlank()){
+                        throw new Exception("Fill in last name field!");
+                    }
+                    if (salaryTextField.getText().isBlank()){
+                        throw new Exception("Fill in salary field!");
+                    }
+                    double salary;
+                    try{
+                        String salaryString= salaryTextField.getText();
+                        salary= Double.parseDouble(salaryString);
+                    } catch (Exception e1){
+                        throw new Exception("Salary must be a number!");
+                    }
+                    if (roleComboBox.getSelectedItem().equals(Role.CHOOSE)){
+                        throw new Exception("Select a role first!");
+                    }
+                    Role role= (Role)roleComboBox.getSelectedItem();
+                    String firstName= firstNameTextField.getText();
+                    String lastName= lastNameTextField.getText();
+                    LocalDate date= LocalDate.now();
+                    if (role.equals(Role.CONSULTANT)){
+                        new Consultant(firstName,lastName,date,salary,role);
+                    }else if (role.equals(Role.WORKER)){
+                        new Worker(firstName,lastName,date,salary,role);
+                    }
+
+                    firstNameTextField.setText("");
+                    lastNameTextField.setText("");
+                    salaryTextField.setText("");
+
+                    roleComboBox.setSelectedItem(Role.CHOOSE);
+
+                    JOptionPane.showMessageDialog(frame,"Hired an employee!", "Info", JOptionPane.PLAIN_MESSAGE);
+                }catch (Exception exception){
+                    JOptionPane.showMessageDialog(frame,exception.getMessage(),"Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
