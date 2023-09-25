@@ -453,6 +453,14 @@ public class ShopGUI extends JFrame {
 
         JButton hireButton= new JButton("Hire");
 
+        hireButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // edytowac liste abstract emploeyes czytanie z pliku zeby przy tworzeniu obiekt byl dodawany do listy a nie
+                // specjalnie trzeba dodawac
+            }
+        });
+
 
         secondPanel.add(firstNameLabel);
         secondPanel.add(firstNameTextField);

@@ -36,6 +36,7 @@ public abstract class AbstractEmployee implements IPersonInfo {
         this.hireDate = hireDate;
         this.salary = salary;
         this.role = role;
+        abstractEmployees.add(this);
 
     }
 
@@ -150,13 +151,13 @@ public abstract class AbstractEmployee implements IPersonInfo {
                 Role role= Role.valueOf(roleString);
 
                 if (role==Role.MANAGER){
-                    abstractEmployees.add(new Manager(firstName,lastName,hireDate,salary,role));
+                    new Manager(firstName,lastName,hireDate,salary,role);
                 }else if (role==Role.WORKER ){
-                    abstractEmployees.add(new Worker(firstName,lastName,hireDate,salary,role));
+                    new Worker(firstName,lastName,hireDate,salary,role);
                 }else if(role==Role.ADMIN){
-                    abstractEmployees.add(new Admin(firstName,lastName,hireDate,salary,role));
+                    new Admin(firstName,lastName,hireDate,salary,role);
                 }else if(role== Role.CONSULTANT){
-                    abstractEmployees.add(new Consultant(firstName,lastName,hireDate,salary,role));
+                    new Consultant(firstName,lastName,hireDate,salary,role);
                 }
             }
             idCounter+=employeesCounter;
