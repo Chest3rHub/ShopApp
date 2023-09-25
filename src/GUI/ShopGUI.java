@@ -260,6 +260,8 @@ public class ShopGUI extends JFrame {
 
         JButton employeesButton= new JButton("Employees");
 
+        JButton passwordsButton= new JButton("Passwords");
+
         addSizesAndQuantitiesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -300,6 +302,12 @@ public class ShopGUI extends JFrame {
                 employeesScreenAdmin();
             }
         });
+        passwordsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                passwordsScreenAdmin();
+            }
+        });
 
         buttonPanel.add(addProductButton);
         buttonPanel.add(logOutButton);
@@ -308,6 +316,7 @@ public class ShopGUI extends JFrame {
         buttonPanel.add(addSizesAndQuantitiesButton);
         buttonPanel.add(customerButton);
         buttonPanel.add(employeesButton);
+        buttonPanel.add(passwordsButton);
         secondPanel.add(buttonPanel, BorderLayout.CENTER);
 
         frame.setTitle("Menu: ADMIN");
@@ -315,6 +324,25 @@ public class ShopGUI extends JFrame {
         frame.getContentPane().add(secondPanel);
         frame.getContentPane().revalidate();
         frame.getContentPane().repaint();
+        setFrameLocation(frame);
+
+        frame.setVisible(true);
+    }
+    public static void passwordsScreenAdmin(){
+        frame.setVisible(false);
+        secondPanel = new JPanel();
+        secondPanel.setLayout(new GridLayout(5,2));
+        frame.setSize(350, 250);
+
+
+
+        frame.setTitle("Passwords");
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(secondPanel);
+        frame.getContentPane().revalidate();
+        frame.pack();
+        frame.getContentPane().repaint();
+
         setFrameLocation(frame);
 
         frame.setVisible(true);
