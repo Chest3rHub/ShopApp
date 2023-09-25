@@ -113,6 +113,12 @@ public abstract class AbstractEmployee implements IPersonInfo {
                 + this.salary + ";"
                 + this.role;
     }
+    public String toString(){
+        return "ID: "+ this.id + ", NAME: "
+                + this.firstName + ", SURNAME: "
+                + this.lastName + ", ROLE: "
+                + this.role;
+    }
     public static void showEmployees(){
         for (AbstractEmployee abstractEmployee : abstractEmployees){
             System.out.println(abstractEmployee.getPersonalData());

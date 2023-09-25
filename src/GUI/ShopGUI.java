@@ -342,6 +342,8 @@ public class ShopGUI extends JFrame {
         JButton removeButton= new JButton("Fire");
         removeButton.setEnabled(false);
 
+        JButton hireEmployeeButton= new JButton("Hire new employee");
+
         employeeJList.setCellRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(
@@ -398,6 +400,12 @@ public class ShopGUI extends JFrame {
 
             }
         });
+        hireEmployeeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                hireNewEmployeeScreenAdmin();
+            }
+        });
 
         JPanel listAndInfoPanel = new JPanel(new BorderLayout());
         listAndInfoPanel.add(new JScrollPane(employeeJList), BorderLayout.CENTER);
@@ -405,6 +413,7 @@ public class ShopGUI extends JFrame {
         JPanel buttonPanel= new JPanel(new FlowLayout());
         buttonPanel.add(backButton);
         buttonPanel.add(removeButton);
+        buttonPanel.add(hireEmployeeButton);
 
         secondPanel.add(listAndInfoPanel, BorderLayout.CENTER);
         secondPanel.add(buttonPanel,BorderLayout.SOUTH);
@@ -420,6 +429,61 @@ public class ShopGUI extends JFrame {
 
         frame.setVisible(true);
     }
+    public static void hireNewEmployeeScreenAdmin(){
+        frame.setVisible(false);
+        secondPanel = new JPanel();
+        secondPanel.setLayout(new GridLayout(5,2));
+        frame.setSize(350, 250);
+
+        JLabel firstNameLabel= new JLabel("First name: ");
+        JTextField firstNameTextField= new JTextField();
+
+        JLabel lastNameLabel= new JLabel("Last name: ");
+        JTextField lastNameTextField= new JTextField();
+
+        JLabel salaryLabel= new JLabel("Salary: ");
+        JTextField salaryTextField= new JTextField();
+
+        JLabel roleLabel= new JLabel("Role: ");
+        JComboBox<Role> roleComboBox= new JComboBox();
+        roleComboBox.addItem(Role.CONSULTANT);
+        roleComboBox.addItem(Role.WORKER);
+
+        JButton backButton= backToMenuAdmin();
+
+        JButton hireButton= new JButton("Hire");
+
+
+        secondPanel.add(firstNameLabel);
+        secondPanel.add(firstNameTextField);
+        secondPanel.add(lastNameLabel);
+        secondPanel.add(lastNameTextField);
+        // date terazniejsza dodac
+        secondPanel.add(salaryLabel);
+        secondPanel.add(salaryTextField);
+
+        secondPanel.add(roleLabel);
+        secondPanel.add(roleComboBox);
+
+        secondPanel.add(backButton);
+        secondPanel.add(hireButton);
+
+
+
+
+
+        frame.setTitle("Hire");
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(secondPanel);
+        frame.getContentPane().revalidate();
+        frame.pack();
+        frame.getContentPane().repaint();
+
+        setFrameLocation(frame);
+
+        frame.setVisible(true);
+    }
+
     public static void revenueScreenAdmin(){
         /**
          * This method opens frame which displays total revenue to Admin
