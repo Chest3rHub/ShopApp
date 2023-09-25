@@ -458,6 +458,7 @@ public class ShopGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // edytowac liste abstract emploeyes czytanie z pliku zeby przy tworzeniu obiekt byl dodawany do listy a nie
                 // specjalnie trzeba dodawac
+                // pushing commits issue
             }
         });
 
