@@ -332,12 +332,16 @@ public class ShopGUI extends JFrame {
     public static void passwordsScreenAdmin(){
         frame.setVisible(false);
         secondPanel = new JPanel();
-        secondPanel.setLayout(new GridLayout(5,2));
-        frame.setSize(350, 250);
+        secondPanel.setLayout(new BorderLayout());
+        frame.setSize(200, 250);
 
 
         DefaultListModel<AccountLoginAndDetailsDTO> accountsDefaultList = new DefaultListModel<>();
         JList<AccountLoginAndDetailsDTO> accountsJList = new JList<>(accountsDefaultList);
+
+        JButton backButton= backToMenuAdmin();
+        JButton changeButton= new JButton("Change password");
+        changeButton.setEnabled(false);
 
         for (Map.Entry<String, PasswordRoleDTO> entry : accounts.entrySet()) {
             String loginHashed = entry.getKey();
@@ -346,6 +350,7 @@ public class ShopGUI extends JFrame {
                 // nothing
             } else if (passwordRoleDTO.getRole().equals(Role.MANAGER)){
               // accountsDefaultList.addElement(new AccountLoginAndDetailsDTO());
+                // dodac jak bedzie jakas opcja menu dla managera itd
             } else if (passwordRoleDTO.getRole().equals(Role.CLIENT)){
                 Customer customer = Customer.getCustomers().get(loginHashed);
                 String name= customer.getFirstName();
@@ -355,8 +360,71 @@ public class ShopGUI extends JFrame {
             }
             // gdyby dalo sie tworzyc konta dla wszystkich pracownikow to tutaj trzeba dodac warunki dla innych ról.
         }
+        accountsJList.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(
+                    JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof AccountLoginAndDetailsDTO) {
+                    value = "LOGIN: " + ((AccountLoginAndDetailsDTO) value).getLoginHashed()
+                            + ", NAME: " + ((AccountLoginAndDetailsDTO) value).getFirstName()
+                            + ", SURNAME: " + ((AccountLoginAndDetailsDTO) value).getLastName();
+                }
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
+        accountsJList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+
+                if (!accountsJList.isSelectionEmpty()){
+                    changeButton.setEnabled(true);
+                    // logika zmiany hasla
+                    changePasswordAsAdminScreen(accountsJList.getSelectedValue());
+                }else {
+                    changeButton.setEnabled(false);
+                }
+            }
+        });
+
+        secondPanel.add(new JScrollPane(accountsJList),BorderLayout.CENTER);
+
+        JPanel buttonsPanel= new JPanel(new FlowLayout());
+        buttonsPanel.add(backButton);
+        buttonsPanel.add(changeButton);
+
+        secondPanel.add(buttonsPanel,BorderLayout.SOUTH);
 
         frame.setTitle("Passwords");
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(secondPanel);
+        frame.getContentPane().revalidate();
+        frame.pack();
+        frame.getContentPane().repaint();
+
+        setFrameLocation(frame);
+
+        frame.setVisible(true);
+    }
+
+    public static void changePasswordAsAdminScreen(AccountLoginAndDetailsDTO accountLoginAndDetailsDTO){
+        frame.setVisible(false);
+        secondPanel = new JPanel(new GridLayout(3,2));
+        secondPanel.setLayout(new BorderLayout());
+        frame.setSize(200, 250);
+
+        JButton backButton= new JButton("Back");
+
+
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                passwordsScreenAdmin();
+            }
+        });
+
+
+
+        frame.setTitle("Change password");
         frame.getContentPane().removeAll();
         frame.getContentPane().add(secondPanel);
         frame.getContentPane().revalidate();
