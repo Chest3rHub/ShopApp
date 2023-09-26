@@ -1,5 +1,6 @@
 package GUI;
 
+import DTOs.AccountLoginAndDetailsDTO;
 import DTOs.PasswordRoleDTO;
 import DTOs.ProductInCartDTO;
 import Exceptions.NotEnoughProductsException;
@@ -95,9 +96,9 @@ public class ShopGUI extends JFrame {
         frame.setVisible(false);
         frame.setTitle("Login to Shop App");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(300, 200);
+        frame.setSize(300, 175);
 
-        secondPanel.setLayout(new GridLayout(4, 2, 10, 10));
+        secondPanel.setLayout(new GridLayout(3, 2, 10, 10));
 
         JLabel loginLabel = new JLabel("Login:");
         JTextField loginField = new JTextField();
@@ -335,6 +336,25 @@ public class ShopGUI extends JFrame {
         frame.setSize(350, 250);
 
 
+        DefaultListModel<AccountLoginAndDetailsDTO> accountsDefaultList = new DefaultListModel<>();
+        JList<AccountLoginAndDetailsDTO> accountsJList = new JList<>(accountsDefaultList);
+
+        for (Map.Entry<String, PasswordRoleDTO> entry : accounts.entrySet()) {
+            String loginHashed = entry.getKey();
+            PasswordRoleDTO passwordRoleDTO = entry.getValue();
+            if (passwordRoleDTO.getRole().equals(Role.ADMIN)){
+                // nothing
+            } else if (passwordRoleDTO.getRole().equals(Role.MANAGER)){
+              // accountsDefaultList.addElement(new AccountLoginAndDetailsDTO());
+            } else if (passwordRoleDTO.getRole().equals(Role.CLIENT)){
+                Customer customer = Customer.getCustomers().get(loginHashed);
+                String name= customer.getFirstName();
+                String surname= customer.getLastName();
+               // String login= customer.getLogin();
+                accountsDefaultList.addElement(new AccountLoginAndDetailsDTO(loginHashed,name,surname));
+            }
+            // gdyby dalo sie tworzyc konta dla wszystkich pracownikow to tutaj trzeba dodac warunki dla innych ról.
+        }
 
         frame.setTitle("Passwords");
         frame.getContentPane().removeAll();
