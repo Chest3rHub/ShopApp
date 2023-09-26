@@ -22,6 +22,17 @@ public class Main {
         // password: Szef
 
 
+        // test
+        System.out.println("Lebioda".hashCode());
+        System.out.println((("Szymon"+ "Lebioda").hashCode()));
+        long test=("Szymon"+ "Lebioda").hashCode();
+        String sss=String.valueOf(test);
+        System.out.println(sss);
+        System.out.println(sss.hashCode());
+
+        System.out.println(("-1802365190"+"Lebioda").hashCode());
+
+
         // jedno konto dla admina, jedno dla managera, wiele dla klientow
 
         // produkty, pozniej seeduje ilosci i rozmiary a na kooniec pracownikow

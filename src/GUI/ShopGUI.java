@@ -378,11 +378,18 @@ public class ShopGUI extends JFrame {
 
                 if (!accountsJList.isSelectionEmpty()){
                     changeButton.setEnabled(true);
-                    // logika zmiany hasla
-                    changePasswordAsAdminScreen(accountsJList.getSelectedValue());
+
                 }else {
                     changeButton.setEnabled(false);
                 }
+            }
+        });
+
+        changeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // logika zmiany hasla
+                changePasswordAsAdminScreen(accountsJList.getSelectedValue());
             }
         });
 
@@ -409,10 +416,15 @@ public class ShopGUI extends JFrame {
     public static void changePasswordAsAdminScreen(AccountLoginAndDetailsDTO accountLoginAndDetailsDTO){
         frame.setVisible(false);
         secondPanel = new JPanel(new GridLayout(3,2));
-        secondPanel.setLayout(new BorderLayout());
         frame.setSize(200, 250);
 
         JButton backButton= new JButton("Back");
+        JLabel newPasswordLabel= new JLabel("New password: ");
+        JPasswordField newPasswordField= new JPasswordField();
+
+        JLabel confirmLabel= new JLabel("Confirm password: ");
+        JPasswordField confirmPasswordField= new JPasswordField();
+
 
 
         backButton.addActionListener(new ActionListener() {
@@ -421,6 +433,61 @@ public class ShopGUI extends JFrame {
                 passwordsScreenAdmin();
             }
         });
+        JButton changeButton= new JButton("Save");
+
+        changeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    if (newPasswordField.getPassword().length!=0 || confirmPasswordField.getPassword().length!=0){
+                        if (newPasswordField.getPassword().length<_minPasswordLength ){
+                            throw new Exception("Too short password! Minimum 7 characters!");
+                        }
+                        if (!Arrays.equals(newPasswordField.getPassword(), confirmPasswordField.getPassword())){
+                            throw new Exception("Passwords are not the same!");
+                        }
+//                          password changing
+
+                        String loginHashed= accountLoginAndDetailsDTO.getLoginHashed();
+
+                        Customer customer= Customer.getCustomers().get(loginHashed);
+
+                        char[] passwordChars = newPasswordField.getPassword();
+                        String enteredPassword= new String(passwordChars);
+                        String toHash=loginHashed+enteredPassword;
+                        long newPasswordLong= toHash.hashCode();
+                        String newPassword=String.valueOf(newPasswordLong);
+                        customer.setPassword(newPassword);
+                       // long enteredLoginHash= loginHashed.hashCode();
+                       // String enteredLoginStringhash= String.valueOf(enteredLoginHash);
+                        // 567832327
+
+                        System.out.println("Zapisywane: " + newPassword);
+                        accounts.replace(loginHashed,new PasswordRoleDTO(newPassword, Role.CLIENT));
+
+                        String loginTest= loginHashed;
+                        String passwordText="Lebioda";
+                        long hash=(loginTest+passwordText).hashCode();
+                        String hashfinal=String.valueOf(hash);
+                        System.out.println("Powinno byc: " + hashfinal);
+                    }
+                    newPasswordField.setText("");
+                    confirmPasswordField.setText("");
+                    JOptionPane.showMessageDialog(frame,"Saved changes successfully!","Info",JOptionPane.PLAIN_MESSAGE);
+                }catch( Exception exception){
+                    JOptionPane.showMessageDialog(frame,exception.getMessage(),"Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        secondPanel.add(newPasswordLabel);
+        secondPanel.add(newPasswordField);
+
+        secondPanel.add(confirmLabel);
+        secondPanel.add(confirmPasswordField);
+        secondPanel.add(backButton);
+
+        secondPanel.add(changeButton);
 
 
 
@@ -3302,6 +3369,9 @@ public class ShopGUI extends JFrame {
             throw new Exception("Incorrect login or password") ;
         }
         String passwordToCheck= loginToCheck.getPassword();
+
+        System.out.println("Wprowadzone haslo: " + passwordToCheck);
+        System.out.println("Haslo w bazie: "+ combinedHashString);
 
         if (passwordToCheck.equals(combinedHashString)){
             return loginToCheck.getRole();
