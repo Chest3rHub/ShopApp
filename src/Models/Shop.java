@@ -24,6 +24,10 @@ public class Shop {
     List<Product> products= new ArrayList<>();
     List<Order> orders= new ArrayList<>();
 
+    /**
+     * This method reads all data from files
+     * @throws IOException when file with provided path not found
+     */
     public static void openShop() throws IOException {
         Product.readProductsFromFile();
         ProductWithSizeAndQtity.seedData();

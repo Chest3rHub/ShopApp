@@ -93,11 +93,11 @@ public String toString(){
         }
     }
 
-
+    /**
+     * This method reads all products from file in the beginning of the program
+     */
     public static void readProductsFromFile (){
-        /**
-         * This method reads all products from file in the beginning of the program
-         */
+
         try{
             int productsCounter=0;
             BufferedReader fileReader= new BufferedReader(new FileReader(productsFileName));
@@ -174,11 +174,11 @@ public String toString(){
     public void setDescription(String description) {
         this.description = description;
     }
-
+    /**
+     * This method saves products to file
+     */
     public static void saveProductsToFile(){
-        /**
-         * This method saves products to file
-         */
+
         try{
             BufferedWriter fileWriter = new BufferedWriter(new FileWriter(productsFileName));
             for (Product product : allProducts){

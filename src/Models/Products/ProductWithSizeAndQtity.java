@@ -23,10 +23,11 @@ public class ProductWithSizeAndQtity{
         this.sizesAndQuantitiesMap = sizes;
         availableProductsWithSizesAndQtity.add(this);
     }
+    /**
+     * This method seeds products with sizes and quantities in the beggining of the program
+     */
     public static void seedData(){
-        /**
-         * This method seeds products with sizes and quantities in the beggining of the program
-         */
+
         List<Size> sizes= new ArrayList<>();
         sizes.add(Size.XS);
         sizes.add(Size.S);

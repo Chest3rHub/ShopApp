@@ -120,15 +120,20 @@ public abstract class AbstractEmployee implements IPersonInfo {
                 + this.lastName + ", ROLE: "
                 + this.role;
     }
+
+    /**
+     * This method prints all employees
+     */
     public static void showEmployees(){
         for (AbstractEmployee abstractEmployee : abstractEmployees){
             System.out.println(abstractEmployee.getPersonalData());
         }
     }
+    /**
+     * This method reads employees from file and adds them to static collection abstractEmployees
+     */
     public static void readEmployeesFromFile (){
-        /**
-         * This method reads employees from file and adds them to static collection abstractEmployees
-         */
+
         try{
             int employeesCounter=0;
             BufferedReader fileReader= new BufferedReader(new FileReader(employeesFileName));
@@ -165,6 +170,10 @@ public abstract class AbstractEmployee implements IPersonInfo {
             e.printStackTrace();
         }
     }
+
+    /**
+     * This method saves employees' changes to file
+     */
     public static void saveEmployeesChangesToFile(){
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(employeesFileName));

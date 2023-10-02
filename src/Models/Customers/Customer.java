@@ -60,10 +60,11 @@ public class Customer implements IPersonInfo {
         this.currentCart = currentCart;
         customers.put(login,this);
     }
+    /**
+     * This method adds to customers their orders read from file in the beginning
+     */
     public static void addOrdersToCustomersStartUp(){
-        /**
-         * This method adds to customers their orders read from file in the beginning
-         */
+
         for (Map.Entry<String, Customer> customerFromMap : customers.entrySet()) {
             String loginHash = customerFromMap.getKey();
             Customer customer = customerFromMap.getValue();

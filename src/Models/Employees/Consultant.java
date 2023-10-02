@@ -26,10 +26,11 @@ public class Consultant extends AbstractEmployee {
         consultantList.add(this);
         averageRating=0;
     }
+    /**
+     * This method reads feedback from file and adds it to consultants.
+     */
     public static void readFeedbackFromFileAndAddToConsultants() throws IOException {
-        /**
-         * This method reads feedback from file and adds it to consultants.
-         */
+
         try (BufferedReader br = new BufferedReader(new FileReader(_consultantFeedbackFileName))) {
             String line;
             line=br.readLine();
@@ -193,20 +194,22 @@ public class Consultant extends AbstractEmployee {
         this.averageRating = averageRating;
     }
 
+    /**
+     * This method gets random Consultant from static consultantList
+     * @return Random consultant
+     */
     public static Consultant getRandomConsultant(){
-        /**
-         * This method gets random Consultant from static consultantList
-         * @return Random consultant
-         */
+
         Random rand = new Random();
         int randomIndex = rand.nextInt(consultantList.size());
 
         return consultantList.get(randomIndex);
     }
+    /**
+     * This method saves feedback about consultants to file
+     */
     public static void saveConsultantFeedbackToFile(){
-        /**
-         * This method saves feedback about consultants to file
-         */
+
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(_consultantFeedbackFileName));
             bufferedWriter.write("ConsultantId;Rating;LocalDate;String comment\n");

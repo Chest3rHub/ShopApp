@@ -50,6 +50,9 @@ public class Order {
         idCounter++;
     }
 
+    /**
+     * This method saves orders to file
+     */
     public static void saveOrdersToFile(){
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(ordersFileName));
@@ -66,6 +69,11 @@ public class Order {
             e.printStackTrace();
         }
     }
+
+    /**
+     * This method gets selected order's info
+     * @return String value of the information
+     */
     public String getSelectedOrderInfo(){
         String info="";
         DecimalFormat decimalFormat = new DecimalFormat("#.00");
@@ -84,6 +92,11 @@ public class Order {
 
         return info;
     }
+
+    /**
+     * This method reads orders from file
+     * @throws Exception when file with provided path not found
+     */
     public static void readOrdersFromFile() throws Exception {
         try (BufferedReader br = new BufferedReader(new FileReader(ordersFileName))) {
             String line;
@@ -147,6 +160,10 @@ public class Order {
     }
 
 
+    /**
+     * This method calculates cost of the current cart
+     * @return Double value of this calculated cost
+     */
 
     public double calculateCost(){
         double cost=0;

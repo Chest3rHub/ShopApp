@@ -3762,14 +3762,13 @@ public class ShopGUI extends JFrame {
         public void addCreditsToAccount(Customer customer){
 
         }
-
-
+    /**
+     * This method changes frame to add credits frame
+     * @param customer Customer value attached to entered login
+     * @param loginEntered String value of entered login
+     */
         public static void addCreditsScreen(Customer customer, String loginEntered){
-            /**
-             * This method changes frame to add credits frame
-             * @param customer Customer value attached to entered login
-             * @param loginEntered String value of entered login
-             */
+
             secondPanel = new JPanel();
             secondPanel.setLayout(new BorderLayout());
 
@@ -3838,12 +3837,13 @@ public class ShopGUI extends JFrame {
 
             frame.setVisible(true);
         }
+    /**
+     * This method changes frame to account customer screen
+     * @param customer Customer value attached to entered login
+     * @param loginEntered String value of entered login
+     */
         public static void accountScreenCustomer(Customer customer, String loginEntered){
-            /**
-             * This method changes frame to account customer screen
-             * @param customer Customer value attached to entered login
-             * @param loginEntered String value of entered login
-             */
+
             secondPanel = new JPanel();
             secondPanel.setLayout(new GridLayout(8, 2, 10, 10));
 
@@ -3980,12 +3980,13 @@ public class ShopGUI extends JFrame {
 
             frame.setVisible(true);
         }
+    /**
+     * This method changes frame to cart screen
+     * @param customer Customer value attached to entered login
+     * @param loginEntered String value of entered login
+     */
         public static void cartScreen(Customer customer, String loginEntered){
-            /**
-             * This method changes frame to cart screen
-             * @param customer Customer value attached to entered login
-             * @param loginEntered String value of entered login
-             */
+
             secondPanel = new JPanel();
             secondPanel.setLayout(new BorderLayout());
 
@@ -4071,12 +4072,13 @@ public class ShopGUI extends JFrame {
 
             frame.setVisible(true);
         }
+    /**
+     * This method calculates cost of the current cart
+     * @param productInCartDTOS List of products in cart
+     * @return Cost of the current cart as a Double
+     */
         public static double calculateCartCost(List<ProductInCartDTO> productInCartDTOS){
-            /**
-             * This method calculates cost of the current cart
-             * @param productInCartDTOS List of products in cart
-             * @return Cost of the current cart as a Double
-             */
+
         double totalCost=0;
         for (ProductInCartDTO product : productInCartDTOS){
             System.out.println("Calculating price for: "+ product);
@@ -4092,14 +4094,15 @@ public class ShopGUI extends JFrame {
 
         return formattedCost;
         }
+    /**
+     * This method places an order
+     * @param customer Customer value attached to entered login
+     * @param loginEntered String value of entered login
+     * @param productsInCart List of products in cart
+     * @throws Exception When account data isn't filled, cart is empty, product's size or quantity is unavailable, there are not enough creduts to pay
+     */
         public static void placeAnOrder(Customer customer, String loginEntered, List<ProductInCartDTO> productsInCart) throws Exception {
-            /**
-             * This method places an order
-             * @param customer Customer value attached to entered login
-             * @param loginEntered String value of entered login
-             * @param productsInCart List of products in cart
-             * @throws Exception When account data isn't filled, cart is empty, product's size or quantity is unavailable, there are not enough creduts to pay
-             */
+
         double totalCost=0;
 
         if (customer.getFirstName()==null){
@@ -4183,10 +4186,11 @@ public class ShopGUI extends JFrame {
             JOptionPane.showMessageDialog(frame,"Order nr " + order.getIdOrder()+ " has been placed!", "Order", JOptionPane.PLAIN_MESSAGE);
 
         }
+    /**
+     * This method changes frame to registered an account screen
+     */
         public static void registeredAnAccountScreen(){
-            /**
-             * This method changes frame to registered an account screen
-             */
+
             secondPanel = new JPanel();
             secondPanel.setLayout(new BorderLayout());
 
@@ -4226,10 +4230,11 @@ public class ShopGUI extends JFrame {
 
             frame.setVisible(true);
         }
+    /**
+     * This method sets current frame location to center
+     */
         public static void setFrameLocation(JFrame frame){
-            /**
-             * This method sets current frame location to center
-             */
+
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             int screenWidth = screenSize.width;
             int screenHeight = screenSize.height;
