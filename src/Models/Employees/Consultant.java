@@ -78,32 +78,6 @@ public class Consultant extends AbstractEmployee {
     }
 
     public static List<Consultant> getConsultantsOrderedByAverageRatingAsc(List<Consultant> parameterList){
-//        List<Consultant> result= new ArrayList<>(parameterList);
-//        Consultant[] arr= result.toArray(new Consultant[0]);
-//
-//        int i, j;
-//        Consultant temp;
-//        boolean swapped;
-//        for (i = 0; i < result.size() - 1; i++) {
-//            swapped = false;
-//            for (j = 0; j < result.size() - i - 1; j++) {
-//                if (arr[j].averageRating > arr[j + 1].averageRating) {
-//
-//                    // Swap arr[j] and arr[j+1]
-//                    temp = arr[j];
-//                    arr[j] = arr[j + 1];
-//                    arr[j + 1] = temp;
-//                    swapped = true;
-//                }
-//            }
-//
-//            // If no two elements were
-//            // swapped by inner loop, then break
-//            if (swapped == false)
-//                break;
-//        }
-//        List<Consultant> orderedBy= Arrays.stream(arr).toList();
-//        return orderedBy;
         List<Consultant> resultList= new ArrayList<>(parameterList);
         Collections.sort(resultList, Comparator.comparingDouble(Consultant::getAverageRating));
         return resultList;
@@ -111,29 +85,6 @@ public class Consultant extends AbstractEmployee {
     }
 
     public static List<Consultant> getConsultantsOrderedByAverageRatingDesc(List<Consultant> parameterList){
-//        List<Consultant> result= new ArrayList<>(parameterList);
-//        Consultant[] arr= result.toArray(new Consultant[0]);
-//
-//        int i, j;
-//        Consultant temp;
-//        boolean swapped;
-//        for (i = 0; i < result.size() - 1; i++) {
-//            swapped = false;
-//            for (j = 0; j < result.size() - i - 1; j++) {
-//                if (arr[j].averageRating < arr[j + 1].averageRating) {
-//
-//                    temp = arr[j];
-//                    arr[j] = arr[j + 1];
-//                    arr[j + 1] = temp;
-//                    swapped = true;
-//                }
-//            }
-//
-//            if (swapped == false)
-//                break;
-//        }
-//        List<Consultant> orderedBy= Arrays.stream(arr).toList();
-//        return orderedBy;
         List<Consultant> resultList= new ArrayList<>(parameterList);
         Collections.sort(resultList, Comparator.comparingDouble(Consultant::getAverageRating).reversed());
         return resultList;
@@ -145,6 +96,10 @@ public class Consultant extends AbstractEmployee {
     public void addFeedback(Feedback feedback){
         this.feedbackFromCustomerList.add(feedback);
     }
+
+    /**
+     * This method calculates and sets average rating to consultant
+     */
     public void setAverageRating(){
         double sum=0;
         for (Feedback feedback : feedbackFromCustomerList){
@@ -172,6 +127,10 @@ public class Consultant extends AbstractEmployee {
         }
 
     }
+
+    /**
+     * This method calculates and sets average rating to all consultants
+     */
     public static void setAverageRatingForAllConsultants(){
         for (Consultant consultant : consultantList){
             consultant.setAverageRating();
