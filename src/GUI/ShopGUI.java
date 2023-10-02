@@ -63,15 +63,15 @@ public class ShopGUI extends JFrame {
 
     public static HashMap<String, PasswordRoleDTO> accounts= new HashMap<>();
 
+    /**
+     * This method saves customers, products, orders changes to file
+     * when window is closed
+     */
     public ShopGUI(){
         loggedOutScreen();
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                /**
-                 * This method saves customers, products, orders changes to file
-                 * when window is closed
-                 */
                 try {
                     savePasswordChangesToFile();
                     saveCustomersChangesToFile();
@@ -86,10 +86,11 @@ public class ShopGUI extends JFrame {
         });
     }
 
+    /**
+     * This method changes frame to login screen
+     */
+
     public static void changeToLoginScreen() {
-        /**
-         * This method changes frame to login
-         */
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
 
@@ -160,10 +161,11 @@ public class ShopGUI extends JFrame {
 
         frame.setVisible(true);
     }
+
+    /**
+     * This method changes frame to logged out screen with register and login buttons.
+     */
     public static void loggedOutScreen(){
-        /**
-         * This method changes frame to logged out screen with register and login buttons.
-         */
         BorderLayout borderLayout= new BorderLayout();
         JPanel mainPanel = new JPanel(borderLayout);
 
@@ -229,11 +231,10 @@ public class ShopGUI extends JFrame {
 
     }
 
-
+    /**
+     * This method changes frame to admin logged in
+     */
     public static void adminLoggedIn() {
-        /**
-         * This method changes frame to admin logged in
-         */
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
         frame.setVisible(false);
@@ -329,6 +330,10 @@ public class ShopGUI extends JFrame {
 
         frame.setVisible(true);
     }
+
+    /**
+     * This method changes frame to changing password screen for admin
+     */
     public static void passwordsScreenAdmin(){
         frame.setVisible(false);
         secondPanel = new JPanel();
@@ -413,6 +418,10 @@ public class ShopGUI extends JFrame {
         frame.setVisible(true);
     }
 
+    /**
+     * This method changes password of the chosen account
+     * @param accountLoginAndDetailsDTO Details of the account which password is being changed
+     */
     public static void changePasswordAsAdminScreen(AccountLoginAndDetailsDTO accountLoginAndDetailsDTO){
         frame.setVisible(false);
         secondPanel = new JPanel(new GridLayout(3,2));
@@ -503,6 +512,9 @@ public class ShopGUI extends JFrame {
         frame.setVisible(true);
     }
 
+    /**
+     * This method changes frame to employees screen for Admin
+     */
     public static void employeesScreenAdmin(){
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
@@ -612,6 +624,10 @@ public class ShopGUI extends JFrame {
 
         frame.setVisible(true);
     }
+
+    /**
+     * This method changes frame to hire new employee screen for Admin
+     */
     public static void hireNewEmployeeScreenAdmin(){
         frame.setVisible(false);
         secondPanel = new JPanel();
@@ -715,10 +731,11 @@ public class ShopGUI extends JFrame {
         frame.setVisible(true);
     }
 
+    /**
+     * This method opens frame which displays total revenue to Admin
+     */
     public static void revenueScreenAdmin(){
-        /**
-         * This method opens frame which displays total revenue to Admin
-         */
+
 
         secondPanel = new JPanel();
         secondPanel.setLayout(new GridLayout(4,1));
@@ -756,10 +773,11 @@ public class ShopGUI extends JFrame {
         frame.setVisible(true);
     }
 
+    /**
+     * This method changes frame to consultants screen for admin with options to display their feedback and order them by few factors
+     */
     public static void changeScreenToConsultantsAdmin(){
-        /**
-         * This method changes frame to consultants screen for admin with options to display their feedback and order them by few factors
-         */
+
         frame.setVisible(false);
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
@@ -951,10 +969,10 @@ public class ShopGUI extends JFrame {
 
         frame.setVisible(true);
     }
+    /**
+     * This method displays customers and their orders menu for admin with option to remove any order.
+     */
     public static void customersAndTheirOrdersMenuAdmin(){
-        /**
-         * This method displays customers and their orders menu for admin with option to remove any order.
-         */
 
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
@@ -1091,6 +1109,9 @@ public class ShopGUI extends JFrame {
 
     }
 
+    /**
+     * This method changes frame to add new product screen for admin
+     */
     public static void addNewProductScreenAdmin(){
         secondPanel = new JPanel();
         secondPanel.setLayout(new GridLayout(6,1,10,10));
