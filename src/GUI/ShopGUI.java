@@ -1226,17 +1226,15 @@ public class ShopGUI extends JFrame {
 
         frame.setVisible(true);
     }
+
+    /**
+     * This method changes frame to add quantities and sizes to existing product screen for admin
+     */
     public static void addQuantitiesAndSizesToProductScreenAdmin(){
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
         frame.setVisible(false);
         frame.setSize(675, 450);
-
-//        DefaultListModel<Product> productDefaultListModel = new DefaultListModel<>();
-//        JList<Product> productJList = new JList<>(productDefaultListModel);
-//        for (Product product : Product.allProducts) {
-//            productDefaultListModel.addElement(product);
-//        }
 
         DefaultListModel<ProductWithSizeAndQtity> productModel = new DefaultListModel<>();
         JList<ProductWithSizeAndQtity> productJList = new JList<>(productModel);
@@ -1695,6 +1693,12 @@ public class ShopGUI extends JFrame {
 
         frame.setVisible(true);
     }
+
+    /**
+     * This method sets JTextArea text to new one (After interaction)
+     * @param parameterTextArea JTextArea which text is being set
+     * @param parameterJList JList of the products being interacted with
+     */
     public static void refreshSizesJLabelAfterEditingProduct(JTextArea parameterTextArea, JList<ProductWithSizeAndQtity> parameterJList){
         ProductWithSizeAndQtity productWithSizeAndQtity = parameterJList.getSelectedValue();
         String sizesText="SIZES: \n";
@@ -1711,6 +1715,15 @@ public class ShopGUI extends JFrame {
 }
 
 
+    /**
+     * This method adds new product to list of all existing products
+     * @param category Category of the new product
+     * @param productNameString Name of the new product
+     * @param brandString Brand of the new product
+     * @param priceString Price of the new product
+     * @param descriptionString Description of the new product
+     * @throws Exception If any field is empty or type is wrong
+     */
     public static void addNewProduct(Category category, String productNameString, String brandString, String priceString, String descriptionString) throws Exception {
         if (productNameString.isBlank()){
             throw new Exception("Product name field is empty!");
@@ -1732,15 +1745,21 @@ public class ShopGUI extends JFrame {
         }
         Product product= new Product(category,productNameString,brandString,price,descriptionString);
     }
+
+    /**
+     * This method changes frame to manager logged in screen
+     */
     public static void managerLoggedIn(){
 
     }
+
+    /**
+     * This method changes frame to client logged in
+     * @param customer Customer value attached to entered login
+     * @param enteredLogin String login value entered while logging in
+     */
     public static void clientLoggedIn(Customer customer, String enteredLogin){
-        /**
-         * This method changes frame to client logged in
-         * @param customer Customer value attached to entered login
-         * @param enteredLogin String login value entered while logging in
-         */
+
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
         frame.setVisible(false);
@@ -1835,12 +1854,13 @@ public class ShopGUI extends JFrame {
 
         frame.setVisible(true);
     }
+    /**
+     * This method displays help menu with option to call one of consultants
+     * @param customer Customer value attached to entered login
+     * @param loginEntered String value of entered login
+     */
     public static void helpMenuClient(Customer customer, String loginEntered){
-        /**
-         * This method displays help menu with option to call one of consultants
-         * @param customer Customer value attached to entered login
-         * @param loginEntered String value of entered login
-         */
+
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
         frame.setVisible(false);
@@ -1892,13 +1912,13 @@ public class ShopGUI extends JFrame {
         frame.setVisible(true);
 
     }
-
+    /**
+     * This method displays calling to a random consultant
+     * @param customer Customer value attached to entered login
+     * @param loginEntered String value of entered login
+     */
     public static void callingConsultantScreen(Customer customer, String loginEntered){
-        /**
-         * This method displays calling to a random consultant
-         * @param customer Customer value attached to entered login
-         * @param loginEntered String value of entered login
-         */
+
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
         frame.setVisible(false);
@@ -1934,13 +1954,14 @@ public class ShopGUI extends JFrame {
         frame.setVisible(true);
     }
 
+    /**
+     * This method displays screen after the call with option to leave feedback
+     * @param customer Customer value attached to entered login
+     * @param loginEntered String value of entered login
+     * @param consultant Consultant who joined the call
+     */
     public static void callFinishedScreen(Customer customer, String loginEntered, Consultant consultant){
-        /**
-         * This method displays screen after the call with option to leave feedback
-         * @param customer Customer value attached to entered login
-         * @param loginEntered String value of entered login
-         * @param consultant Consultant who joined the call
-         */
+
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
 
@@ -1993,13 +2014,14 @@ public class ShopGUI extends JFrame {
 
         frame.setVisible(true);
     }
+    /**
+     * This method displays leaving feedback screen
+     * @param customer Customer value attached to entered login
+     * @param loginEntered String value of entered login
+     * @param consultant Consultant who joined the call
+     */
     public static void leaveFeedbackToConsultantMenu(Customer customer, String loginEntered, Consultant consultant){
-        /**
-         * This method displays leaving feedback screen
-         * @param customer Customer value attached to entered login
-         * @param loginEntered String value of entered login
-         * @param consultant Consultant who joined the call
-         */
+
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
 
@@ -2106,14 +2128,13 @@ public class ShopGUI extends JFrame {
 
     }
 
-
-
+    /**
+     * This method changes frame to products Menu for client
+     * @param customer Customer value attached to entered login
+     * @param loginEntered String login value entered while logging in
+     */
     public static void productsMenuClient(Customer customer, String loginEntered){
-        /**
-         * This method changes frame to products Menu for client
-         * @param customer Customer value attached to entered login
-         * @param loginEntered String login value entered while logging in
-         */
+
         frame.setVisible(false);
         frame.setSize(575,400);
         secondPanel = new JPanel(new BorderLayout());
@@ -3296,12 +3317,13 @@ public class ShopGUI extends JFrame {
 
     }
 
+    /**
+     * This method changes frame to orders Menu for client
+     * @param customer Customer value attached to entered login
+     * @param loginEntered String login value entered while logging in
+     */
     public static void ordersMenuClient(Customer customer, String loginEntered) {
-        /**
-         * This method changes frame to orders Menu for client
-         * @param customer Customer value attached to entered login
-         * @param loginEntered String login value entered while logging in
-         */
+
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
 
@@ -3368,17 +3390,15 @@ public class ShopGUI extends JFrame {
         frame.setVisible(true);
 
     }
-
+    /**
+     * This method generates hash for entered login and password
+     * then compares it to the values stored in database
+     * @param loginEntered String login value entered while logging in
+     * @param passwordEntered String login value entered while logging in
+     * @throws Exception when didn't find entered login or password in database
+     * @return Role of the person who logged in
+     */
     public static Role login(String loginEntered, String passwordEntered) throws Exception {
-
-        /**
-         * This method generates hash for entered login and password
-         * then compares it to the values stored in database
-         * @param loginEntered String login value entered while logging in
-         * @param passwordEntered String login value entered while logging in
-         * @throws Exception when didnt find entered login or password in database
-         * @return Role of the person who logged in
-         */
 
         String loginPasswordCombination= loginEntered+passwordEntered;
         long loginPasswordCombinationHash= loginPasswordCombination.hashCode();
@@ -3400,11 +3420,12 @@ public class ShopGUI extends JFrame {
             throw new Exception("Incorrect login or password");
         }
     }
+    /**
+     * This method read all customers,their orders and cart from file
+     * @throws Exception when file with specified path not found
+     */
     public static void readCustomersFromFile() throws Exception{
-        /**
-         * This method read all customers,their orders and cart from file
-         * @throws Exception when file with specified path not found
-         */
+
         try (BufferedReader br = new BufferedReader(new FileReader(customersFileName))) {
             String line;
             line=br.readLine();
@@ -3467,11 +3488,12 @@ public class ShopGUI extends JFrame {
             }
         }
     }
+    /**
+     * This method reads all account from file
+     * @throws Exception when file with specified path not found
+     */
     public static void readAccountsFromFile() throws Exception {
-        /**
-         * This method reads all account from file
-         * @throws Exception when file with specified path not found
-         */
+
         try (BufferedReader br = new BufferedReader(new FileReader(accountsFileName))) {
             String line;
             line=br.readLine();
@@ -3499,10 +3521,11 @@ public class ShopGUI extends JFrame {
             }
         }
     }
+    /**
+     * This method writes passwords' changes to file
+     */
     public static void savePasswordChangesToFile(){
-        /**
-         * This method writes password changes to file
-         */
+
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(accountsFileName));
             bufferedWriter.write("login;password;role -> password hash= (login+password).hash\n");
@@ -3520,10 +3543,11 @@ public class ShopGUI extends JFrame {
             e.printStackTrace();
         }
     }
+    /**
+     * This method writes to file all customers' changes
+     */
     public static void saveCustomersChangesToFile(){
-        /**
-         * This method writes to file all customers' changes
-         */
+
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(customersFileName));
             bufferedWriter.write("loginHash;firstName;lastName;address;tel;credits;email;currentCart;orders\n");
@@ -3547,11 +3571,11 @@ public class ShopGUI extends JFrame {
             e.printStackTrace();
         }
     }
-
+    /**
+     * This method changes frame to register
+     */
     public static void changeToRegisterScreen(){
-        /**
-         * This method changes frame to register
-         */
+
         secondPanel = new JPanel();
         secondPanel.setLayout(new BorderLayout());
 
@@ -3613,14 +3637,15 @@ public class ShopGUI extends JFrame {
 
         frame.setVisible(true);
     }
+    /**
+     * This method registers new user
+     * @param loginEntered String value of login entered while registering
+     * @param passwordEntered String value of password entered while registering
+     * @param confirmedPasswordEntered String value of confirmed password entered while registering
+     * @throws Exception when login is already taken, password is less than 7 characters, entered passwords are not the same
+     */
     public static void register(String loginEntered, String passwordEntered, String confirmedPasswordEntered) throws Exception{
-        /**
-         * This method registers new user
-         * @param loginEntered String value of login entered while registering
-         * @param passwordEntered String value of password entered while registering
-         * @param confirmedPasswordEntered String value of confirmed password entered while registering
-         * @throws Exception when login is already taken, password is less than 7 characters, entered passwords are not the same
-         */
+
         int loginHashLong= loginEntered.hashCode();
         String loginHash= String.valueOf(loginHashLong);
 
@@ -3646,62 +3671,68 @@ public class ShopGUI extends JFrame {
         addCustomerToAccountsFile(customer);
         registeredAnAccountScreen();
     }
+    /**
+     * This method shows all acounts
+     */
     public static void showAllAccounts(){
-        /**
-         * This method shows all acounts
-         */
+
         for (Map.Entry<String, PasswordRoleDTO> entry : accounts.entrySet()) {
             String key = entry.getKey();
             PasswordRoleDTO passwordRoleDTO = entry.getValue();
             System.out.println("Key: " + key + ", Value: " + passwordRoleDTO.getPassword() + ";" + passwordRoleDTO.getRole());
         }
     }
+    /**
+     * This method adds new registered user to file with accounts
+     * @param customer Value of registered customer
+     * @throws Exception when file with specified path not found
+     */
     public static void addCustomerToAccountsFile(Customer customer) throws Exception{
-        /**
-         * This method adds new registered user to file with accounts
-         * @param customer Value of registered customer
-         * @throws Exception when file with specified path not found
-         */
+
         FileOutputStream fos = new FileOutputStream(accountsFileName, true);
         PrintStream ps = new PrintStream(fos);
         ps.println(customer.getLogin() + ";" + customer.getPassword() + ";" + _roleClientHash);
         ps.close();
         }
-        public static JButton logOutButton(){
-            /**
-             * This method creates log out button
-             * @return JButton with logging out function
-             */
-            JButton logOutButton= new JButton("Log out");
-            logOutButton.setBackground(new Color(255,94,90));
-             logOutButton.addActionListener(new ActionListener() {
-                 @Override
-                 public void actionPerformed(ActionEvent e) {
+    /**
+     * This method creates log out button
+     * @return JButton with logging out function
+     */
+    public static JButton logOutButton(){
+
+        JButton logOutButton= new JButton("Log out");
+        logOutButton.setBackground(new Color(255,94,90));
+        logOutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                      loggedOutScreen();
                  }
-             });
-
-            return logOutButton;
-        }
-        public static JButton backToMenuClient(Customer customer, String login){
-            /**
-             * This method creates back to menu button
-             * @param customer Customer value attached to entered login
-             * @param login String value of entered login
-             * @return JButton with going back to client's menu function
-             */
-            JButton backToMenuButton= new JButton("Back");
-            backToMenuButton.setBackground(new Color(100,200,200));
-
-            backToMenuButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
+        });
+        return logOutButton;
+    }
+    /**
+     * This method creates back to menu button
+     * @param customer Customer value attached to entered login
+     * @param login String value of entered login
+     * @return JButton with going back to client's menu function
+     */
+    public static JButton backToMenuClient(Customer customer, String login){
+        JButton backToMenuButton= new JButton("Back");
+        backToMenuButton.setBackground(new Color(100,200,200));
+        backToMenuButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                     clientLoggedIn(customer,login);
                 }
-            });
-            return backToMenuButton;
-        }
-        public static JButton backToMenuAdmin(){
+        });
+        return backToMenuButton;
+    }
+
+    /**
+     * this method creates back to menu button for admin
+     * @return JButton with going back to admin's menu function
+     */
+    public static JButton backToMenuAdmin(){
         JButton backButton= new JButton("Back");
 
         backButton.addActionListener(new ActionListener() {
@@ -3711,7 +3742,7 @@ public class ShopGUI extends JFrame {
             }
         });
         return backButton;
-        }
+    }
 
         public static JButton addCreditsButton(){
          JButton button= new JButton();
